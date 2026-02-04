@@ -5,10 +5,12 @@ import { MainLayout } from './layout_boutique/main-layout/main-layout';
 import { LoginComponent } from './pages/login/login';
 import { SignComponent } from './pages/sign/sign';
 import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
+import { AuthCallbackComponent } from './pages/auth-callback/auth-callback';
 
 export const routes: Routes = 
 [
   { path: '', component: LoginComponent },
+   { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'layout-boutique', 
     component: MainLayout, 

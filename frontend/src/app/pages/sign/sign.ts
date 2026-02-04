@@ -31,6 +31,7 @@ export class SignComponent {
       next: (res) => {
         this.authService.setToken(res.token);
         console.log('Inscription réussie', res.user);
+        this.router.navigate(['/login']);
         // this.router.navigate(['/dashboard']);
       },
        error: (err) => {

@@ -28,7 +28,17 @@ export class LoginComponent {
     next: (res) => {
       console.log('login OK', res);
       this.authService.setToken(res.token);
-      // this.router.navigate(['/dashboard']);
+
+       if (res.user.role === 'admin') {
+        this.router.navigate(['/layout-admin']);
+      } 
+
+       if (res.user.role === 'boutique') {
+        this.router.navigate(['/layout-boutique']);
+      } 
+      else {
+        this.router.navigate(['/login']);
+      }
     },
 
      error: (err) => {
