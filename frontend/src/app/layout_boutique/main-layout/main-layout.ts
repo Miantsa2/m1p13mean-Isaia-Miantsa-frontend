@@ -11,5 +11,8 @@ import { RouterModule } from '@angular/router';
   templateUrl: './main-layout.html',
 })
 export class MainLayout {
-
+  isSidebarVisible = true;
+  toogleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
 }
