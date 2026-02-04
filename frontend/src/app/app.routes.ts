@@ -8,7 +8,7 @@ import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
 
 export const routes: Routes = 
 [
-  { path: '', component: Home },
+  { path: '', component: LoginComponent },
   {
     path: 'layout-boutique', 
     component: MainLayout, 
