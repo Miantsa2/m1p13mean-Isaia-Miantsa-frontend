@@ -1,0 +1,104 @@
+<!-- Test 1 (Event dans la page d'accueil) -->
+<div class="flex flex-col justify-center gap-12 p-6 md:flex-row">
+  <app-event-card
+    icon="calendar_month"
+    title="BLACK FRIDAY"
+    text="Just some text here"
+  />
+
+  <app-event-card
+    icon="campaign"
+    title="NEW OFFER"
+    text="Limited time only"
+  />
+
+  <app-event-card
+    icon="notifications"
+    title="REMINDER"
+    text="Don't miss out"
+  />
+</div>
+
+<!-- Test 2 (About us dans la page d'accueil) -->
+<div class="flex flex-col justify-center gap-12 p-6 md:flex-row">
+  <app-about-card
+    icon="browse_gallery"
+    description="Schedule: 9h - 21h"
+  />
+
+  <app-about-card
+    icon="local_parking"
+    description="Parking: 240 places"
+  />
+
+  <app-about-card
+    icon="location_on"
+    description="Tanjombato, Madagascar,102"
+  />
+</div>
+
+<!-- Test 3: la liste des boutiques (la page d'accueil) -->
+<div class="p-6">
+  <div class="flex justify-center gap-6">
+    <app-store-card
+      image="/pasta.png"
+      description="PASTA & GELATO"
+    />
+
+    <app-store-card
+      image="/abc.png"
+      description="ABC"
+    />
+
+    <app-store-card
+      image="/pasta.png"
+      description="PAPA OURS"
+    />
+  </div>
+</div>
+
+<!-- Test 4: la liste des produits (la page d'accueil) -->
+<div
+  class="flex justify-center gap-6 p-6"
+>
+    <app-product-card
+        title="Linguine Cacio e pepe"
+        [price]="25000"
+        image="/pate.png"
+        >
+    </app-product-card>
+    <app-product-card
+        title="Linguine Cacio e pepe"
+        [price]="25000"
+        image="/pate.png"
+        >
+    </app-product-card>
+</div>
+
+<!-- Test 5: Tableau pour les différentes listes -->
+<div class="p-6">
+  <app-table-corps [columns]="tableColumns">
+
+    <tr
+      *ngFor="let row of tableRows"
+      class="border-t border-slate-200"
+    >
+      <td class="px-4 py-3 text-sm text-[#375E67] ">
+        {{ row.name }}
+      </td>
+
+      <td class="px-4 py-3 text-sm text-[#375E67]">
+        {{ row.category }}
+      </td>
+
+      <td class="px-4 py-3 text-sm text-[#375E67]">
+        {{ row.price }} Ar
+      </td>
+    </tr>
+
+  </app-table-corps>
+</div>
+
+<!-- Test 6: bouton primaire -->
+ <app-button-primaire text="CREATE NEW SPONSOR"></app-button-primaire>
+
