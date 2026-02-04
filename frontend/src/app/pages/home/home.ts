@@ -6,6 +6,8 @@ import { StoreCard } from '../../components/store-card/store-card';
 import { ProductCard } from '../../components/product-card/product-card';
 import { TableCorps, TableColumn } from '../../components/table-corps/table-corps';
 import { ButtonPrimaire } from '../../components/button-primaire/button-primaire';
+import {Header} from '../../layout-client/header/header';
+import {Footer, FooterData} from '../../layout-client/footer/footer';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +20,8 @@ import { ButtonPrimaire } from '../../components/button-primaire/button-primaire
     ProductCard,
     TableCorps,
     ButtonPrimaire,
+    Header,
+    Footer
   ],
   templateUrl: './home.html',
   styleUrls: ['./home.css'], 
@@ -34,4 +38,12 @@ export class Home {
     { name: 'Gelato', category: 'Dessert', price: 12000 },
     { name: 'Pizza', category: 'Fast food', price: 30000 },
   ];
+
+  footerData = {
+    title: 'CONTACT',
+    phone: '032 88 861 50',
+    email: 'email@gmail.com',
+    logoUrl: '/logo.jpg',
+  };
+
 }

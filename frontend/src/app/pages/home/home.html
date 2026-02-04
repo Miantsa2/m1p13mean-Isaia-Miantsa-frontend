@@ -1,3 +1,6 @@
+<!-- Header -->
+<app-header headerType="header3"></app-header>
+
 <!-- Test 1 (Event dans la page d'accueil) -->
 <div class="flex flex-col justify-center gap-12 p-6 md:flex-row">
   <app-event-card
@@ -75,6 +78,8 @@
     </app-product-card>
 </div>
 
+<!-- Test 6: bouton primaire -->
+ <app-button-primaire text="CREATE NEW SPONSOR"></app-button-primaire>
 <!-- Test 5: Tableau pour les différentes listes -->
 <div class="p-6">
   <app-table-corps [columns]="tableColumns">
@@ -99,6 +104,9 @@
   </app-table-corps>
 </div>
 
-<!-- Test 6: bouton primaire -->
- <app-button-primaire text="CREATE NEW SPONSOR"></app-button-primaire>
 
+<!-- Footer -->
+<app-footer
+  footerType="footer1"
+  [footerData]="footerData">
+</app-footer>
