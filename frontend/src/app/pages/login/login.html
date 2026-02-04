@@ -23,12 +23,19 @@
 
       <h2 class="text-3xl font-black text-[#345e63] mb-10 tracking-tight">WELCOME BACK!</h2>
 
-      <form class="w-full max-w-sm space-y-8">
+      <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" class="w-full max-w-sm space-y-8">
+        <div *ngIf="loginForm.controls['password']?.errors?.['invalidCredentials']" 
+            class="text-red-500 text-sm mt-2">
+          {{ loginForm.controls['password']?.errors?.['invalidCredentials'] }}
+        </div>
+
         <div class="relative group border-b border-gray-300 focus-within:border-[#345e63] transition-all pt-4">
             <input 
                 type="email" 
                 id="email"
-                placeholder=" " 
+                name="email"
+                [(ngModel)]="email"
+                required
                 class="peer w-full pb-1 bg-transparent outline-none text-gray-700 text-sm"
             >
             <label 
@@ -46,7 +53,9 @@
             <input 
                 type="password" 
                 id="password"
-                placeholder=" " 
+                name="password"
+                [(ngModel)]="password" 
+                required
                 class="peer w-full pb-1 bg-transparent outline-none text-gray-700 text-sm"
             >
             <label 
@@ -61,15 +70,25 @@
         </div>
 
         <div class="pt-4">
-          <button type="submit" 
-            class="w-full bg-[#8ca3a6] hover:bg-[#7a8f92] text-white font-semibold py-3 px-6 rounded shadow transition-colors uppercase text-sm tracking-widest">
-            Submit
+                  <button type="submit" [disabled]="loginForm.invalid"
+            class="w-full bg-[#8ca3a6] hover:bg-[#7a8f92] text-white font-semibold py-3 px-6 rounded shadow transition-colors uppercase text-sm tracking-widest
+                  disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400">
+             Login
           </button>
+
         </div>
 
-        <div class="py-2"></div>
+        
 
-        <button type="button" 
+        
+      </form>
+      <div class="flex items-center my-4 w-full">
+        <hr class="flex-grow border-gray-300">
+        <span class="px-3 text-gray-400 text-sm font-semibold">OR</span>
+        <hr class="flex-grow border-gray-300">
+      </div>
+
+      <button type="button" (click)="onGoogleLogin()"
             class="w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-100 py-2.5 px-4 rounded-lg transition-all text-gray-700 font-medium text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="w-5 h-5">
                 <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -79,8 +98,7 @@
                 <path fill="none" d="M0 0h48v48H0z"/>
             </svg>
             <span>Continue with Google</span>
-        </button>
-      </form>
+      </button>
     </div>
   </div>
 </div>
