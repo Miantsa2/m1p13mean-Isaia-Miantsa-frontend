@@ -12,4 +12,7 @@ import { RouterModule } from '@angular/router';
 })
 export class MainLayoutAdmin {
   isSidebarVisible = true;
+  toogleSidebar() {
+    this.isSidebarVisible = !this.isSidebarVisible;
+  }
 }
