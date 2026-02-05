@@ -5,10 +5,11 @@ import { MainLayout } from './layout_boutique/main-layout/main-layout';
 import { LoginComponent } from './pages/login/login';
 import { SignComponent } from './pages/sign/sign';
 import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
+import { Header } from './layout-client/header/header';
 
 export const routes: Routes = 
 [
-  { path: '', component: LoginComponent },
+  { path: '', component: Home },
   {
     path: 'layout-boutique', 
     component: MainLayout, 
@@ -26,7 +27,7 @@ export const routes: Routes =
   {
     path: 'sign',
     component: SignComponent
-  }
+  },
 
 ];
 
