@@ -6,10 +6,11 @@ import { LoginComponent } from './pages/login/login';
 import { SignComponent } from './pages/sign/sign';
 import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback';
+import { Rooms } from './pages/admin/rooms/rooms';
 
 export const routes: Routes = 
 [
-  { path: '', component: LoginComponent },
+  { path: '', component: Home },
    { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'layout-boutique', 
@@ -19,7 +20,12 @@ export const routes: Routes =
   {
     path: 'layout-admin', 
     component: MainLayoutAdmin,
-    children: [{path: '', component: Home}]
+    children: [
+      {
+        path: 'rooms', 
+        component: Rooms 
+      }
+    ]
   },
   {
     path: 'login',
