@@ -6,40 +6,61 @@
 
   <div class="flex flex-wrap items-center gap-8 mb-8">
     <div class="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg">
-      <span class="text-[#697F84] font-medium">ACTUAL: <span>200 000Ar/m²</span></span>
+      <span class="text-[#697F84] font-medium">ACTUAL: <span>{{ meterPrice }}/m²</span></span>
       <button (click)="openPriceModal()" class="ml-1 text-teal-600">
         <span class="material-symbols-outlined">border_color</span>
       </button>
     </div>
-    
-    <div class="flex items-center gap-2 cursor-pointer text-[#3A626B]">
-      <span class="font-normal">Completion date</span>
-      <span class="text-sm material-symbols-outlined">south</span>
-    </div>
+  </div>
+ <div class="flex flex-wrap items-center gap-8 mb-8">
+  
+  <div class="flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Completion date</span>
+    <select 
+      [(ngModel)]="filterOptions.ordre" 
+      (change)="onFilterChange()"
+      class="py-0 pr-8 text-[gray] bg-transparent border-none cursor-pointer focus:ring-0">
+      <option value="desc">Newest</option>
+      <option value="asc">Oldest</option>
+    </select>
+  </div>
 
-    <div class="relative flex items-center gap-2 text-[#3A626B]">
-        <span class="font-normal pointer-events-none">Status</span>
-        
-        <div class="relative flex items-center">
-            <select 
-                class="py-0 pr-8 text-[gray] font-normal leading-tight bg-transparent border-none appearance-none cursor-pointer focus:outline-none focus:ring-0"
-            >
-                <option value="all">All</option>
-                <option value="free">Free</option>
-                <option value="occupied">Occupied</option>
-            </select>
-            
-            <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
-                arrow_downward
-            </span>
-        </div>
+  <div class="relative flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Status</span>
+    <div class="relative flex items-center">
+      <select 
+        [(ngModel)]="filterOptions.statut" 
+        (change)="onFilterChange()"
+        class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+        <option value="all">All</option>
+        <option value="libre">Free</option>
+        <option value="occupee">Occupied</option>
+      </select>
+      <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+        arrow_downward
+      </span>
     </div>
   </div>
 
+  <div class="flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Min Size</span>
+    <div class="relative flex items-center">
+      <input 
+        type="number" 
+        [(ngModel)]="filterOptions.taille"
+        (change)="onFilterChange()"
+        placeholder="ex: 20"
+        class="w-20 py-1 px-2 text-[gray] bg-transparent border-b border-gray-300 focus:border-[#E9B162] focus:outline-none transition-colors"
+      >
+      <span class="text-xs ml-1">m²</span>
+    </div>
+  </div>
+
+</div>
   <app-table-corps [columns]="roomColumns">
-    @for (room of rooms; track room.ref) {
+    @for (room of rooms; track room._id) {
       <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
-        <td class="px-4 py-4 font-bold text-[#697F84]">{{ room.ref }}</td>
+        <td class="px-4 py-4 font-bold text-[#697F84]">{{ room.reference }}</td>
         <td class="px-4 py-4 text-[#375E67]">{{ room.size }} m²</td>
         <td class="px-4 py-4 text-[#375E67]">{{ room.date }}</td>
         <td class="px-4 py-4">
@@ -54,7 +75,7 @@
           <button class="text-teal-500 transition-transform hover:scale-110">
             <span class="material-symbols-outlined">edit</span>
           </button>
-          <button class="text-red-500 transition-transform hover:scale-110">
+          <button (click)="deleteRoom(room._id)" class="text-red-500 transition-transform hover:scale-110">
             <span class="material-symbols-outlined">delete</span>
           </button>
           
@@ -71,26 +92,34 @@
 
 <!-- Modal component pour la création room -->
 <app-modal-form 
+  type="submit"
   title="CREATE ROOM" 
   buttonText="CONFIRM"
   [isOpen]="isModalOpen"
-  (close)="closeCreateModal()">
+  (close)="closeCreateModal()"
+  (submitForm)="addRoom()">
   
-  <form class="grid grid-cols-2 gap-x-8 gap-y-6">
+  <form (ngSubmit)="addRoom()" #RoomForm="ngForm" class="grid grid-cols-2 gap-x-8 gap-y-6">
     <div class="flex flex-col gap-2">
       <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Room Reference</label>
-      <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all">
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="reference"
+        [(ngModel)]="newRoom.reference">
     </div>
 
     <div class="flex flex-col gap-2">
       <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Size in m²</label>
-      <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all">
+      <input 
+        type="number" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="tailleMetreCarre"
+        [(ngModel)]="newRoom.tailleMetreCarre" required>
+       
     </div>
 
-    <div class="flex flex-col col-span-1 gap-2">
-      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Completion Date</label>
-      <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all text-gray-500">
-    </div>
+
   </form>
 
 </app-modal-form>
