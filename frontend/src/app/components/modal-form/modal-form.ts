@@ -12,8 +12,14 @@ export class ModalForm {
   @Input() isOpen: boolean = false;
   @Input() title: string = '';
   @Output() close = new EventEmitter<void>();
+  @Output() submitForm = new EventEmitter<void>();
   
   closeModal() {
     this.close.emit();
+
+  }
+  confirm() {
+    this.close.emit();
+    this.submitForm.emit();
   }
 }
