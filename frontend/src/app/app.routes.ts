@@ -10,7 +10,9 @@ import { Rooms } from './pages/admin/rooms/rooms';
 
 export const routes: Routes = 
 [
-  { path: '', component: Home },
+  { path: '', component: LoginComponent },
+ 
+
    { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'layout-boutique', 
