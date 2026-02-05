@@ -1,0 +1,122 @@
+<!-- Header -->
+<app-header headerType="header1"></app-header>
+
+<main class="min-h-screen">
+  
+  <section class="relative h-[620px] w-full overflow-hidden bg-gray-900">
+    <div class="absolute inset-0 transition-opacity duration-1000">
+      <img [src]="slides[currentSlide()].img" class="object-cover w-full h-full opacity-60" [alt]="slides[currentSlide()].title">
+      <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
+        <h1 class="mb-2 font-black tracking-tighter uppercase text-7xl">
+          {{ slides[currentSlide()].title }}
+        </h1>
+        <p class="max-w-xl text-lg font-light leading-tight">
+          {{ slides[currentSlide()].description }}
+        </p>
+      </div>
+    </div>
+
+    <div class="absolute flex gap-3 -translate-x-1/2 bottom-6 left-1/2">
+      <div *ngFor="let slide of slides; let i = index" 
+          [class]="i === currentSlide() ? 'bg-[#EBAD5A]' : 'bg-white opacity-50'"
+          class="w-3 h-3 transition-all duration-300 rounded-full">
+      </div>
+    </div>
+  </section>
+
+  <app-section-divider title="EVENTS"></app-section-divider>
+  
+  <div class="grid grid-cols-1 gap-6 px-8 mx-auto max-w-7xl md:grid-cols-3">
+    <app-event-card
+      icon="calendar_month"
+      title="BLACK FRIDAY"
+      text="Just some text here"
+    />
+
+    <app-event-card
+      icon="campaign"
+      title="NEW OFFER"
+      text="Limited time only"
+    />
+
+    <app-event-card
+      icon="notifications"
+      title="REMINDER"
+      text="Don't miss out"
+    />
+  </div>
+  
+  <app-section-divider title="ABOUT US"></app-section-divider>
+
+  <div class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
+    <div class="md:w-1/2">
+      <img src="/olympia.png" class="rounded-xl shadow-xl w-full h-[350px] object-cover" alt="Olympia">
+    </div>
+    <div class="space-y-6 md:w-1/2">
+      <h2 class="text-3xl font-bold text-[#355F68] leading-tight">OLYMPIA Tanjombato</h2>
+      <p class="text-base font-light leading-relaxed text-[#355F68]">
+        A contemporary shopping center designed to bring together shopping, dining, services and leisure in one welcoming and accessible place.
+      </p>
+      <p class="text-base font-light leading-relaxed text-[#355F68]">
+        Our center hosts a diverse selection of local and international brands, restaurants, cafés and essential services, carefully curated to meet the everyday needs of our community. 
+        <a class="text-[#D7B471] font-bold cursor-pointer hover:underline">View more...</a>
+      </p>
+    </div>
+  </div>
+  
+  <div class="grid grid-cols-1 gap-10 px-8 mx-auto mt-16 mb-20 max-w-7xl md:grid-cols-3">
+    <app-about-card
+      icon="browse_gallery"
+      description="Schedule: 9h - 21h"
+    />
+
+    <app-about-card
+      icon="local_parking"
+      description="Parking: 240 places"
+    />
+
+    <app-about-card
+      icon="location_on"
+      description="Tanjombato, Madagascar,102"
+    />
+  </div>
+
+  <app-section-divider title=" OUR STORES"></app-section-divider>
+
+  <div class="relative flex items-center px-4 mx-auto mb-24 max-w-7xl group">
+    <button 
+      *ngIf="canScrollLeft"
+      (click)="scroll('left', storeContainer)"
+      class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
+    </button>
+    
+    <div 
+      #storeContainer
+      (scroll)="checkScroll(storeContainer)"
+      class="flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      
+      <div 
+        *ngFor="let store of stores" 
+        class="flex-none w-[calc((100%-4rem)/3)] snap-start pl-12">
+        <app-store-card
+          [image]="store.image"
+          [description]="store.description">
+        </app-store-card>
+      </div>
+    </div>
+
+    <button 
+      *ngIf="canScrollRight"
+      (click)="scroll('right', storeContainer)"
+      class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+</main>
+
+<!-- Footer -->
+<app-footer
+  footerType="footer1"
+  [footerData]="footerData">
+</app-footer>

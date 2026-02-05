@@ -1,0 +1,94 @@
+<aside class="top-0 left-0 flex flex-col justify-between w-64 h-screen bg-white border-r border-gray-100">
+  <div>
+    <div class="flex items-center gap-3 p-6">
+      <div class="flex items-center justify-center w-10 h-10 overflow-hidden">
+         <img src="/logo.jpg" alt="Logo Admin" class="object-contain w-full h-full">
+      </div>
+      <h1 class="font-bold text-[#425466] text-[13px] tracking-wide">OLYMPIA</h1>
+    </div>
+
+    <nav class="px-4 mt-4 space-y-2">
+        <a 
+            routerLink=""
+            #rla="routerLinkActive"
+            routerLinkActive="border-b-4 border-[#EBAD5A]"
+            [ngClass]="{
+                'text-[#3A626B] font-medium': rla.isActive,
+                'hover:text-[#EBAD5A]': !rla.isActive
+            }"
+            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
+        >
+            <span class="material-symbols-outlined text-[24px] text-[#697F84]">store</span>
+            <span class="text-[15px] font-medium text-[#3A626B]">Stores</span>
+        </a>
+
+        <a 
+            routerLink="" 
+            #rla="routerLinkActive"
+            routerLinkActive="border-b-4 border-[#EBAD5A]"
+            [ngClass]="{
+                'text-[#3A626B] font-medium': rla.isActive,
+                'hover:text-[#EBAD5A]': !rla.isActive
+            }"
+            routerLinkActive="bg-gray-50 text-[#5d7285]" 
+            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
+        >
+            <span class="material-symbols-outlined text-[24px] text-[#697F84]">sell</span>
+            <span class="text-[15px] font-medium text-[#3A626B]">Rent</span>
+        </a>
+
+        <a 
+            routerLink="" 
+            #rla="routerLinkActive"
+            routerLinkActive="border-b-4 border-[#EBAD5A]"
+            [ngClass]="{
+                'text-[#3A626B] font-medium': rla.isActive,
+                'hover:text-[#EBAD5A]': !rla.isActive
+            }"
+            routerLinkActive="bg-gray-50 text-[#5d7285]" 
+            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
+        >
+            <span class="material-symbols-outlined text-[24px] text-[#697F84]">calendar_today</span>
+            <span class="text-[15px] font-medium text-[#3A626B]">Event</span>
+        </a>
+
+        <a 
+            routerLink="" 
+            #rla="routerLinkActive"
+            routerLinkActive="border-b-4 border-[#EBAD5A]"
+            [ngClass]="{
+                'text-[#3A626B] font-medium': rla.isActive,
+                'hover:text-[#EBAD5A]': !rla.isActive
+            }"
+            routerLinkActive="bg-gray-50 text-[#5d7285]" 
+            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
+        >
+            <span class="material-symbols-outlined text-[24px] text-[#697F84]">text_ad</span>
+            <span class="text-[15px] font-medium text-[#3A626B]">Sponsoring</span>
+        </a>
+
+        <a 
+            routerLink="/layout-admin/rooms" 
+            #rla="routerLinkActive"
+            routerLinkActive="border-b-4 border-[#EBAD5A]"
+            [ngClass]="{
+                'text-[#3A626B] font-medium': rla.isActive,
+                'hover:text-[#EBAD5A]': !rla.isActive
+            }"
+            routerLinkActive="bg-gray-50 text-[#5d7285]" 
+            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
+        >
+            <span class="material-symbols-outlined text-[24px] text-[#697F84]">room_preferences</span>
+            <span class="text-[15px] font-medium text-[#3A626B]">Rooms</span>
+        </a>
+
+    </nav>
+
+  </div>
+
+  <div class="p-4 bg-[#e9ecef]/50 border-t border-gray-100">
+    <p class="text-[12px] text-gray-500 font-medium px-2">
+      Miantsa - Isaia
+    </p>
+  </div>
+</aside>
