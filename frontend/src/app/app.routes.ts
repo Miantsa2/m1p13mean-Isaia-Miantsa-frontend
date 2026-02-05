@@ -28,7 +28,7 @@ export const routes: Routes =
   {
     path: 'sign',
     component: SignComponent
-  }
+  },
 
 ];
 
