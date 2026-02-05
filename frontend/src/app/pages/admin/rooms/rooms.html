@@ -39,7 +39,7 @@
   <app-table-corps [columns]="roomColumns">
     @for (room of rooms; track room._id) {
       <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
-        <td class="px-4 py-4 font-bold text-[#697F84]">{{ room.ref }}</td>
+        <td class="px-4 py-4 font-bold text-[#697F84]">{{ room.reference }}</td>
         <td class="px-4 py-4 text-[#375E67]">{{ room.size }} m²</td>
         <td class="px-4 py-4 text-[#375E67]">{{ room.date }}</td>
         <td class="px-4 py-4">

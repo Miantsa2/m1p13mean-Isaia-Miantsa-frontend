@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableCorps, TableColumn } from '../../../components/table-corps/table-corps';
 import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
@@ -17,9 +17,9 @@ export class Rooms implements OnInit {
 
   roomColumns: TableColumn[] = [
     { key: 'reference', label: 'Room Reference' },
-    { key: 'tailleMetreCarre', label: 'Size in m²' },
-    { key: 'createdAt', label: 'Completion date' },
-    { key: 'statut', label: 'Status' },
+    { key: 'size', label: 'Size in m²' },
+    { key: 'date', label: 'Completion date' },
+    { key: 'status', label: 'Status' },
     { key: 'actions', label: 'Actions' }
   ];
 
@@ -30,7 +30,7 @@ export class Rooms implements OnInit {
   isModalOpen = false;
   isPriceModalOpen = false;
 
-  constructor(private salleService: SalleService) {}
+  constructor(private salleService: SalleService,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadRooms();
@@ -39,13 +39,16 @@ export class Rooms implements OnInit {
   loadRooms(): void {
     this.salleService.getRoom().subscribe({
       next: (res) => {
+        console.log(res);
+
         this.rooms = res.map((room: any) => ({
           _id: room._id,
-          reference: room._id,
+          reference: room.reference,
           size: room.tailleMetreCarre,
           date: new Date(room.createdAt).toLocaleDateString(),
           status: room.statut === 'libre' ? 'Free' : 'Occupied'
         }));
+        this.cdr.detectChanges();
         console.log(this.rooms);
 
       },
