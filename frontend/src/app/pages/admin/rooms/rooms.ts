@@ -38,7 +38,7 @@ export class Rooms implements OnInit {
   isModalOpen = false;
   isPriceModalOpen = false;
 
-  constructor(private salleService: SalleService,private cdr: ChangeDetectorRef, private centreService: CentreService ) {}
+  constructor(private salleService: SalleService, private centreService: CentreService ) {}
 
 
 
@@ -59,7 +59,7 @@ export class Rooms implements OnInit {
           date: new Date(room.createdAt).toLocaleDateString(),
           status: room.statut === 'libre' ? 'Free' : 'Occupied'
         }));
-        this.cdr.detectChanges();
+        //this.cdr.detectChanges();
         console.log(this.rooms);
 
       },
@@ -74,7 +74,7 @@ export class Rooms implements OnInit {
         const centreData = res[0];
         this.meterPrice = centreData.prixMetreCarre;
         console.log('Meter price loaded:', res);
-        this.cdr.detectChanges();
+        //this.cdr.detectChanges();
       },
       
       error: (err) => {
@@ -133,7 +133,7 @@ export class Rooms implements OnInit {
           date: new Date(room.createdAt).toLocaleDateString(),
           status: room.statut === 'libre' ? 'Free' : 'Occupied'
         }));
-        this.cdr.detectChanges();
+        ////this.cdr.detectChanges();
       }
     });
   }
