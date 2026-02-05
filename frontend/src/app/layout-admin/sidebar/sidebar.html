@@ -8,78 +8,69 @@
     </div>
 
     <nav class="px-4 mt-4 space-y-2">
-        <a 
-            routerLink=""
-            #rla="routerLinkActive"
-            routerLinkActive="border-b-4 border-[#EBAD5A]"
-            [ngClass]="{
-                'text-[#3A626B] font-medium': rla.isActive,
-                'hover:text-[#EBAD5A]': !rla.isActive
-            }"
-            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
-        >
-            <span class="material-symbols-outlined text-[24px] text-[#697F84]">store</span>
-            <span class="text-[15px] font-medium text-[#3A626B]">Stores</span>
+        <a routerLink="/layout-admin/stores" 
+            routerLinkActive="bg-gray-50" 
+            #rlaStores="routerLinkActive"
+            class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                [ngClass]="rlaStores.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">store</span>
+            <span class="text-[15px] font-medium" 
+                [ngClass]="rlaStores.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Stores</span>
+            @if (rlaStores.isActive) {
+            <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
         </a>
 
-        <a 
-            routerLink="" 
-            #rla="routerLinkActive"
-            routerLinkActive="border-b-4 border-[#EBAD5A]"
-            [ngClass]="{
-                'text-[#3A626B] font-medium': rla.isActive,
-                'hover:text-[#EBAD5A]': !rla.isActive
-            }"
-            routerLinkActive="bg-gray-50 text-[#5d7285]" 
-            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
-        >
-            <span class="material-symbols-outlined text-[24px] text-[#697F84]">sell</span>
-            <span class="text-[15px] font-medium text-[#3A626B]">Rent</span>
+        <a routerLink="/layout-admin/rent" 
+            routerLinkActive="bg-gray-50" 
+            #rlaRent="routerLinkActive"
+            class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                [ngClass]="rlaRent.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">sell</span>
+            <span class="text-[15px] font-medium" 
+                [ngClass]="rlaRent.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Rent</span>
+            @if (rlaRent.isActive) {
+            <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
         </a>
 
-        <a 
-            routerLink="" 
-            #rla="routerLinkActive"
-            routerLinkActive="border-b-4 border-[#EBAD5A]"
-            [ngClass]="{
-                'text-[#3A626B] font-medium': rla.isActive,
-                'hover:text-[#EBAD5A]': !rla.isActive
-            }"
-            routerLinkActive="bg-gray-50 text-[#5d7285]" 
-            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
-        >
-            <span class="material-symbols-outlined text-[24px] text-[#697F84]">calendar_today</span>
-            <span class="text-[15px] font-medium text-[#3A626B]">Event</span>
+        <a routerLink="/layout-admin/event" 
+            routerLinkActive="bg-gray-50" 
+            #rlaEvent="routerLinkActive"
+            class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                [ngClass]="rlaEvent.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">calendar_today</span>
+            <span class="text-[15px] font-medium" 
+                [ngClass]="rlaEvent.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Event</span>
+            @if (rlaEvent.isActive) {
+            <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
         </a>
 
-        <a 
-            routerLink="" 
-            #rla="routerLinkActive"
-            routerLinkActive="border-b-4 border-[#EBAD5A]"
-            [ngClass]="{
-                'text-[#3A626B] font-medium': rla.isActive,
-                'hover:text-[#EBAD5A]': !rla.isActive
-            }"
-            routerLinkActive="bg-gray-50 text-[#5d7285]" 
-            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
-        >
-            <span class="material-symbols-outlined text-[24px] text-[#697F84]">text_ad</span>
-            <span class="text-[15px] font-medium text-[#3A626B]">Sponsoring</span>
+        <a routerLink="/layout-admin/sponsoring" 
+            routerLinkActive="bg-gray-50" 
+            #rlaSponsoring="routerLinkActive"
+            class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                [ngClass]="rlaSponsoring.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">text_ad</span>
+            <span class="text-[15px] font-medium" 
+                [ngClass]="rlaSponsoring.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Sponsoring</span>
+            @if (rlaSponsoring.isActive) {
+            <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
         </a>
 
-        <a 
-            routerLink="/layout-admin/rooms" 
-            #rla="routerLinkActive"
-            routerLinkActive="border-b-4 border-[#EBAD5A]"
-            [ngClass]="{
-                'text-[#3A626B] font-medium': rla.isActive,
-                'hover:text-[#EBAD5A]': !rla.isActive
-            }"
-            routerLinkActive="bg-gray-50 text-[#5d7285]" 
-            class="flex items-center gap-4 px-4 py-2.5 text-gray-400 rounded-xl transition-all group"
-        >
-            <span class="material-symbols-outlined text-[24px] text-[#697F84]">room_preferences</span>
-            <span class="text-[15px] font-medium text-[#3A626B]">Rooms</span>
+        <a routerLink="/layout-admin/rooms" 
+            routerLinkActive="bg-gray-50" 
+            #rlaRooms="routerLinkActive"
+            class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                [ngClass]="rlaRooms.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">room_preferences</span>
+            <span class="text-[15px] font-medium" 
+                [ngClass]="rlaRooms.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Rooms</span>
+            @if (rlaRooms.isActive) {
+            <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
         </a>
 
     </nav>

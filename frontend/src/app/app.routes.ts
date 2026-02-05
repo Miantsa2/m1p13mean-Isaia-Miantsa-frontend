@@ -7,7 +7,7 @@ import { SignComponent } from './pages/sign/sign';
 import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback';
 import { Rooms } from './pages/admin/rooms/rooms';
-
+import { Stores } from './pages/admin/stores/stores';
 export const routes: Routes = 
 [
   { path: '', component: Home },
@@ -24,6 +24,10 @@ export const routes: Routes =
       {
         path: 'rooms', 
         component: Rooms 
+      },
+      {
+        path: 'stores',
+        component: Stores
       }
     ]
   },
