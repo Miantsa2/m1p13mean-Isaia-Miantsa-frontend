@@ -2,18 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:5000/mean/auth'; 
+  private apiUrl = `${environment.apiUrl}/mean/auth`;
+ 
 
   constructor(private http: HttpClient) { }
 
-  signup(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signup`, user);
+  signup(user: any): Observable<{ token: string, user: any }> {
+    return this.http.post<{ token: string, user: any }>(
+      `${this.apiUrl}/signup`,
+      user
+    ).pipe(
+      tap(res => localStorage.setItem('token', res.token))
+    );
   }
 
   // login(email: string, password: string): Observable<any> {
@@ -21,9 +28,14 @@ export class AuthService {
   // }
 
   login(email: string, password: string) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
-      .pipe(tap(res => localStorage.setItem('token', res.token)));
+    return this.http.post<{ token: string, user: { id: string, email: string, role: string } }>(
+      `${this.apiUrl}/login`,
+      { email, password }
+    ).pipe(
+      tap(res => localStorage.setItem('token', res.token))
+    );
   }
+
 
   loginWithGoogle(): void {
     window.location.href = `${this.apiUrl}/google`;

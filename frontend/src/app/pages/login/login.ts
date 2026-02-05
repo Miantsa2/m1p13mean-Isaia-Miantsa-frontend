@@ -26,9 +26,23 @@ export class LoginComponent {
 
   this.authService.login(this.email, this.password).subscribe({
     next: (res) => {
-      console.log('login OK', res);
+      console.log('login OK', res.user.role);
       this.authService.setToken(res.token);
-      // this.router.navigate(['/dashboard']);
+
+       if (res.user.role === 'admin') {
+      console.log('login OK', res.user.role);
+
+        this.router.navigate(['/layout-admin']);
+      } 
+
+       if (res.user.role === 'boutique') {
+        this.router.navigate(['/layout-boutique']);
+      } 
+
+       if (res.user.role === 'client') {
+        this.router.navigate(['/login']);
+      } 
+     
     },
 
      error: (err) => {

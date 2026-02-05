@@ -1,19 +1,19 @@
-<div class="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+<div class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
   <div class="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[550px]">
     
     <div class="md:w-5/12 bg-[#345e63] p-10 flex flex-col justify-between text-white relative">
       <div class="z-10 pt-16">
-        <h1 class="text-4xl font-bold leading-tight uppercase tracking-wide">
+        <h1 class="text-4xl font-bold leading-tight tracking-wide uppercase">
           Log into <br> your account
         </h1>
-        <p class="mt-4 text-gray-300 text-sm">
+        <p class="mt-4 text-sm text-gray-300">
           Don't have an account? 
-          <a routerLink="/sign" class="text-yellow-500 hover:underline font-semibold">Sign in</a>
+          <a routerLink="/sign" class="font-semibold text-yellow-500 hover:underline">Sign in</a>
         </p>
       </div>
 
-      <div class="mt-auto pt-10">
-        <img src="/login.png" alt="Community" class="w-full object-contain">
+      <div class="pt-10 mt-auto">
+        <img src="/login.png" alt="Community" class="object-contain w-full">
       </div>
     </div>
 
@@ -25,7 +25,7 @@
 
       <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm" class="w-full max-w-sm space-y-8">
         <div *ngIf="loginForm.controls['password']?.errors?.['invalidCredentials']" 
-            class="text-red-500 text-sm mt-2">
+            class="mt-2 text-sm text-red-500">
           {{ loginForm.controls['password']?.errors?.['invalidCredentials'] }}
         </div>
 
@@ -34,9 +34,10 @@
                 type="email" 
                 id="email"
                 name="email"
+                placeholder=" "
                 [(ngModel)]="email"
                 required
-                class="peer w-full pb-1 bg-transparent outline-none text-gray-700 text-sm"
+                class="w-full pb-1 text-sm text-gray-700 bg-transparent outline-none peer"
             >
             <label 
                 for="email"
@@ -53,10 +54,11 @@
             <input 
                 type="password" 
                 id="password"
+                placeholder=" "
                 name="password"
                 [(ngModel)]="password" 
                 required
-                class="peer w-full pb-1 bg-transparent outline-none text-gray-700 text-sm"
+                class="w-full pb-1 text-sm text-gray-700 bg-transparent outline-none peer"
             >
             <label 
                 for="password"
@@ -78,13 +80,10 @@
 
         </div>
 
-        
-
-        
       </form>
-      <div class="flex items-center my-4 w-full">
+      <div class="flex items-center w-full my-4">
         <hr class="flex-grow border-gray-300">
-        <span class="px-3 text-gray-400 text-sm font-semibold">OR</span>
+        <span class="px-3 text-sm font-semibold text-gray-400">OR</span>
         <hr class="flex-grow border-gray-300">
       </div>
 
