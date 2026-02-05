@@ -12,10 +12,10 @@ import { ModalForm } from '../../../components/modal-form/modal-form';
 })
 export class Stores {
   stores = [
-    { logo: '/pasta.png', salle_ref: 'Room 001' , metre_carre: '50'},
-    { logo: '/pasta.png', salle_ref: 'Room 015' , metre_carre: '50'},
-    { logo: '/abc.png', salle_ref: 'Room 050' , metre_carre: '50'},
-    { logo: '/abc.png', salle_ref: 'Room 005' , metre_carre: '50'},
+    { logo: '/pasta.png', name:'PASTA & GELATO', salle_ref: 'Room 001' , metre_carre: '50'},
+    { logo: '/pasta.png',name:'PASTA & GELATO', salle_ref: 'Room 015' , metre_carre: '50'},
+    { logo: '/abc.png', name:'PASTA & GELATO', salle_ref: 'Room 050' , metre_carre: '50'},
+    { logo: '/abc.png',name:'PASTA & GELATO', salle_ref: 'Room 005' , metre_carre: '50'},
   ]
 
   // Modal ajout

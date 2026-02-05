@@ -9,6 +9,7 @@ import { ModalForm } from '../modal-form/modal-form';
 })
 export class StoreCardAdmin {
   @Input() logo: string = '';
+  @Input() name: string = '';
   @Input() salle_ref: string = '';
   @Input() metre_carre: string = '';
 
