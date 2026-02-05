@@ -10,11 +10,11 @@ export class CentreService {
 
     constructor(private http: HttpClient) {}
     getCenter(): Observable<any> {
-      return this.http.get(this.apiUrl);
+      return this.http.get(`${this.apiUrl}/getCenter`);
       }
    
     updateCenter(id: string, center: any): Observable<any> {
-      return this.http.put(`${this.apiUrl}/${id}`, center);
+      return this.http.put(`${this.apiUrl}/updateCenter${id}`, center);
       }
 
 }
