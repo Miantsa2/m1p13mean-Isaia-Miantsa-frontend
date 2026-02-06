@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableCorps, TableColumn } from '../../../components/table-corps/table-corps';
 import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
@@ -172,7 +172,6 @@ export class Rooms implements OnInit {
           date: new Date(room.createdAt).toLocaleDateString(),
           status: room.statut === 'libre' ? 'Free' : 'Occupied'
         }));
-        ////this.cdr.detectChanges();
       }
     });
   }

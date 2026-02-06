@@ -10,6 +10,7 @@ import { Rooms } from './pages/admin/rooms/rooms';
 import { Stores } from './pages/admin/stores/stores';
 import { StoresProduct } from './pages/admin/stores-product/stores-product';
 
+import {Events} from './pages/admin/event/event';
 export const routes: Routes = 
 [
   { path: '', component: LoginComponent },
@@ -36,6 +37,10 @@ export const routes: Routes =
         path: 'stores',
         component: Stores
       },
+      {
+        path: 'event',
+        component: Events
+      }
     ]
   },
   {
