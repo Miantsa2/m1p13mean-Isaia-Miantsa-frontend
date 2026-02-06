@@ -1,7 +1,10 @@
 <div class="relative flex flex-col w-64 h-64 p-6 bg-white shadow-md mt-11 rounded-3xl">
     
     <div class="flex flex-col items-center justify-start w-full mt-2">
-        <div class="flex items-center justify-center w-full h-32">
+        <div 
+            class="flex items-center justify-center w-full h-32 cursor-pointer"
+            (click)="goToProducts()"
+        >
             <img *ngIf="logo" [src]="logo" [alt]="name" 
                  class="object-contain max-w-full max-h-full mx-auto" />
         </div>
@@ -34,14 +37,14 @@
   buttonText="UPDATE"
   [isOpen]="isModalEditOpen"
   (close)="closeEditModal()"
+  (submitForm)="updateBoutiqueSalle()"
 >  
   <div class="grid grid-cols-2 gap-x-8 gap-y-6"> <!-- Ici j'ai spécifié oe 2 colonnes et pas plus, tu dois un peu modifier ceci raha miotra-->
     <div class="flex flex-col gap-2">
       <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Room Reference</label>
-      <input 
-        type="text" 
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
-      >
+      <select [(ngModel)]="selectedSalleId" class="w-full px-4 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162]">
+        <option *ngFor="let room of salles" [value]="room._id">{{ room.reference }}</option>
+      </select>
     </div>
   </div>
 </app-modal-form>
