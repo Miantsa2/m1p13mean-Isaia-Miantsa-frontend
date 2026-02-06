@@ -28,10 +28,10 @@ export class Rooms implements OnInit {
   currentEditingId: string  = '';
 
   rooms: any[] = []; 
-
   categories: any[] = [];
 
   meterPrice: number = 0;
+  centreId: string= '';
 
   selectedRoomName: string = '';
   form: any = {
@@ -102,6 +102,7 @@ export class Rooms implements OnInit {
       next: (res) => {
         const centreData = res[0];
         this.meterPrice = centreData.prixMetreCarre;
+        this.centreId= centreData._id;
         console.log('Meter price loaded:', res);
         //this.cdr.detectChanges();
       },
@@ -120,16 +121,30 @@ export class Rooms implements OnInit {
   }
 
 
- addRoom() {
-  this.salleService.addRoom(this.newRoom).subscribe({
-    next: (res) => {
-      console.log('Success!');
-      this.loadRooms(); 
-      this.closeCreateModal();
-    },
-    error: (err) => console.error('Erreur lors de la création', err)
-  });
-}
+  addRoom() {
+    this.salleService.addRoom(this.newRoom).subscribe({
+      next: (res) => {
+        console.log('Success!');
+        this.loadRooms(); 
+        this.closeCreateModal();
+      },
+      error: (err) => console.error('Erreur lors de la création', err)
+    });
+  }
+
+
+  savePrice() {
+    if (!this.centreId) return;
+
+    this.centreService.updatePrice(this.centreId, this.meterPrice).subscribe({
+      next: (res) => {
+        console.log('Prix mis à jour !');
+        this.closePriceModal();
+        this.loadCentre(); 
+      },
+      error: (err) => console.error('Erreur update prix:', err)
+    });
+  }
 
 
   deleteRoom(id: string): void {
