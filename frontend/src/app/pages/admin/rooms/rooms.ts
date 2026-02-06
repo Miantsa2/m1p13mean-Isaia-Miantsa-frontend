@@ -5,7 +5,8 @@ import { ButtonPrimaire } from '../../../components/button-primaire/button-prima
 import { ModalForm } from '../../../components/modal-form/modal-form';
 import { SalleService } from '../../../services/salle';
 import { CentreService } from '../../../services/centre';
-import { FormsModule } from '@angular/forms';import { Boutique } from '../../../services/boutique';
+import { FormsModule } from '@angular/forms';
+import { Boutique } from '../../../services/boutique';
 import { Categorie } from '../../../services/categorie';
 import { UserService } from '../../../services/user';
 
@@ -25,12 +26,13 @@ export class Rooms implements OnInit {
     { key: 'status', label: 'Status' },
     { key: 'actions', label: 'Actions' }
   ];
+  currentEditingId: string  = '';
 
   rooms: any[] = []; 
-
   categories: any[] = [];
 
   meterPrice: number = 0;
+  centreId: string= '';
 
   selectedRoomName: string = '';
   form: any = {
@@ -40,6 +42,19 @@ export class Rooms implements OnInit {
     email: '',
     password: '',
     telephone: ''
+  };
+
+    filterOptions = {
+    statut: 'all',
+    ordre: 'desc',
+    taille: null as number | null
+  };
+
+  newRoom = {
+    tailleMetreCarre: 0,
+    statut: 'libre',
+    reference:''
+    
   };
 
   // Modal section
@@ -88,6 +103,7 @@ export class Rooms implements OnInit {
       next: (res) => {
         const centreData = res[0];
         this.meterPrice = centreData.prixMetreCarre;
+        this.centreId= centreData._id;
         console.log('Meter price loaded:', res);
         //this.cdr.detectChanges();
       },
@@ -106,30 +122,30 @@ export class Rooms implements OnInit {
   }
 
 
-  // Objet pour stocker les choix actuels
-  filterOptions = {
-    statut: 'all',
-    ordre: 'desc',
-    taille: null as number | null
-  };
+  addRoom() {
+    this.salleService.addRoom(this.newRoom).subscribe({
+      next: (res) => {
+        console.log('Success!');
+        this.loadRooms(); 
+        this.closeCreateModal();
+      },
+      error: (err) => console.error('Erreur lors de la création', err)
+    });
+  }
 
-  newRoom = {
-    tailleMetreCarre: 0,
-    statut: 'libre',
-    reference:''
-    
-  };
 
- addRoom() {
-  this.salleService.addRoom(this.newRoom).subscribe({
-    next: (res) => {
-      console.log('Success!');
-      this.loadRooms(); // Rafraîchir la liste
-      //this.isModalOpen = false; // Fermer la modal ici
-    },
-    error: (err) => console.error('Erreur lors de la création', err)
-  });
-}
+  savePrice() {
+    if (!this.centreId) return;
+
+    this.centreService.updatePrice(this.centreId, this.meterPrice).subscribe({
+      next: (res) => {
+        console.log('Prix mis à jour !');
+        this.closePriceModal();
+        this.loadCentre(); 
+      },
+      error: (err) => console.error('Erreur update prix:', err)
+    });
+  }
 
 
   deleteRoom(id: string): void {
@@ -199,6 +215,28 @@ export class Rooms implements OnInit {
       }
     });
   }
+  
+
+  updateRoom() {
+    this.salleService.updateRoom(this.currentEditingId, this.newRoom).subscribe({
+      next: () => {
+        this.loadRooms();
+        this.newRoom = {
+          tailleMetreCarre: 0,
+          statut: 'libre',
+          reference:''
+          
+        };
+        this.closeEditModal();
+      },
+      error: (err) => console.error(err)
+    });
+  
+  }
+
+
+
+
 
 
 
@@ -209,7 +247,18 @@ export class Rooms implements OnInit {
   closePriceModal() { this.isPriceModalOpen = false; }
 
   // edit modal
-  openEditModal() { this.isEditModalOpen = true; }
+  //openEditModal() { this.isEditModalOpen = true; }
+
+  openEditModal(room: any) {
+    this.newRoom = {
+      reference: room.reference,
+      tailleMetreCarre: room.size,
+      statut: room.status === 'Free' ? 'libre' : 'occupee'
+    };
+    this.currentEditingId= room._id;
+    
+    this.isEditModalOpen = true;
+  }
   closeEditModal() { this.isEditModalOpen = false; }
 
   // assign modal

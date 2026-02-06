@@ -14,7 +14,11 @@ export class CentreService {
       }
    
     updateCenter(id: string, center: any): Observable<any> {
-      return this.http.put(`${this.apiUrl}/updateCenter${id}`, center);
+      return this.http.put(`${this.apiUrl}/updateCenter/${id}`, center);
       }
+
+    updatePrice(id: string, price: number): Observable<any> {
+      return this.http.put(`${this.apiUrl}/updatePrice/${id}`, { prixMetreCarre: price });
+    }
 
 }

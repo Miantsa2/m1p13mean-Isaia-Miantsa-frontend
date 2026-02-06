@@ -11,4 +11,5 @@ export class ButtonPrimaire {
   @Input() text: string = 'Bouton';
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() route?: string | any[];
+  @Input() disabled: boolean = false;
 }
