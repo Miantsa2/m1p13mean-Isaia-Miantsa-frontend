@@ -19,7 +19,6 @@ export class ModalForm {
 
   }
   confirm() {
-    this.close.emit();
     this.submitForm.emit();
   }
 }

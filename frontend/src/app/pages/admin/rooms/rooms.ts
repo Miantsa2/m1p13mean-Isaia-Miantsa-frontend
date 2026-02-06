@@ -5,10 +5,9 @@ import { ButtonPrimaire } from '../../../components/button-primaire/button-prima
 import { ModalForm } from '../../../components/modal-form/modal-form';
 import { SalleService } from '../../../services/salle';
 import { CentreService } from '../../../services/centre';
-import { FormsModule } from '@angular/forms';
-
-
-
+import { FormsModule } from '@angular/forms';import { Boutique } from '../../../services/boutique';
+import { Categorie } from '../../../services/categorie';
+import { UserService } from '../../../services/user';
 
 
 @Component({
@@ -29,22 +28,38 @@ export class Rooms implements OnInit {
 
   rooms: any[] = []; 
 
+  categories: any[] = [];
+
   meterPrice: number = 0;
 
-
-  
+  selectedRoomName: string = '';
+  form: any = {
+    nom: '',
+    categorie: '',
+    salle: '',
+    email: '',
+    password: '',
+    telephone: ''
+  };
 
   // Modal section
   isModalOpen = false;
   isPriceModalOpen = false;
+  isEditModalOpen = false;
+  isModalAssignOpen = false;
 
-  constructor(private salleService: SalleService, private centreService: CentreService ) {}
-
-
+  constructor(
+    private salleService: SalleService, 
+    private centreService: CentreService,
+    private userService: UserService,
+    private boutiqueService: Boutique,
+    private categorieService: Categorie
+  ) {}
 
   ngOnInit(): void {
     this.loadRooms();
     this.loadCentre();
+    this.loadCategories();
   }
 
   loadRooms(): void {
@@ -83,6 +98,14 @@ export class Rooms implements OnInit {
     });
   }
 
+  loadCategories() {
+    this.categorieService.getCategories().subscribe({
+      next: data => this.categories = data,
+      error: err => console.error(err)
+    });
+  }
+
+
   // Objet pour stocker les choix actuels
   filterOptions = {
     statut: 'all',
@@ -112,7 +135,7 @@ export class Rooms implements OnInit {
   deleteRoom(id: string): void {
     this.salleService.deleteRoom(id).subscribe(() =>
     this.loadRooms());
-    }
+  }
 
   onFilterChange(): void {
     const params: any = { ordre: this.filterOptions.ordre };
@@ -137,7 +160,46 @@ export class Rooms implements OnInit {
       }
     });
   }
-  
+
+  createStore() {
+    console.log("Données du formulaire avant envoi :", this.form);
+
+    if (!this.form.email || !this.form.password) {
+      alert("Veuillez remplir l'email et le mot de passe.");
+      return;
+    }
+
+    const userPayload = {
+      email: this.form.email,
+      password: this.form.password,
+      role: 'boutique'
+    };
+
+    this.userService.createUser(userPayload).subscribe({
+      next: (user: any) => {
+        const boutiquePayload = {
+          user: user._id,
+          nom: this.form.nom,
+          telephone: this.form.telephone,
+          categorie: this.form.categorie,
+          salle: this.form.salle // Déjà défini dans openAssignModal
+        };
+        
+        this.boutiqueService.createBoutique(boutiquePayload).subscribe({
+          next: () => {
+            this.loadRooms();
+            this.closeAssignModal();
+          },
+          error: err => console.error("Erreur Boutique:", err)
+        });
+      },
+      error: err => {
+        console.error("Erreur User détaillée:", err.error);
+        alert("Erreur lors de la création de l'utilisateur : " + (err.error.message || "Champs requis manquants"));
+      }
+    });
+  }
+
 
 
   openCreateModal() { this.isModalOpen = true; }
@@ -145,4 +207,25 @@ export class Rooms implements OnInit {
 
   openPriceModal() { this.isPriceModalOpen = true; }
   closePriceModal() { this.isPriceModalOpen = false; }
+
+  // edit modal
+  openEditModal() { this.isEditModalOpen = true; }
+  closeEditModal() { this.isEditModalOpen = false; }
+
+  // assign modal
+  openAssignModal(room: any) {
+    this.selectedRoomName = room.reference;
+    this.form.salle = room._id;
+    this.isModalAssignOpen = true;
+  }
+
+  closeAssignModal() {
+    this.isModalAssignOpen= false;
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.form = { nom: '', categorie: '', salle: '', email: '', password: '', telephone: '' };
+    this.selectedRoomName = '';
+  }
 }

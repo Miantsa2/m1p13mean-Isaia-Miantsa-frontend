@@ -27,7 +27,6 @@ export class SalleService {
 
     getFreeRoom(): Observable<any[]> {
      return this.http.get<any[]>(`${this.apiUrl}/freeRoom`);
-     
     }
 
     filterSalles(options: { statut?: string; ordre?: 'asc' | 'desc'; taille?: number }): Observable<any> {

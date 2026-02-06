@@ -52,7 +52,7 @@
         placeholder="ex: 20"
         class="w-20 py-1 px-2 text-[gray] bg-transparent border-b border-gray-300 focus:border-[#E9B162] focus:outline-none transition-colors"
       >
-      <span class="text-xs ml-1">m²</span>
+      <span class="ml-1 text-xs">m²</span>
     </div>
   </div>
 
@@ -72,7 +72,7 @@
           </span>
         </td>
         <td class="flex items-center gap-4 px-4 py-4">
-          <button class="text-teal-500 transition-transform hover:scale-110">
+          <button (click)="openEditModal()" class="text-teal-500 transition-transform hover:scale-110">
             <span class="material-symbols-outlined">edit</span>
           </button>
           <button (click)="deleteRoom(room._id)" class="text-red-500 transition-transform hover:scale-110">
@@ -80,7 +80,7 @@
           </button>
           
           @if (room.status === 'Free') {
-            <button class="ml-4 bg-[#4D9893] text-white px-6 py-1.5 rounded font-normal text-sm uppercase">
+            <button (click)="openAssignModal(room)" class="ml-4 bg-[#4D9893] text-white px-6 py-1.5 rounded font-normal text-sm uppercase">
               Assign
             </button>
           }
@@ -89,6 +89,8 @@
     }
   </app-table-corps>
 </div>
+
+<!----------------------------------------------------------------------------------------------------->
 
 <!-- Modal component pour la création room -->
 <app-modal-form 
@@ -143,4 +145,116 @@
     </div>
   </div>
 
+</app-modal-form>
+
+<!-- Modal pour la modification des lignes de la liste des room-->
+<app-modal-form
+  title="UPDATE ROOM" 
+  buttonText="UPDATE"
+  [isOpen]="isEditModalOpen"
+  (close)="closeEditModal()"
+>  
+  <div class="grid grid-cols-2 gap-x-8 gap-y-6"> <!-- Ici j'ai spécifié oe 2 colonnes et pas plus, tu dois un peu modifier ceci raha miotra-->
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Room Reference</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+      >
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Size in m²</label>
+      <input 
+        type="number" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+      >
+    </div>
+  </div>
+</app-modal-form>
+
+<!-- Modal pour l'assignation à une nouvelle boutique -->
+<app-modal-form
+  title="ASSIGN WITH A NEW STORE"
+  buttonText="CONFIRM"
+  [isOpen]="isModalAssignOpen"
+  (close)="closeAssignModal()"
+  (submitForm)="createStore()"
+>
+  <form #f="ngForm" (ngSubmit)="createStore()" class="grid grid-cols-2 gap-x-8 gap-y-6">
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Name Store</label>
+      <input
+        name="nom"
+        [(ngModel)]="form.nom"
+        type="text"
+        required
+        class="w-full px-3 py-2 border rounded-md"
+      >
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Category</label>
+      <select
+        name="categorie"
+        [(ngModel)]="form.categorie"
+        required
+        class="w-full px-3 py-2 border rounded-md"
+      >
+        <option value="" disabled>Select category</option>
+        @for (cat of categories; track cat._id) {
+          <option [value]="cat._id">{{ cat.nom }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Address E-mail</label>
+      <input
+        name="email"
+        [(ngModel)]="form.email"
+        type="email"
+        required
+        class="w-full px-3 py-2 border rounded-md"
+      >
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Password</label>
+      <input
+        name="password"
+        [(ngModel)]="form.password"
+        type="password"
+        required
+        class="w-full px-3 py-2 border rounded-md"
+      >
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Assigned Room</label>
+      <input
+        type="text"
+        [value]="selectedRoomName"
+        readonly
+        class="w-full px-3 py-2 bg-gray-100 border rounded-md"
+      >
+      <input
+        type="hidden"
+        name="salle"
+        [(ngModel)]="form.salle"
+      >
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Phone Number</label>
+      <input
+        name="telephone"
+        [(ngModel)]="form.telephone"
+        type="number"
+        class="w-full px-3 py-2 border rounded-md"
+      >
+    </div>
+
+  </form>
 </app-modal-form>
