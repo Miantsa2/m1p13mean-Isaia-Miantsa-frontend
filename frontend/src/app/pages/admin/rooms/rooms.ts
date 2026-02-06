@@ -5,7 +5,8 @@ import { ButtonPrimaire } from '../../../components/button-primaire/button-prima
 import { ModalForm } from '../../../components/modal-form/modal-form';
 import { SalleService } from '../../../services/salle';
 import { CentreService } from '../../../services/centre';
-import { FormsModule } from '@angular/forms';import { Boutique } from '../../../services/boutique';
+import { FormsModule } from '@angular/forms';
+import { Boutique } from '../../../services/boutique';
 import { Categorie } from '../../../services/categorie';
 import { UserService } from '../../../services/user';
 
