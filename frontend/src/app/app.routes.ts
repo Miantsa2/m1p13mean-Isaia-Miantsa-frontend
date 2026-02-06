@@ -29,13 +29,13 @@ export const routes: Routes =
         component: Rooms 
       },
       {
+        path: 'stores/stores-products/:id',
+        component: StoresProduct 
+      },
+      {
         path: 'stores',
         component: Stores
       },
-      {
-        path: 'stores/stores-products/:id',
-        component: StoresProduct 
-      }
     ]
   },
   {
