@@ -25,6 +25,7 @@ export class Rooms implements OnInit {
     { key: 'status', label: 'Status' },
     { key: 'actions', label: 'Actions' }
   ];
+  currentEditingId: string  = '';
 
   rooms: any[] = []; 
 
@@ -40,6 +41,19 @@ export class Rooms implements OnInit {
     email: '',
     password: '',
     telephone: ''
+  };
+
+    filterOptions = {
+    statut: 'all',
+    ordre: 'desc',
+    taille: null as number | null
+  };
+
+  newRoom = {
+    tailleMetreCarre: 0,
+    statut: 'libre',
+    reference:''
+    
   };
 
   // Modal section
@@ -106,26 +120,12 @@ export class Rooms implements OnInit {
   }
 
 
-  // Objet pour stocker les choix actuels
-  filterOptions = {
-    statut: 'all',
-    ordre: 'desc',
-    taille: null as number | null
-  };
-
-  newRoom = {
-    tailleMetreCarre: 0,
-    statut: 'libre',
-    reference:''
-    
-  };
-
  addRoom() {
   this.salleService.addRoom(this.newRoom).subscribe({
     next: (res) => {
       console.log('Success!');
-      this.loadRooms(); // Rafraîchir la liste
-      //this.isModalOpen = false; // Fermer la modal ici
+      this.loadRooms(); 
+      this.closeCreateModal();
     },
     error: (err) => console.error('Erreur lors de la création', err)
   });
@@ -199,6 +199,28 @@ export class Rooms implements OnInit {
       }
     });
   }
+  
+
+  updateRoom() {
+    this.salleService.updateRoom(this.currentEditingId, this.newRoom).subscribe({
+      next: () => {
+        this.loadRooms();
+        this.newRoom = {
+          tailleMetreCarre: 0,
+          statut: 'libre',
+          reference:''
+          
+        };
+        this.closeEditModal();
+      },
+      error: (err) => console.error(err)
+    });
+  
+  }
+
+
+
+
 
 
 
@@ -209,7 +231,18 @@ export class Rooms implements OnInit {
   closePriceModal() { this.isPriceModalOpen = false; }
 
   // edit modal
-  openEditModal() { this.isEditModalOpen = true; }
+  //openEditModal() { this.isEditModalOpen = true; }
+
+  openEditModal(room: any) {
+    this.newRoom = {
+      reference: room.reference,
+      tailleMetreCarre: room.size,
+      statut: room.status === 'Free' ? 'libre' : 'occupee'
+    };
+    this.currentEditingId= room._id;
+    
+    this.isEditModalOpen = true;
+  }
   closeEditModal() { this.isEditModalOpen = false; }
 
   // assign modal
