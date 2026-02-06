@@ -1,0 +1,64 @@
+<div class="min-h-screen p-4">
+    <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide"><span> {{ storeName }} </span>PRODUCTS</h1>
+    <app-button-primaire text="GO BACK" (click)="goBack()"></app-button-primaire>
+  </div>
+
+  <div class="relative flex items-center gap-2 text-[#3A626B] mb-10">
+        <span class="font-normal pointer-events-none">Categories</span>
+        
+        <div class="relative flex items-center">
+            <select 
+                (change)="onCategoryChange($event)"
+                class="py-0 pr-8 text-[gray] font-normal leading-tight bg-transparent border-none appearance-none cursor-pointer focus:outline-none focus:ring-0"
+            >
+                <option value="all">All</option>
+                @for (cat of categories; track cat._id) {
+                    <option [value]="cat._id">
+                        {{ cat.nom }}
+                    </option>
+                }
+            </select>
+            
+            <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+                arrow_downward
+            </span>
+        </div>
+
+        <div class="relative flex items-center gap-2 text-[#3A626B] ml-10">
+            <span class="font-normal">Search</span>
+            <div class="relative flex items-center">
+                <input 
+                    type="text" 
+                    [(ngModel)]="searchName"
+                    (input)="filterProducts()"
+                    placeholder="Product name..."
+                    class="px-2 py-1 text-sm border-b border-slate-300 focus:border-[#4D9893] outline-none bg-transparent text-slate-600"
+                >
+                <span class="text-sm material-symbols-outlined text-slate-400">search</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- List des produits sous forme de tableaux -->
+    <div class="min-h-[300px]">
+        @if (filteredProduits.length === 0) {
+            <div class="flex flex-col items-center justify-center py-10 text-center col-span-full text-slate-400">
+            <span class="mb-3 text-6xl material-symbols-outlined">
+                inventory_2
+            </span>
+            <p class="text-lg font-light">No product found</p>
+            <p class="text-sm">Try changing filters or add a new product</p>
+            </div>
+        } @else {
+            <app-table-corps [columns]="roomColumns">
+            @for (prod of filteredProduits; track prod._id) {
+                <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
+                <td class="px-4 py-4 font-normal text-[#375E67]">{{ prod.nom }}</td>
+                <td class="px-4 py-4 text-[#375E67]">{{ prod.categorie?.nom || '—' }}</td>
+                </tr>
+            }
+            </app-table-corps>
+        }
+    </div>
+</div>

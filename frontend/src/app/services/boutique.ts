@@ -15,8 +15,16 @@ export class Boutique {
     return this.http.get<any[]>(`${this.apiUrl}/getBoutiques`);
   }
 
+  getBoutiquesById(id: String): Observable<any> {
+    return this.http.get(`${this.apiUrl}/getBoutique/${id}`);
+  }
+
   createBoutique(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/createBoutique`, data);
+  }
+
+  updateBoutique(id: String, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateBoutique/${id}`, data);
   }
 
   deleteBoutique(id: String): Observable<any> {
