@@ -10,6 +10,7 @@ import { ButtonPrimaire } from '../button-primaire/button-primaire';
 export class ModalForm {
   @Input() buttonText: string = 'SAVE CHANGES';
   @Input() isOpen: boolean = false;
+  @Input() disable: boolean = false;
   @Input() title: string = '';
   @Output() close = new EventEmitter<void>();
   @Output() submitForm = new EventEmitter<void>();
