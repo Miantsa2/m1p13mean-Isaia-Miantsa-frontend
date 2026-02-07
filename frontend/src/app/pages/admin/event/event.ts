@@ -37,12 +37,13 @@ export class Events implements OnInit {
   
   filterOptions = {
     statut: 'all',
-    ordre: 'desc'
+    order: 'desc'
   };
 
   newEvent = {
     reference: '',
     type: 'centre',
+    statut: 'approuved',
     description:'',
     dateDebut:'',
     dateFin:''
@@ -69,8 +70,10 @@ export class Events implements OnInit {
           _id: event._id,
           reference: event.reference,
           description: event.description,
-          dateDebut: new Date(event.dateDebut).toLocaleString(),
-          dateFin: new Date(event.dateFin).toLocaleString(),
+          dateDebut: new Date(event.dateDebut),
+          dateFin: new Date(event.dateFin),
+          dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
+          dateFinFormatted: new Date(event.dateFin).toLocaleString()
         }));
         console.log(this.events);
 
@@ -81,7 +84,7 @@ export class Events implements OnInit {
 
   
   onFilterChange(): void {
-    const params: any = { ordre: this.filterOptions.ordre };
+    const params: any = { order: this.filterOptions.order };
      if (this.filterOptions.statut !== 'all') {
       params.statut = this.filterOptions.statut;
     }
@@ -92,8 +95,10 @@ export class Events implements OnInit {
           _id: event._id,
           reference: event.reference,
           description: event.description,
-          dateDebut: new Date(event.dateDebut).toLocaleString(),
-          dateFin: new Date(event.dateFin).toLocaleString(),
+          dateDebut: new Date(event.dateDebut),
+          dateFin: new Date(event.dateFin),
+          dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
+          dateFinFormatted: new Date(event.dateFin).toLocaleString()
 
         }));
         console.log(this.events);
@@ -138,13 +143,34 @@ export class Events implements OnInit {
 
   resetEventForm(){
       this.newEvent = {
-        reference: '',
-        type: 'centre',
-        description:'',
-        dateDebut:'',
-        dateFin:''
-        
-      };
+      reference: '',
+      type: 'centre',
+      statut: 'approuved',
+      description:'',
+      dateDebut:'',
+      dateFin:''
+    };
+  }
+
+  isEventFormInvalid(): boolean {
+    if (!this.newEvent.reference || !this.newEvent.description || !this.newEvent.dateDebut || !this.newEvent.dateFin) {
+      return true; 
+    }
+    const debut = new Date(this.newEvent.dateDebut);
+    const fin = new Date(this.newEvent.dateFin);
+
+    if (debut >= fin) {
+      return true;
+    }
+
+    const maintenant = new Date();
+    if (!this.currentEditingId) {
+    if (debut < maintenant) {
+      return true;
+    }
+  }
+
+    return false; 
   }
 
 
@@ -152,17 +178,13 @@ export class Events implements OnInit {
   openCreateModal() { this.isModalOpen = true; }
   closeCreateModal() { this.isModalOpen = false; }
 
-  openPriceModal() { this.isPriceModalOpen = true; }
-  closePriceModal() { this.isPriceModalOpen = false; }
-
-  formatDateForInput(dateInput: any): string {
+  formatDateForInput(dateInput: string | Date): string {
     if (!dateInput) return '';
-    
+
     const d = new Date(dateInput);
-        if (isNaN(d.getTime())) return '';
+    if (isNaN(d.getTime())) return '';
 
-    const pad = (n: number) => n < 10 ? '0' + n : n;
-
+    const pad = (n: number) => n.toString().padStart(2, '0');
     const year = d.getFullYear();
     const month = pad(d.getMonth() + 1);
     const day = pad(d.getDate());
@@ -171,6 +193,7 @@ export class Events implements OnInit {
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
+
 
   // edit modal
   openEditModal(event: any) {
@@ -181,6 +204,7 @@ export class Events implements OnInit {
     this.newEvent = {
       reference: event.reference,
       type: event.type,
+      statut: event.statut,
       description: event.description,
       dateDebut: this.formatDateForInput(event.dateDebut),
       dateFin: this.formatDateForInput(event.dateFin)
@@ -188,6 +212,9 @@ export class Events implements OnInit {
     this.currentEditingId= event._id
     this.isEditModalOpen = true; 
     }
-  closeEditModal() { this.isEditModalOpen = false; }
+  closeEditModal() { 
+    this.resetEventForm();
+    this.isEditModalOpen = false; 
+  }
 
 }
