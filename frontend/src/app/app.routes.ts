@@ -20,7 +20,6 @@ export const routes: Routes =
   {
     path: 'layout-boutique', 
     component: MainLayout, 
-    children: [{path: '', component: Home}]
   },
   {
     path: 'layout-admin', 
@@ -29,6 +28,10 @@ export const routes: Routes =
       {
         path: 'rooms', 
         component: Rooms 
+      },
+      {
+        path: 'stores/stores-products/:id',
+        component: StoresProduct 
       },
       {
         path: 'stores',
