@@ -15,4 +15,8 @@ export class Categorie {
   getCategories(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getCategorie`);
   }
+
+  createCategory(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/createCategorie`, data);
+  }
 }

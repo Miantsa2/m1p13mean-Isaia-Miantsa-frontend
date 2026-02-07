@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Boutique } from '../../services/boutique';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,5 +10,5 @@ import { RouterModule } from '@angular/router';
   templateUrl: './sidebar.html',
 })
 export class Sidebar {
-
+  boutiqueService = inject(Boutique);
 }
