@@ -11,6 +11,7 @@ import { Stores } from './pages/admin/stores/stores';
 import {EventStore} from './pages/admin/event-store/event-store';
 import {Events} from './pages/admin/event/event';
 import { Products } from './pages/boutique/products/products';
+import { StoresProduct } from './pages/admin/stores-product/stores-product';
 
 export const routes: Routes = 
 [
