@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -9,10 +9,19 @@ import { environment } from '../../environments/environment';
 export class Boutique {
   private apiUrl = `${environment.apiUrl}/mean/boutique`;
 
+  currentBoutique = signal<any>(null);
+
   constructor(private http: HttpClient) {}
 
   getBoutiques(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getBoutiques`);
+  }
+
+  loadCurrentBoutique() {
+    this.http.get<any>(`${this.apiUrl}/getBoutiqueByUser`).subscribe({
+      next: (data) => this.currentBoutique.set(data),
+      error: (err) => console.error('Error loading boutique', err)
+    });
   }
 
   getBoutiquesById(id: String): Observable<any> {

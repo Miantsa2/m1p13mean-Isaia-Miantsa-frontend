@@ -6,8 +6,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 
-
-
 @Component({
   selector: 'app-header',
   imports: [ModalForm, FormsModule],

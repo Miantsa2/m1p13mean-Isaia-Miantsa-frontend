@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Home } from './pages/home/home';
 import { MainLayout } from './layout_boutique/main-layout/main-layout';
@@ -11,6 +11,7 @@ import { Stores } from './pages/admin/stores/stores';
 import { StoresProduct } from './pages/admin/stores-product/stores-product';
 
 import {Events} from './pages/admin/event/event';
+import { Products } from './pages/boutique/products/products';
 export const routes: Routes = 
 [
   { path: '', component: LoginComponent },
@@ -20,6 +21,12 @@ export const routes: Routes =
   {
     path: 'layout-boutique', 
     component: MainLayout, 
+    children: [
+      {
+        path: 'products',
+        component: Products 
+      }
+    ]
   },
   {
     path: 'layout-admin', 

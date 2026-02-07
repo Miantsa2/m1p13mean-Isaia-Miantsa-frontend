@@ -23,9 +23,111 @@
         <span class="material-symbols-outlined text-[26px]">notifications</span>
       </button>
 
-      <button class="flex items-center text-gray-400 hover:text-gray-600">
+      <button (click)="openSettings()" class="flex items-center text-gray-400 hover:text-gray-600">
         <span class="material-symbols-outlined text-[32px] text-[#697F84]">manage_accounts</span>
       </button>
     </div>
   </div>
 </header>
+
+<app-modal-form 
+  *ngIf="isModalOpen" 
+  [isOpen]="isModalOpen"
+  [buttonText]="'SAVE CHANGES'"
+  title="SETTINGS" 
+  (close)="closeSettings()"
+  (submitForm)="saveChanges()"
+>
+  <div class="flex gap-10">
+    <div class="flex flex-col items-center">
+      <div class="relative group">
+        <div class="w-24 h-24 overflow-hidden border-2 border-gray-100 rounded-full shadow-sm">
+          <img [src]="storeData.logo || '/image.png'" 
+              alt="Logo" 
+              class="object-cover w-full h-full">
+        </div>
+  
+        <div class="absolute bottom-0 right-0 flex items-center justify-center w-8 h-8 transition-colors bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
+          <span class="text-gray-500 text-[18px] material-symbols-outlined">edit</span>
+          <input 
+            type="file"
+            #fileInput
+            class="absolute inset-0 opacity-0 cursor-pointer"
+            accept="public/*"
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1">
+      <div class="grid grid-cols-2 gap-x-6 gap-y-4">
+        
+        <div>
+          <label class="block text-[10px] text-[#697F84] uppercase mb-1">Room</label>
+          <input readonly type="text" [(ngModel)]="storeData.room" class="w-full px-3 py-2 text-gray-500 border border-gray-200 rounded-lg outline-none bg-gray-50/30">
+        </div>
+        <div>
+          <label class="block text-[10px] text-[#697F84] uppercase mb-1">Categorie</label>
+          <input readonly type="text" [(ngModel)]="storeData.category" class="w-full px-3 py-2 text-gray-500 border border-gray-200 rounded-lg bg-gray-50/30">
+        </div>
+
+        <div>
+          <div class="flex items-center gap-1 mb-1">
+            <label class="block text-[10px] text-[#697F84] uppercase font-bold">Store Name</label>
+            <span *ngIf="isDirty('name')" class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+          </div>
+          <input type="text" 
+                [(ngModel)]="storeData.name" 
+                [ngClass]="{'border-red-300 ring-1 ring-red-100': isDirty('name')}"
+                class="w-full px-3 py-2 text-gray-500 transition-all border border-gray-200 rounded-lg outline-none">
+        </div>
+        <div>
+          <label class="block text-[10px] text-[#697F84] uppercase mb-1">Opening Date</label>
+          <input readonly type="text" [value]="storeData.createdAt | date:'dd-MM-yyyy'" class="w-full px-3 py-2 text-gray-500 border border-gray-200 rounded-lg bg-gray-50/30">
+        </div>
+
+        <div>
+          <label class="block text-[10px] text-[#697F84] uppercase mb-1">Address E-mail</label>
+          <input readonly type="email" [(ngModel)]="storeData.email" class="w-full px-3 py-2 text-gray-500 border border-gray-200 rounded-lg bg-gray-50/30">
+        </div>
+        <div>
+          <div class="flex items-center gap-1 mb-1">
+            <label class="block text-[10px] text-[#697F84] uppercase font-bold">Phone Number</label>
+            <span *ngIf="isDirty('phone')" class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+          </div>
+          <input type="text" 
+                [(ngModel)]="storeData.phone" 
+                [ngClass]="{'border-red-300 ring-1 ring-red-100': isDirty('phone')}"
+                class="w-full px-3 py-2 text-gray-500 border border-gray-200 rounded-lg outline-none">
+        </div>
+
+        <div class="col-span-2 mt-4">
+          <div class="flex items-center gap-2 mb-1">
+            <label class="block text-[10px] text-[#697F84] uppercase font-bold">Opening and Closing Times</label>
+          </div>
+
+          <div *ngFor="let horaire of storeData.horaires; let i = index" class="grid items-center grid-cols-3 gap-3 mb-2">
+            <input type="text" [(ngModel)]="horaire.jour" 
+                  [ngClass]="{'border-red-300 ring-1 ring-red-100': isHorairesDirty()}"
+                  placeholder="Day (ex: Mon-Fri)" 
+                  class="px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none transition-all">
+            
+            <div class="flex items-center col-span-2 gap-2">
+              <input type="text" [(ngModel)]="horaire.ouverture" 
+                    [ngClass]="{'border-red-300 ring-1 ring-red-100': isHorairesDirty()}"
+                    placeholder="09:00" 
+                    class="w-full px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none text-center transition-all">
+              
+              <span class="text-gray-400">-</span>
+              
+              <input type="text" [(ngModel)]="horaire.fermeture" 
+                    [ngClass]="{'border-red-300 ring-1 ring-red-100': isHorairesDirty()}"
+                    placeholder="19:00" 
+                    class="w-full px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none text-center transition-all">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal-form>

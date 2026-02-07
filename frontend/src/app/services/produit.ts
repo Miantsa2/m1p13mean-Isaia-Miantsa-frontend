@@ -11,19 +11,23 @@ export class Produit {
 
   constructor(private http: HttpClient) {}
 
+  getProduitsByBoutique(id: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/getProduitsByBoutique/${id}`);
+  }
+  
+  getCategoriesByBoutique(id: string) {
+    return this.http.get<any[]>(`${this.apiUrl}/getCategoriesByBoutique/${id}`);
+  }
+
   createProduit(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/createProduit`, data);
   }
-
+  
   deleteProduit(id: String): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteProduit/${id}`);
   }
 
-  getProduitsByBoutique(id: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/getProduitsByBoutique/${id}`);
-  }
-
-  getCategoriesByBoutique(id: string) {
-    return this.http.get<any[]>(`${this.apiUrl}/getCategoriesByBoutique/${id}`);
+  updateProduit(id: string, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateProduit/${id}`, data);
   }
 }
