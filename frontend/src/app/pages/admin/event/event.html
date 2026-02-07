@@ -9,7 +9,7 @@
   <div class="flex items-center gap-2 text-[#3A626B]">
     <span class="font-normal">Start Date</span>
     <select 
-      [(ngModel)]="filterOptions.ordre" 
+      [(ngModel)]="filterOptions.order" 
       (change)="onFilterChange()"
       class="py-0 pr-8 text-[gray] bg-transparent border-none cursor-pointer focus:ring-0">
       <option value="desc">furthest</option>
@@ -26,7 +26,7 @@
         (change)="onFilterChange()"
         class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
         <option value="all">All</option>
-        <option value="termine">Finished</option>
+        <option value="finished">Finished</option>
       </select>
       <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
         arrow_downward
@@ -41,8 +41,8 @@
       <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
         <td class="px-4 py-4 font-bold text-[#697F84]">{{ event.reference }}</td>
         <td class="px-4 py-4 text-[#375E67]">{{ event.description }}</td>
-        <td class="px-4 py-4 text-[#375E67]">{{ event.dateDebut }}</td>
-        <td class="px-4 py-4 text-[#375E67]">{{ event.dateFin }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.dateDebutFormatted }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.dateDebutFormatted }}</td>
         <td class="flex items-center gap-4 px-4 py-4">
           <button (click)="openEditModal(event)" class="text-teal-500 transition-transform hover:scale-110">
             <span class="material-symbols-outlined">edit</span>
@@ -64,7 +64,7 @@
   type="submit"
   title="CREATE EVENT" 
   buttonText="CONFIRM"
-  [disable]="!!EventForm.invalid" 
+  [disable]="isEventFormInvalid()" 
   [isOpen]="isModalOpen"
   (close)="closeCreateModal()"
   (submitForm)="addEvent()">
@@ -119,6 +119,7 @@
   title="UPDATE EVENT" 
   buttonText="UPDATE"
   [isOpen]="isEditModalOpen"
+  [disable]="isEventFormInvalid()" 
   (close)="closeEditModal()"
   (submitForm)="updateEvent()">  
 

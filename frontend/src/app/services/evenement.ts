@@ -30,18 +30,28 @@ export class EvenementService {
     
     if (type) {
       params = params.set('type', type); 
+      console.log('Type parameter set to:', type);
     }
+    console.log('Final query parameters:', this.http.get<any[]>(`${this.apiUrl}/getEvent`, { params }));
     return this.http.get<any[]>(`${this.apiUrl}/getEvent`, { params });
   }
 
-  filterStoreEvents(filters: { boutiqueId?: string, statut?: number, order?: 'asc' | 'desc' }): Observable<any[]> {
-    let params: any = {};
-    
-    if (filters.boutiqueId) params = params.set('boutiqueId', filters.boutiqueId);
-    if (filters.statut !== undefined) params = params.set('statut', filters.statut.toString());
-    if (filters.order) params = params.set('order', filters.order);
+  filterStoreEvents(filters: { boutiqueId?: string, statut?: string, ordre?: 'asc' | 'desc' }): Observable<any[]> {
+      let params = new HttpParams();
+      
+      if (filters.boutiqueId) {
+          params = params.set('boutiqueId', filters.boutiqueId);
+      }
+      
+      if (filters.statut && filters.statut !== 'all') {
+          params = params.set('statut', filters.statut);
+      }
+      
+      if (filters.ordre) {
+          params = params.set('order', filters.ordre);
+      }
 
-    return this.http.get<any[]>(`${this.apiUrl}/FilterEventStore`, { params });
+      return this.http.get<any[]>(`${this.apiUrl}/FilterEventStore`, { params });
   }
 
   filterCenterEvents(filters: { statut?: string, order?: 'asc' | 'desc' }): Observable<any[]> {
