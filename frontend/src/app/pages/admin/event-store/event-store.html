@@ -1,0 +1,103 @@
+<div class="min-h-screen p-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide">Events</h1>
+    <app-button-primaire text="GENERAL EVENT" [route]="'/layout-admin/eventCenter'"></app-button-primaire>
+  </div>
+
+ <div class="flex flex-wrap items-center gap-8 mb-8">
+  
+  <div class="flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Start Date</span>
+    <select 
+      [(ngModel)]="filterOptions.ordre" 
+      (change)="onFilterChange()"
+      class="py-0 pr-8 text-[gray] bg-transparent border-none cursor-pointer focus:ring-0">
+      <option value="desc">furthest</option>
+      <option value="asc">nearest</option>
+    </select>
+  </div>
+
+
+  <div class="relative flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Status</span>
+    <div class="relative flex items-center">
+      <select 
+        [(ngModel)]="filterOptions.statut" 
+        (change)="onFilterChange()"
+        class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+        <option value="all">All</option>
+        <option value="finished">Finished</option>
+        <option value="approuved">Approuved</option>
+        <option value="refused">Rejected</option>
+        <option value="pending">Pending</option>
+
+
+      </select>
+      <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+        arrow_downward
+      </span>
+    </div>
+  </div>
+
+   <div class="relative flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Stores</span>
+    <div class="relative flex items-center">
+      <select 
+        [(ngModel)]="filterOptions.boutiqueId" 
+        (change)="onFilterChange()"
+        class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+        <option value="all">All</option>
+          @for (store of stores; track store._id) {
+            <option value="{{ store._id }}">{{ store.nom }}</option>
+          }
+
+      </select>
+      <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+        arrow_downward
+      </span>
+    </div>
+  </div>
+
+
+
+</div>
+<app-table-corps [columns]="eventColumns">
+  @for (eventStore of eventStores; track eventStore._id) {
+    <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
+      <td class="px-4 py-4 font-bold text-[#697F84]">{{ eventStore.reference }}</td>
+      <td class="px-4 py-4 text-[#375E67]">{{ eventStore.description }}</td>
+      
+      <td class="px-4 py-4 font-semibold" [ngClass]="{
+        'text-red-500': eventStore.statut === 'refused' || eventStore.statut === 'finished',
+        'text-green-500': eventStore.statut === 'approuved',
+        'text-yellow-500': eventStore.statut === 'pending'
+      }">
+        {{ eventStore.statut }}
+      </td>
+
+      <td class="px-4 py-4 text-[#375E67]">{{ eventStore.boutique.nom }}</td>
+      <td class="px-4 py-4 text-[#375E67]">{{ eventStore.dateDebut }}</td>
+      <td class="px-4 py-4 text-[#375E67]">{{ eventStore.dateFin }}</td>
+
+      <td class="flex items-center gap-4 px-4 py-4">
+        @if (eventStore.statut === 'pending') {
+          <button (click)="updateEventStore(eventStore._id, 'approuved')" 
+                  class="text-green-500 transition-transform hover:scale-110" 
+                  title="Valider">
+              <span class="material-symbols-outlined font-bold">check_circle</span>
+          </button>
+
+          <button (click)="updateEventStore(eventStore._id, 'refused')" 
+                  class="text-red-500 transition-transform hover:scale-110" 
+                  title="Refuser">
+              <span class="material-symbols-outlined font-bold">cancel</span>
+          </button>
+        } 
+      </td>
+    </tr>
+  }
+</app-table-corps>
+</div>
+
+
+

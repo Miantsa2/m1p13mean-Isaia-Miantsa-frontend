@@ -220,12 +220,7 @@ export class Rooms implements OnInit {
     this.salleService.updateRoom(this.currentEditingId, this.newRoom).subscribe({
       next: () => {
         this.loadRooms();
-        this.newRoom = {
-          tailleMetreCarre: 0,
-          statut: 'libre',
-          reference:''
-          
-        };
+        this.resetFormEvent()
         this.closeEditModal();
       },
       error: (err) => console.error(err)
@@ -258,7 +253,19 @@ export class Rooms implements OnInit {
     
     this.isEditModalOpen = true;
   }
-  closeEditModal() { this.isEditModalOpen = false; }
+  closeEditModal() { 
+    this.resetFormEvent()
+    this.isEditModalOpen = false; 
+  }
+
+  resetFormEvent(){
+    this.newRoom = {
+    tailleMetreCarre: 0,
+    statut: 'libre',
+    reference:''
+    
+  };
+  }
 
   // assign modal
   openAssignModal(room: any) {

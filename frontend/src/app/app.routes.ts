@@ -8,7 +8,9 @@ import { MainLayoutAdmin } from './layout-admin/main-layout/main-layout';
 import { AuthCallbackComponent } from './pages/auth-callback/auth-callback';
 import { Rooms } from './pages/admin/rooms/rooms';
 import { Stores } from './pages/admin/stores/stores';
+import {EventStore} from './pages/admin/event-store/event-store';
 import {Events} from './pages/admin/event/event';
+
 export const routes: Routes = 
 [
   { path: '', component: LoginComponent },
@@ -34,8 +36,14 @@ export const routes: Routes =
       },
       {
         path: 'event',
+        component: EventStore
+      },
+
+        {
+        path: 'eventCenter',
         component: Events
       }
+      
     ]
   },
   {
