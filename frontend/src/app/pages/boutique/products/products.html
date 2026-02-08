@@ -4,6 +4,7 @@
         <div class="flex items-center gap-4">
             <div class="relative">
                 <input type="text" 
+                       [(ngModel)]="searchTerm"
                        placeholder="Search product" 
                        class="px-4 py-2 bg-[#F1F4F5] border-none rounded-lg text-sm w-64 outline-none text-gray-600">
             </div>
@@ -24,7 +25,7 @@
     </div>
 
     <app-table-corps [columns]="productColumns">
-        @for (product of productList; track product._id) {
+        @for (product of filteredProducts; track product._id) {
             <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50/50">
                 <td class="px-4 py-4 text-[#375E67] font-medium">{{ product.nom }}</td>
                 
@@ -52,7 +53,7 @@
         } @empty {
             <tr>
                 <td [attr.colspan]="productColumns.length" class="py-10 text-center text-gray-400">
-                    No products found for this store.
+                    {{ searchTerm ? 'No products match your search.' : 'No products found for this store.' }}
                 </td>
             </tr>
         }
@@ -65,45 +66,60 @@
     buttonText="CONFIRM"
     [isOpen]="isModalAddOpen"
     (close)="closeAddModal()"
+    (submitForm)="onCreateProduct()"
 >
     <div class="grid grid-cols-2 gap-x-8 gap-y-6">
         <div class="flex flex-col gap-2">
             <label class="text-[13px] font-medium text-[#697F84]">Name</label>
-            <input type="text"
+            <input type="text" [(ngModel)]="newProduct.nom"
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
         </div>
 
         <div class="flex flex-col gap-2">
             <label class="text-[13px] font-medium text-[#697F84]">Description (Image)</label>
-            <input type="text"
+            <input type="text" [(ngModel)]="newProduct.description"
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
         </div>
         
         <div class="flex flex-col gap-2">
             <label class="text-[13px] font-medium text-[#697F84]">Unit Price</label>
-            <input type="number"
+            <input type="number" [(ngModel)]="newProduct.prix"
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
         </div>
 
         <div class="flex flex-col gap-2">
             <label class="text-[13px] font-medium text-[#697F84]">Stock</label>
-            <input type="number"
+            <input type="number" [(ngModel)]="newProduct.stock"
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
         </div>
     </div>
 
-    <div class="flex flex-col w-1/2 gap-2 pr-4">
-        <label class="text-[13px] font-medium text-[#697F84]">Categorie</label>
-        <div class="relative">
-        <select
-                class="w-full appearance-none px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] bg-white transition-colors cursor-pointer">
-            <option value=""></option>
-            
-        </select>
-        <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#3A626B] pointer-events-none">
-            expand_more
-        </span>
+    <div class="grid grid-cols-2 gap-x-8 mt-6">
+        <div class="flex flex-col gap-2 pr-4">
+            <label class="text-[13px] font-medium text-[#697F84]">Categorie</label>
+            <div class="relative">
+                <select [(ngModel)]="newProduct.categorie" (change)="onCategoryChange()"
+                        class="w-full appearance-none px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] bg-white transition-colors cursor-pointer">
+                    <option value="" disabled>Select category</option>
+                    @for (cat of allCategories; track cat._id) {
+                        <option [value]="cat._id">{{ cat.nom }}</option>
+                    }
+                    <option value="OTHER" class="font-bold text-[#3A626B]">+ Other (Create new)</option>
+                </select>
+                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#3A626B] pointer-events-none">
+                    expand_more
+                </span>
+            </div>
         </div>
+
+        @if (isNewCategorie) {
+            <div class="flex flex-col gap-2">
+                <label class="text-[13px] font-medium text-[#3A626B]">New Category Name</label>
+                <input type="text" [(ngModel)]="newCategoryName"
+                    placeholder="Enter new category"
+                    class="w-full px-4 py-2.5 border border-[#3A626B] bg-[#F1F4F5] rounded-lg outline-none">
+            </div>
+        }
     </div>
 </app-modal-form>
 
