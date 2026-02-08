@@ -6,6 +6,7 @@ import { TableCorps, TableColumn } from '../../../components/table-corps/table-c
 import { Boutique } from '../../../services/boutique';
 import { Produit } from '../../../services/produit';
 import { FormsModule } from '@angular/forms';
+import { Categorie } from '../../../services/categorie';
 
 
 @Component({
@@ -17,12 +18,26 @@ import { FormsModule } from '@angular/forms';
 export class Products  {
   private produitService = inject(Produit);
   private boutiqueService = inject(Boutique);
+  private categorieService = inject(Categorie);
 
+  searchTerm: string = '';
   productList: any[] = [];
   categories: any[] = [];
 
   selectedProduct: any = null;
   newPrice: number = 0;
+
+  newProduct = {
+    nom:'',
+    description:'',
+    prix: 0,
+    stock: null,
+    categorie:''
+  }
+
+  isNewCategorie = false;
+  newCategoryName = '';
+  allCategories: any[] = [];
 
   constructor() {
     effect(() => {
@@ -41,6 +56,12 @@ export class Products  {
     {key: 'stock', label:'Stock'},
     { key: 'actions', label: 'Actions' }
   ];
+
+  get filteredProducts() {
+    return this.productList.filter(product => 
+      product.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
 
   loadData(boutiqueId: string) {
     // Charger les produits
@@ -71,9 +92,62 @@ export class Products  {
     }
   }
 
+  // load categories
+  loadCategories() {
+    this.categorieService.getCategories().subscribe(cats => this.allCategories = cats);
+  }
+
+  onCategoryChange() {
+    this.isNewCategorie = (this.newProduct.categorie === 'OTHER');
+  }
+
+  async onCreateProduct() {
+    const boutique = this.boutiqueService.currentBoutique();
+    const boutiqueId = boutique?._id;
+    if(!boutiqueId) return;
+
+    let finalCategoryId = this.newProduct.categorie;
+
+    if(this.isNewCategorie && this.newCategoryName.trim() !== '') {
+      try {
+        const res = await this.categorieService.createCategory({ nom: this.newCategoryName}).toPromise();
+        finalCategoryId = res._id;
+      }catch(err) {
+        console.error("Error creating categories", err);
+        return;
+      }
+    }
+
+    // 2. 
+    const productToSave = {
+      ...this.newProduct,
+      categorie: finalCategoryId,
+      boutique: boutiqueId
+    };
+
+    // 3.
+    this.produitService.createProduit(productToSave).subscribe({
+      next: () => {
+        this.loadData(boutiqueId);
+        this.closeAddModal();
+        this.resetCreateForm();
+      },
+      error: (err) => console.error("Error creating product", err)
+    });
+  }
+
+  resetCreateForm() {
+    this.newProduct = { nom: '', description: '', prix: 0, stock: null, categorie: '' };
+    this.isNewCategorie = false;
+    this.newCategoryName = '';
+  }
+
+  // Appeler loadCategories à l'ouverture de la modale
+  
   // Modal section create
   isModalAddOpen = false;
   openAddModal() {
+    this.loadCategories();
     this.isModalAddOpen = true;
   }
   closeAddModal() {

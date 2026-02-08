@@ -18,7 +18,7 @@ export const routes: Routes =
   { path: '', component: LoginComponent },
  
 
-   { path: 'auth/callback', component: AuthCallbackComponent },
+  { path: 'auth/callback', component: AuthCallbackComponent },
   {
     path: 'layout-boutique', 
     component: MainLayout, 
