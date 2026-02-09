@@ -1,14 +1,25 @@
-import { Component, EventEmitter, Output, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalForm } from '../../components/modal-form/modal-form';
 import { Boutique } from '../../services/boutique';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  isRead: boolean;
+}
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [ModalForm, FormsModule, CommonModule],
+  imports: [ModalForm, FormsModule, CommonModule, MatBadgeModule, MatMenuModule, MatButtonModule],
   templateUrl: './header.html',
 })
 export class Header {
@@ -19,6 +30,16 @@ export class Header {
   // Modal section
   isModalOpen = false;
   storeData: any = {};
+
+  // Simulation notification (je pense ici faut juste adopter aux schéma du boutique)
+  notifications = signal<Notification[]>([
+    { id: 1, title: 'Admin centre', message: 'Your rent has been paid for the month of January.', time: '1j', isRead: false },
+    { id: 2, title: 'Admin centre', message: 'Your sponsorship request has been rejected', time: '1h', isRead: false }
+  ]);
+
+  clearAll() {
+    this.notifications.set([]);
+  }
 
   openSettings() {
     const boutique = this.boutiqueService.currentBoutique();
