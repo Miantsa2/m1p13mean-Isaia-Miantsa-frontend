@@ -1,14 +1,26 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { ModalForm } from '../../components/modal-form/modal-form';
 import { CentreService } from '../../services/centre';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 
+
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  isRead: boolean;
+}
 
 @Component({
   selector: 'app-header',
-  imports: [ModalForm, FormsModule],
+  imports: [CommonModule, ModalForm, FormsModule, MatBadgeModule, MatMenuModule, MatButtonModule],
   standalone: true,
   templateUrl: './header.html',
 })
@@ -26,6 +38,16 @@ export class Header {
   currentCenter: any = {
     horaires: [] 
   };
+
+  // Simulation notification (je pense ici faut juste adopter aux schéma du boutique)
+  notifications = signal<Notification[]>([
+    { id: 1, title: 'Event request', message: 'Your rent has been paid for the month of January.', time: '1j', isRead: false },
+    { id: 2, title: 'Something', message: 'Your sponsorship request has been rejected', time: '1h', isRead: false }
+  ]);
+
+  clearAll() {
+    this.notifications.set([]);
+  }
 
   week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 

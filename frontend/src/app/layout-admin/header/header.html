@@ -16,12 +16,57 @@
 
     <div class="flex items-center gap-5">
       <button mat-icon-button 
-              class="text-gray-400"
-              matBadge="0" 
+              [matMenuTriggerFor]="notifMenu"
+              class="relative text-gray-400 hover:bg-gray-50"
+              [matBadge]="notifications().length" 
+              [matBadgeHidden]="notifications().length === 0"
               matBadgeColor="warn" 
               matBadgeSize="small">
         <span class="material-symbols-outlined text-[26px]">notifications</span>
       </button>
+      <mat-menu #notifMenu="matMenu" xPosition="before" class="notification-menu-panel">
+        <div class="w-25 max-w-[95vw] overflow-hidden rounded-xl bg-white p-2" (click)="$event.stopPropagation()">
+          
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-50">
+            <h3 class="text-lg font-bold text-[#3E5C65]">Notifications</h3>
+            <button *ngIf="notifications().length > 0" 
+                    (click)="clearAll()" 
+                    class="text-sm font-semibold text-[#C4A46F] hover:underline">
+              Clear all
+            </button>
+          </div>
+
+          <div class="max-h-[400px] overflow-y-auto">
+            <ng-container *ngIf="notifications().length > 0; else emptyState">
+              <div *ngFor="let notif of notifications()" 
+                   class="flex gap-3 p-4 transition-colors rounded-lg cursor-pointer hover:bg-gray-50">
+                
+                <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 border border-gray-200 rounded-full bg-gray-50">
+                  <span class="text-gray-600 material-symbols-outlined">person</span>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-bold text-[#3E5C65]">{{ notif.title }}</p>
+                    <span class="text-xs text-gray-400">{{ notif.time }}</span>
+                  </div>
+                  <p class="mt-0.5 text-sm text-gray-500 leading-snug line-clamp-2">
+                    {{ notif.message }}
+                  </p>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #emptyState>
+              <div class="flex flex-col items-center justify-center px-6 py-10 text-center">
+                <span class="material-symbols-outlined text-[48px] text-gray-200 mb-2">notifications_off</span>
+                <p class="font-medium text-gray-500">No notifications for the moment</p>
+                <p class="mt-1 text-xs text-gray-400">We'll let you know when something happens.</p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </mat-menu>
 
       <button (click)="openSettings()" class="flex items-center text-gray-400 hover:text-gray-600">
         <span class="material-symbols-outlined text-[32px] text-[#697F84]">manage_accounts</span>
@@ -45,9 +90,9 @@
   (submitForm)="saveCenterInfo()"> 
 
   <div class="flex justify-end mb-4">
-    <button  (click)="logout()" class="flex items-center gap-2 text-red-500 hover:text-red-700 transition-colors group">
+    <button  (click)="logout()" class="flex items-center gap-2 text-red-500 transition-colors hover:text-red-700 group">
       <span class="text-[10px] font-bold uppercase">Logout</span>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transition-transform group-hover:translate-x-1">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
       </svg>
     </button>
@@ -102,15 +147,15 @@
                   [(ngModel)]="h.ouverture" 
                   name="open-{{$index}}" 
                   placeholder="Open" 
-                  class="w-1/4 p-1 border rounded text-xs text-gray-700">
+                  class="w-1/4 p-1 text-xs text-gray-700 border rounded">
             
             <input type="time" 
                   [(ngModel)]="h.fermeture" 
                   name="close-{{$index}}" 
                   placeholder="Close" 
-                  class="w-1/4 p-1 border rounded text-xs text-gray-700">
+                  class="w-1/4 p-1 text-xs text-gray-700 border rounded">
             
-            <button type="button" (click)="removeHoraire($index)" class="text-red-500 text-xs">✕</button>
+            <button type="button" (click)="removeHoraire($index)" class="text-xs text-red-500">✕</button>
           </div>
         } @empty {
           <p class="text-[10px] text-gray-400 italic mb-2">No hours defined.</p>
