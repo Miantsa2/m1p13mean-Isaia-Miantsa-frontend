@@ -18,8 +18,8 @@
       <button mat-icon-button 
               [matMenuTriggerFor]="notifMenu"
               class="relative text-gray-400 hover:bg-gray-50"
-              [matBadge]="notifications().length" 
-              [matBadgeHidden]="notifications().length === 0"
+              [matBadge]="unreadCount()" 
+              [matBadgeHidden]="unreadCount() === 0"
               matBadgeColor="warn" 
               matBadgeSize="small">
         <span class="material-symbols-outlined text-[26px]">notifications</span>
@@ -30,7 +30,7 @@
           
           <div class="flex items-center justify-between px-4 py-3 border-b border-gray-50">
             <h3 class="text-lg font-bold text-[#3E5C65]">Notifications</h3>
-            <button *ngIf="notifications().length > 0" 
+            <button *ngIf="unreadCount() > 0" 
                     (click)="clearAll()" 
                     class="text-sm font-semibold text-[#C4A46F] hover:underline">
               Clear all
@@ -38,21 +38,22 @@
           </div>
 
           <div class="max-h-[400px] overflow-y-auto">
-            <ng-container *ngIf="notifications().length > 0; else emptyState">
-              <div *ngFor="let notif of notifications()" 
+            <ng-container *ngIf="unreadCount() > 0; else emptyState">
+              <div *ngFor="let notif of unreadNotifications()" 
                    class="flex gap-3 p-4 transition-colors rounded-lg cursor-pointer hover:bg-gray-50">
-                
                 <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 border border-gray-200 rounded-full bg-gray-50">
                   <span class="text-gray-600 material-symbols-outlined">person</span>
                 </div>
 
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
-                    <p class="text-sm font-bold text-[#3E5C65]">{{ notif.title }}</p>
-                    <span class="text-xs text-gray-400">{{ notif.time }}</span>
+                    <p class="text-sm font-bold text-[#3E5C65]">{{ notif.titre }}</p>
+                    <span class="text-xs text-gray-400">
+                      {{ notif.date_envoyee | date: 'dd/MM/yyyy' }}
+                    </span>
                   </div>
                   <p class="mt-0.5 text-sm text-gray-500 leading-snug line-clamp-2">
-                    {{ notif.message }}
+                    {{ notif.description }}
                   </p>
                 </div>
               </div>
@@ -84,6 +85,15 @@
   (close)="closeSettings()"
   (submitForm)="saveChanges()"
 >
+
+  <div class="flex justify-end mb-4">
+    <button  (click)="logout()" class="flex items-center gap-2 text-red-500 transition-colors hover:text-red-700 group">
+      <span class="text-[10px] font-bold uppercase">Logout</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transition-transform group-hover:translate-x-1">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+      </svg>
+    </button>
+  </div>
   <div class="flex gap-10">
     <div class="flex flex-col items-center">
       <div class="relative group">

@@ -81,17 +81,30 @@
 
       <td class="flex items-center gap-4 px-4 py-4">
         @if (eventStore.statut === 'pending') {
-          <button (click)="updateEventStore(eventStore._id, 'approuved')" 
-                  class="text-green-500 transition-transform hover:scale-110" 
-                  title="Valider">
-              <span class="material-symbols-outlined font-bold">check_circle</span>
+          <button
+            (click)="updateEventStore(
+              eventStore._id,
+              'approuved',
+              eventStore.boutique._id,
+              eventStore.reference
+            )"
+            class="text-green-500 transition-transform hover:scale-110"
+            title="Valider">
+            <span class="material-symbols-outlined font-bold">check_circle</span>
           </button>
 
-          <button (click)="updateEventStore(eventStore._id, 'refused')" 
-                  class="text-red-500 transition-transform hover:scale-110" 
-                  title="Refuser">
-              <span class="material-symbols-outlined font-bold">cancel</span>
+          <button
+            (click)="updateEventStore(
+              eventStore._id,
+              'refused',
+              eventStore.boutique._id,
+              eventStore.reference
+            )"
+            class="text-red-500 transition-transform hover:scale-110"
+            title="Refuser">
+            <span class="material-symbols-outlined font-bold">cancel</span>
           </button>
+
         } 
       </td>
     </tr>

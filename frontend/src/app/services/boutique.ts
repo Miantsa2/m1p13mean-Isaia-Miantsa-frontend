@@ -36,7 +36,19 @@ export class Boutique {
     return this.http.put(`${this.apiUrl}/updateBoutique/${id}`, data);
   }
 
+  
+  addNotif(id: String, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateNotif/${id}`, data);
+  }
+
   deleteBoutique(id: String): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteBoutique/${id}`);
   }
+
+
+  // Dans boutique.service.ts
+  markAllNotificationsAsRead(boutiqueId: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/readNotif/${boutiqueId}/notifications/lue`, {});
+  }
+
 }
