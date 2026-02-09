@@ -17,10 +17,19 @@ export class Boutique {
     return this.http.get<any[]>(`${this.apiUrl}/getBoutiques`);
   }
 
+  getBoutique() {
+   return this.http.get<any>(`${this.apiUrl}/getBoutiqueByUser`);
+  }
+
   loadCurrentBoutique() {
     this.http.get<any>(`${this.apiUrl}/getBoutiqueByUser`).subscribe({
-      next: (data) => this.currentBoutique.set(data),
-      error: (err) => console.error('Error loading boutique', err)
+      next: (data) => {
+        this.currentBoutique.set(data);    
+        console.log('Current boutique loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error loading boutique', err);
+      }
     });
   }
 
