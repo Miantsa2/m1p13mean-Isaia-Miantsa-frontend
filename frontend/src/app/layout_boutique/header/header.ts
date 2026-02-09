@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, Output, inject,computed, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ModalForm } from '../../components/modal-form/modal-form';
 import { Boutique } from '../../services/boutique';
@@ -7,14 +7,15 @@ import { CommonModule } from '@angular/common';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/auth';
 
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  time: string;
-  isRead: boolean;
-}
+// interface Notification {
+//   id: number;
+//   title: string;
+//   message: string;
+//   time: string;
+//   isRead: boolean;
+// }
 
 @Component({
   selector: 'app-header',
@@ -24,22 +25,43 @@ interface Notification {
 })
 export class Header {
   @Output() onToggle = new EventEmitter<void>();
+
+  
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
   
   boutiqueService = inject(Boutique);
+  notifications: any[] = [];
 
   // Modal section
   isModalOpen = false;
   storeData: any = {};
 
-  // Simulation notification (je pense ici faut juste adopter aux schéma du boutique)
-  notifications = signal<Notification[]>([
-    { id: 1, title: 'Admin centre', message: 'Your rent has been paid for the month of January.', time: '1j', isRead: false },
-    { id: 2, title: 'Admin centre', message: 'Your sponsorship request has been rejected', time: '1h', isRead: false }
-  ]);
+  unreadNotifications = computed(() => {
+    const boutique = this.boutiqueService.currentBoutique();
+    if (!boutique || !boutique.notifications) return [];
+        return boutique.notifications.filter((notif: any) => !notif.est_lue);
+  });
+
+  unreadCount = computed(() => this.unreadNotifications().length);
+
 
   clearAll() {
-    this.notifications.set([]);
+    const boutique = this.boutiqueService.currentBoutique();
+    if (!boutique || !boutique._id) return;
+
+    this.boutiqueService.markAllNotificationsAsRead(boutique._id).subscribe({
+      next: () => {
+        const updatedBoutique = { ...boutique, notifications: [] };
+        this.boutiqueService.currentBoutique.set(updatedBoutique);  
+        console.log("Notifications vidées localement");
+      },
+      error: (err) => console.error("Erreur lors du nettoyage :", err)
+    });
   }
+
 
   openSettings() {
     const boutique = this.boutiqueService.currentBoutique();
@@ -58,6 +80,11 @@ export class Header {
       }
     }
     this.isModalOpen = true;
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   closeSettings() {

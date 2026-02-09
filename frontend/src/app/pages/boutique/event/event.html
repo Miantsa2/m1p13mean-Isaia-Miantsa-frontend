@@ -1,0 +1,191 @@
+<div class="min-h-screen p-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide">Events</h1>
+    <app-button-primaire text="CREATE EVENT" (click)="openCreateModal()"></app-button-primaire>
+  </div>
+
+ <div class="flex flex-wrap items-center gap-8 mb-8">
+  
+   <div class="flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Start Date</span>
+    <select 
+      [(ngModel)]="filterOptions.ordre" 
+      (change)="onFilterChange()"
+      class="py-0 pr-8 text-[gray] bg-transparent border-none cursor-pointer focus:ring-0">
+      <option value="desc">furthest</option>
+      <option value="asc">nearest</option>
+    </select>
+  </div>
+
+
+  <div class="relative flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Status</span>
+    <div class="relative flex items-center">
+      <select 
+        [(ngModel)]="filterOptions.statut" 
+        (change)="onFilterChange()"
+        class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+        <option value="all">All</option>
+        <option value="finished">Finished</option>
+        <option value="approuved">Approuved</option>
+        <option value="refused">Rejected</option>
+        <option value="pending">Pending</option>
+
+
+      </select>
+      <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+        arrow_downward
+      </span>
+    </div>
+  </div>
+
+
+</div>
+  <app-table-corps [columns]="eventColumns">
+    @for (event of events; track event._id) {
+      <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
+        <td class="px-4 py-4 font-bold text-[#697F84]">{{ event.reference }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.description }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.createdAtFormatted }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.dateDebutFormatted }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ event.dateFinFormatted }}</td>
+        <td class="px-4 py-4 font-semibold" [ngClass]="{
+            'text-red-500': event.statut === 'refused' || event.statut === 'finished',
+            'text-green-500': event.statut === 'approuved',
+            'text-yellow-500': event.statut === 'pending'
+        }">
+            {{ event.statut }}
+        </td>
+       
+        <td class="flex items-center gap-4 px-4 py-4">
+            @if (event.statut !== 'approuved') {
+                <button 
+                (click)="openEditModal(event)" 
+                class="text-teal-500 transition-transform hover:scale-110">
+                <span class="material-symbols-outlined">edit</span>
+                </button>
+
+                <button 
+                (click)="deleteEvent(event._id)" 
+                class="text-red-500 transition-transform hover:scale-110">
+                <span class="material-symbols-outlined">delete</span>
+                </button>
+            }
+        </td>
+
+    
+      </tr>
+    }
+  </app-table-corps>
+</div>
+
+<!----------------------------------------------------------------------------------------------------->
+
+<!-- Modal component pour la création Event -->
+<app-modal-form 
+  type="submit"
+  title="CREATE EVENT" 
+  buttonText="CONFIRM"
+  [disable]="isEventFormInvalid()" 
+  [isOpen]="isModalOpen"
+  (close)="closeCreateModal()"
+  (submitForm)="addEvent()">
+  
+  <form #EventForm="ngForm" class="grid grid-cols-2 gap-x-8 gap-y-6">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Event Reference</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="reference"
+        [(ngModel)]="newEvent.reference" required>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Description</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="description"
+        [(ngModel)]="newEvent.description">
+       
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Start Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="dateDebut"
+        [(ngModel)]="newEvent.dateDebut" required>
+       
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">End Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="dateFin"
+        [(ngModel)]="newEvent.dateFin" required>
+       
+    </div>
+
+
+  </form>
+
+</app-modal-form>
+
+<!-- Modal pour la modification des lignes de la liste des Event-->
+<app-modal-form
+  title="UPDATE EVENT" 
+  buttonText="UPDATE"
+  [isOpen]="isEditModalOpen"
+  [disable]="isEventFormInvalid()" 
+  (close)="closeEditModal()"
+  (submitForm)="updateEvent()">  
+
+    <form  class="grid grid-cols-2 gap-x-8 gap-y-6">
+ <!-- Ici j'ai spécifié oe 2 colonnes et pas plus, tu dois un peu modifier ceci raha miotra-->
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Event Reference</label>
+      <input 
+        name="reference"
+        [(ngModel)]="newEvent.reference"
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+      >
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Description</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="description"
+        [(ngModel)]="newEvent.description">
+       
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Start Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="dateDebut"
+        [(ngModel)]="newEvent.dateDebut">
+       
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">End Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="dateFin"
+        [(ngModel)]="newEvent.dateFin">
+       
+    </div>
+</form>
+
+</app-modal-form>

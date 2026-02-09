@@ -129,18 +129,34 @@ statutFormatted (statut : string): string {
   
  
 
- updateEventStore(id: string, nouveauStatut: string) {
-  const updateData = { statut: nouveauStatut };
+ updateEventStore(eventId: string,nouveauStatut: string,storeId: string,eventReference: string): void {
+    const updateData = { statut: nouveauStatut };
 
-  this.evenementService.updateEvent(id, updateData).subscribe({
-    next: () => {
-      console.log(`Statut mis à jour en : ${nouveauStatut}`);
-      this.loadEventStores(); 
-    },
-    error: (err) => {
-      console.error("Erreur lors de la mise à jour du statut", err);
-    }
-  });
-}
+    this.evenementService.updateEvent(eventId, updateData).subscribe({
+      next: () => {
+
+        const notif = {
+          titre: 'Event Request',
+          description: `The event ${eventReference} has been ${nouveauStatut}`
+        };
+
+        this.boutiqueService.addNotif(storeId, notif).subscribe({
+          next: () => {
+            console.log('Notification envoyée à la boutique');
+          },
+          error: (err) => {
+            console.error('Erreur notification', err);
+          }
+        });
+
+        console.log(`Statut mis à jour : ${nouveauStatut}`);
+        this.loadEventStores();
+      },
+      error: (err) => {
+        console.error("Erreur lors de la mise à jour du statut", err);
+      }
+    });
+  }
+
 
 }

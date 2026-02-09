@@ -36,6 +36,10 @@ export class EvenementService {
     return this.http.get<any[]>(`${this.apiUrl}/getEvent`, { params });
   }
 
+  getEventsByBoutiqueId(boutiqueId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getEventByBoutiqueId/${boutiqueId}`);
+  }
+
   filterStoreEvents(filters: { boutiqueId?: string, statut?: string, ordre?: 'asc' | 'desc' }): Observable<any[]> {
       let params = new HttpParams();
       
@@ -73,4 +77,6 @@ export class EvenementService {
     const params = new HttpParams().set('order', order);
     return this.http.get<any[]>(`${this.apiUrl}/SortEvent`, { params });
   }
+
+
 }

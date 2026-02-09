@@ -17,10 +17,19 @@ export class Boutique {
     return this.http.get<any[]>(`${this.apiUrl}/getBoutiques`);
   }
 
+  getBoutique() {
+   return this.http.get<any>(`${this.apiUrl}/getBoutiqueByUser`);
+  }
+
   loadCurrentBoutique() {
     this.http.get<any>(`${this.apiUrl}/getBoutiqueByUser`).subscribe({
-      next: (data) => this.currentBoutique.set(data),
-      error: (err) => console.error('Error loading boutique', err)
+      next: (data) => {
+        this.currentBoutique.set(data);    
+        console.log('Current boutique loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error loading boutique', err);
+      }
     });
   }
 
@@ -36,7 +45,19 @@ export class Boutique {
     return this.http.put(`${this.apiUrl}/updateBoutique/${id}`, data);
   }
 
+  
+  addNotif(id: String, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updateNotif/${id}`, data);
+  }
+
   deleteBoutique(id: String): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteBoutique/${id}`);
   }
+
+
+  // Dans boutique.service.ts
+  markAllNotificationsAsRead(boutiqueId: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/readNotif/${boutiqueId}/notifications/lue`, {});
+  }
+
 }
