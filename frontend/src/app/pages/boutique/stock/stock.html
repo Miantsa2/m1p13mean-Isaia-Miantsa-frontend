@@ -1,0 +1,150 @@
+<div class="min-h-screen p-4">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-xl font-normal text-[#3A626B] tracking-tight">STOCK</h1>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <input type="text" 
+                       [ngModel]="searchTerm()"
+                       (ngModelChange)="searchTerm.set($event)"
+                       placeholder="Search product" 
+                       class="px-4 py-2 bg-[#F1F4F5] border-none rounded-lg text-sm w-64 outline-none text-gray-600">
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-4 mb-8">
+    
+    <div class="relative inline-block group">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
+            <span class="text-[#3A626B] font-normal text-sm">Categories</span>
+            <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
+                expand_more
+            </span>
+            <select 
+                [ngModel]="selectedCategory()"
+                (change)="selectedCategory.set($any($event.target).value)"
+                class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
+                <option value="all">All Categories</option>
+                @for (cat of categories(); track cat._id) {
+                    <option [value]="cat._id">{{ cat.nom }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="relative inline-block group">
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
+            <span class="text-[#3A626B] font-normal text-sm">Status</span>
+            <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
+                filter_list
+            </span>
+            <select 
+                [ngModel]="selectedStatus()"
+                (change)="selectedStatus.set($any($event.target).value)"
+                class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
+                <option value="all">All Status</option>
+                <option value="Available">Available</option>
+                <option value="Low stock">Low stock</option>
+                <option value="Out of stock">Out of stock</option>
+            </select>
+        </div>
+    </div>
+</div>
+    @if (loading()) {
+        <div class="flex justify-center py-10">
+            <div class="animate-pulse text-[#3A626B]">Loading inventory...</div>
+        </div>
+    } @else {
+        <app-table-corps [columns]="stockColumns">
+            @for (item of filteredStock(); track item._id) {
+                <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50/50">
+                    <td class="px-4 py-4 text-[#3A626B] font-bold">{{ item.nom }}</td>
+                    <td class="px-4 py-4 text-[#8FA3A7]">{{ item.aboutStock }}</td>
+                    <td class="px-4 py-4 text-[#3A626B]">{{ item.quantity }}</td>
+                    <td class="px-4 py-4 text-[#3A626B]">{{ item.in }}</td>
+                    <td class="px-4 py-4 text-[#3A626B]">{{ item.out }}</td>
+
+                    <td class="px-4 py-4">
+                        <span class="font-medium" [ngClass]="{
+                            'text-green-600': item.status === 'Available',
+                            'text-orange-400': item.status === 'Low stock',
+                            'text-red-500': item.status === 'Out of stock'
+                        }">
+                            {{ item.status }}
+                        </span>
+                    </td>
+
+                    <td class="px-4 py-4">
+                        <div class="flex pr-2">
+                            @if (item.aboutStock === 'Not storable') {
+                                <button (click)="toggleProductStatus(item)" 
+                                        [ngClass]="item.status === 'Available' ? 'bg-[#7BA9AF] opacity-80' : 'bg-[#67949E]'"
+                                        class="px-6 py-1.5 text-white text-[13px] rounded-lg transition-all min-w-[110px] shadow-sm">
+                                    {{ item.status === 'Available' ? 'Make Unavailable' : 'Make Available' }}
+                                </button>
+                            } @else {
+                                <button (click)="openModalStock(item)" 
+                                        class="px-6 py-1.5 bg-[#67949E] text-white text-[13px] rounded-lg hover:bg-[#527a82] transition-all min-w-[110px]">
+                                    Add stock
+                                </button>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            } @empty {
+                <tr>
+                    <td [attr.colspan]="stockColumns.length" class="py-10 text-center text-gray-400">
+                        No products found.
+                    </td>
+                </tr>
+            }
+        </app-table-corps>
+    }
+</div>
+
+<!-- Modal pour ajouter un stock au produit -->
+<app-modal-form
+    title="STOCK MOVEMENT"
+    buttonText="CONFIRM"
+    [isOpen]="isModalStockOpen"
+    (close)="closeModalStock()"
+    (submitForm)="confirmAddStock()"
+>
+    <div class="py-4 space-y-6">
+        <div class="flex gap-4 p-1 bg-gray-100 rounded-lg w-fit">
+            <button (click)="movementType.set(1)" 
+                    [class]="movementType() === 1 ? 'bg-white shadow-sm text-[#3A626B]' : 'text-gray-500'"
+                    class="px-4 py-1.5 rounded-md text-xs font-bold transition-all">
+                ENTRY
+            </button>
+            <button (click)="movementType.set(0)" 
+                    [class]="movementType() === 0 ? 'bg-white shadow-sm text-red-500' : 'text-gray-500'"
+                    class="px-4 py-1.5 rounded-md text-xs font-bold transition-all">
+                EXIT
+            </button>
+        </div>
+
+        <div class="flex flex-row items-end gap-4">
+            <div class="flex flex-col flex-1 gap-2">
+                <label class="text-[13px] font-medium text-[#697F84]">Product Name</label>
+                <input type="text" [value]="selectedStockItem?.nom" readonly
+                       class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-500 outline-none text-sm">
+            </div>
+            <div class="flex flex-col w-32 gap-2">
+                <label class="text-[13px] font-medium text-[#697F84]">Current</label>
+                <input type="text" [value]="selectedStockItem?.quantity" readonly
+                       class="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-gray-500 text-center text-sm">
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label class="text-[13px] font-medium text-[#697F84]">
+                Quantity to {{ movementType() === 1 ? 'Add' : 'Remove' }}
+            </label>
+            <input type="number" 
+                   [(ngModel)]="quantityToAdd"
+                   [class]="movementType() === 1 ? 'focus:border-[#3A626B]' : 'focus:border-red-400'"
+                   class="w-40 px-4 py-2.5 border border-gray-300 rounded-lg outline-none transition-colors text-sm">
+        </div>
+    </div>
+</app-modal-form>
