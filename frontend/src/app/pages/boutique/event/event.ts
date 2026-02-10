@@ -182,8 +182,8 @@ export class StoresEvent implements OnInit {
   resetEventForm(){
       this.newEvent = {
       reference: '',
-      type: 'centre',
-      statut: 'approuved',
+      type: 'boutique',
+      statut: 'pending',
       description:'',
       dateDebut:'',
       dateFin:'',

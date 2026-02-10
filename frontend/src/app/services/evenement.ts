@@ -20,6 +20,11 @@ export class EvenementService {
     return this.http.put<any>(`${this.apiUrl}/updateEvent/${id}`, event);
   }
 
+  
+  acceptEvent(id: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/acceptEvent/${id}`, event);
+  }
+
   deleteEvent(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/deleteEvent/${id}`);
   }

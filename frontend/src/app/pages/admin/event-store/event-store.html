@@ -82,11 +82,9 @@
       <td class="flex items-center gap-4 px-4 py-4">
         @if (eventStore.statut === 'pending') {
           <button
-            (click)="updateEventStore(
-              eventStore._id,
-              'approuved',
-              eventStore.boutique._id,
-              eventStore.reference
+            (click)="acceptEvent(
+              eventStore._id
+          
             )"
             class="text-green-500 transition-transform hover:scale-110"
             title="Valider">
