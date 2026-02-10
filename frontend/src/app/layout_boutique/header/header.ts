@@ -114,6 +114,22 @@ export class Header {
     return JSON.stringify(this.storeData.horaires) !== JSON.stringify(original);
   }
 
+  addHoraire() {
+    this.storeData.horaires.push({
+      jour: '',
+      ouverture: '',
+      fermeture: ''
+    });
+  }
+
+  removeHoraire(index: number) {
+    if (this.storeData.horaires.length > 1) {
+      this.storeData.horaires.splice(index, 1);
+    } else {
+      this.storeData.horaires[0] = { jour: '', ouverture: '', fermeture: '' };
+    }
+  }
+
   // save the changes
   saveChanges() {
     const id = this.boutiqueService.currentBoutique()?._id;
