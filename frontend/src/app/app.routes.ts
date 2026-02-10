@@ -14,6 +14,7 @@ import { Products } from './pages/boutique/products/products';
 import { StoresProduct } from './pages/admin/stores-product/stores-product';
 import { Stock } from './pages/boutique/stock/stock';
 import {StoresEvent} from './pages/boutique/event/event';
+import { Charge } from './pages/boutique/charge/charge';
 
 export const routes: Routes = 
 [
@@ -37,6 +38,10 @@ export const routes: Routes =
        {
         path: 'event',
         component: StoresEvent 
+      },
+       {
+        path: 'charges',
+        component: Charge 
       }
 
       

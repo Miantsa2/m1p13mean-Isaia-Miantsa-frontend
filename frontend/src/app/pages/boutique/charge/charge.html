@@ -1,0 +1,184 @@
+<div class="min-h-screen p-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide">Charges</h1>
+    <app-button-primaire text="CREATE EVENT" (click)="openCreateModal()"></app-button-primaire>
+  </div>
+
+ <div class="flex flex-wrap items-center gap-8 mb-8">
+  
+   <div class="flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Start Date</span>
+    <select 
+      [(ngModel)]="ordre" (change)="applyFilters()"
+      class="py-0 pr-8 text-[gray] bg-transparent border-none cursor-pointer focus:ring-0">
+      <option value="desc">furthest</option>
+      <option value="asc">nearest</option>
+    </select>
+  </div>
+
+
+  <div class="relative flex items-center gap-2 text-[#3A626B]">
+    <span class="font-normal">Owner</span>
+    <div class="relative flex items-center">
+      <select 
+        [(ngModel)]="selectedDuCentre" (change)="applyFilters()"
+        class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+         <option [ngValue]="null">all</option>
+        <option value="true">Center</option>
+        <option value="false">Store</option>
+      </select>
+      <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+        arrow_downward
+      </span>
+    </div>
+  </div>
+
+
+
+
+</div>
+  <app-table-corps [columns]="eventColumns">
+    @for (charge of charges; track charge._id) {
+      <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
+        <td class="px-4 py-4 font-bold text-[#697F84]">{{ charge.reference }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ charge.description }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ charge.valeur }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ charge.dateFormatted }}</td>
+        <td class="px-4 py-4 font-semibold" [ngClass]="{
+            'text-red-500': charge.du_centre === false ,
+            'text-green-500': charge.du_centre === true
+        }">
+           {{ charge.du_centre ? 'Center' : 'Store' }}
+        </td>
+       
+        <td class="flex items-center gap-4 px-4 py-4">
+            <button 
+            (click)="openEditModal(charge)" 
+            class="text-teal-500 transition-transform hover:scale-110">
+            <span class="material-symbols-outlined">edit</span>
+            </button>
+
+            <button 
+            (click)="deleteCharge(charge._id)" 
+            class="text-red-500 transition-transform hover:scale-110">
+            <span class="material-symbols-outlined">delete</span>
+            </button>
+        </td>
+
+    
+      </tr>
+    }
+  </app-table-corps>
+</div>
+
+<!----------------------------------------------------------------------------------------------------->
+
+<!-- Modal component pour la création Event -->
+<app-modal-form 
+  type="submit"
+  title="CREATE CHARGE" 
+  buttonText="CONFIRM"
+  [disable]="isChargeFormInvalid()" 
+  [isOpen]="isModalAddOpen"
+  (close)="closeCreateModal()"
+  (submitForm)="createCharge()">
+  
+  <form #ChargeForm="ngForm" class="grid grid-cols-2 gap-x-8 gap-y-6">
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Charge Reference</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="reference"
+        [(ngModel)]="newCharge.reference" required>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Description</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="description"
+        [(ngModel)]="newCharge.description">
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Valeur</label>
+      <input 
+        type="number" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="valeur"
+        [(ngModel)]="newCharge.valeur">
+    </div>
+
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Limit Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="date_limite"
+        [(ngModel)]="newCharge.date_limite" required>
+    </div>
+
+
+     <div class="flex flex-col gap-1">
+      <label class="text-[11px] font-semibold text-[#697F84] uppercase">Owner</label>
+      <select
+          [(ngModel)]="newCharge.du_centre"  name="du_centre"
+          class="w-full px-3 py-2 bg-white border rounded-md border-slate-300"
+          >
+          <option value="false">Store</option>
+          <option value="true">Center</option>
+        
+      </select>
+
+        </div>
+   </form> 
+
+</app-modal-form>
+
+<!-- Modal pour la modification des lignes de la liste des Event-->
+<app-modal-form
+  title="UPDATE CHARGE" 
+  buttonText="UPDATE"
+  [isOpen]="isEditModalOpen"
+  [disable]="isChargeFormInvalid()" 
+  (close)="closeEditModal()"
+  (submitForm)="updateCharge()">  
+
+    <form  class="grid grid-cols-3 gap-x-8 gap-y-6">
+ <!-- Ici j'ai spécifié oe 2 colonnes et pas plus, tu dois un peu modifier ceci raha miotra-->
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Event Reference</label>
+      <input 
+        name="reference"
+        [(ngModel)]="newCharge.reference"
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+      >
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Description</label>
+      <input 
+        type="text" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="description"
+        [(ngModel)]="newCharge.description">
+       
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-xs font-semibold text-[#697F84] uppercase tracking-wider">Start Date</label>
+      <input 
+        type="datetime-local" 
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E9B162] transition-all"
+        name="date_limite"
+        [(ngModel)]="newCharge.date_limite">
+       
+    </div>
+
+</form>
+
+</app-modal-form>
