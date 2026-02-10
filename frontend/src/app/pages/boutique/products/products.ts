@@ -67,16 +67,29 @@ export class Products  {
     // Charger les produits
     this.produitService.getProduitsByBoutique(boutiqueId).subscribe({
       next: (data) => {
-        this.productList = data.map(p => ({
-          ...p,
-          prix: `Ar ${p.prix.toLocaleString()}`,
-          stock: (p.stock === null || p.stock === undefined) ? 'Not storable' : p.stock
-        }));
+        this.productList = data.map(p => {
+          let stockStatus: string | number;
+
+          if (p.stock === null || p.stock === undefined) {
+            stockStatus = 'Not storable';
+          } 
+          else if (p.stock <= 0) {
+            stockStatus = 'Out of stock';
+          } 
+          else {
+            stockStatus = p.stock;
+          }
+
+          return {
+            ...p,
+            prix: `Ar ${p.prix.toLocaleString()}`,
+            stock: stockStatus
+          };
+        });
       },
       error: (err) => console.error('Erreur produits:', err)
     });
 
-    // Charger les catégories
     this.produitService.getCategoriesByBoutique(boutiqueId).subscribe({
       next: (cats) => this.categories = cats,
       error: (err) => console.error('Error categories:', err)

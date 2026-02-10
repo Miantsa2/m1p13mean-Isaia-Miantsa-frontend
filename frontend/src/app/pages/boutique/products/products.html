@@ -32,7 +32,11 @@
                 <td class="px-4 py-4 text-[#375E67]">{{ product.prix }}</td>
                 
                 <td class="px-4 py-4">
-                    <span [ngClass]="product.stock === 'Not storable' ? 'text-gray-400' : 'text-[#375E67] font-semibold'">
+                    <span [ngClass]="{
+                        'text-gray-400': product.stock === 'Not storable',
+                        'text-gray-400 font-bold': product.stock === 'Out of stock',
+                        'text-[#375E67] font-semibold': product.stock !== 'Not storable' && product.stock !== 'Out of stock'
+                    }">
                         {{ product.stock }}
                     </span>
                 </td>
@@ -94,7 +98,7 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-2 gap-x-8 mt-6">
+    <div class="grid grid-cols-2 mt-6 gap-x-8">
         <div class="flex flex-col gap-2 pr-4">
             <label class="text-[13px] font-medium text-[#697F84]">Categorie</label>
             <div class="relative">
