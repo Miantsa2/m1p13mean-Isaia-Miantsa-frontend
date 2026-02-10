@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -19,6 +19,16 @@ export class CentreService {
 
     updatePrice(id: string, price: number): Observable<any> {
       return this.http.put(`${this.apiUrl}/updatePrice/${id}`, { prixMetreCarre: price });
+    }
+
+
+
+    addNotif(id: String, data: any): Observable<any> {
+      return this.http.put(`${this.apiUrl}/updateNotif/${id}`, data);
+    }
+
+    markAllNotificationsAsRead(centreId: string): Observable<any> {
+     return this.http.put(`${this.apiUrl}/readNotif/${centreId}/notifications/lue`, {});
     }
 
 }

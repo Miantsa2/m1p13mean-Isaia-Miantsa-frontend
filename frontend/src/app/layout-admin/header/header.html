@@ -14,22 +14,24 @@
       <span class="absolute text-xl text-gray-400 -translate-y-1/2 pointer-events-none material-symbols-outlined right-2 top-1/2">expand_more</span>
     </div>
 
-    <div class="flex items-center gap-5">
-      <button mat-icon-button 
-              [matMenuTriggerFor]="notifMenu"
-              class="relative text-gray-400 hover:bg-gray-50"
-              [matBadge]="notifications().length" 
-              [matBadgeHidden]="notifications().length === 0"
-              matBadgeColor="warn" 
-              matBadgeSize="small">
-        <span class="material-symbols-outlined text-[26px]">notifications</span>
-      </button>
+     <div class="flex items-center gap-5">
+      <button mat-icon-button
+        [matMenuTriggerFor]="notifMenu"
+        class="relative text-gray-400 hover:bg-gray-50"
+        [matBadge]="unreadNotifications.length"
+        [matBadgeHidden]="unreadNotifications.length === 0"
+        matBadgeColor="warn"
+        matBadgeSize="small">
+  <span class="material-symbols-outlined text-[26px]">notifications</span>
+</button>
+
+
       <mat-menu #notifMenu="matMenu" xPosition="before" class="notification-menu-panel">
         <div class="w-25 max-w-[95vw] overflow-hidden rounded-xl bg-white p-2" (click)="$event.stopPropagation()">
           
           <div class="flex items-center justify-between px-4 py-3 border-b border-gray-50">
             <h3 class="text-lg font-bold text-[#3E5C65]">Notifications</h3>
-            <button *ngIf="notifications().length > 0" 
+            <button *ngIf="unreadNotifications.length > 0" 
                     (click)="clearAll()" 
                     class="text-sm font-semibold text-[#C4A46F] hover:underline">
               Clear all
@@ -37,25 +39,27 @@
           </div>
 
           <div class="max-h-[400px] overflow-y-auto">
-            <ng-container *ngIf="notifications().length > 0; else emptyState">
-              <div *ngFor="let notif of notifications()" 
+            <ng-container *ngIf="unreadNotifications.length> 0; else emptyState">
+              <div *ngFor="let notif of unreadNotifications" 
                    class="flex gap-3 p-4 transition-colors rounded-lg cursor-pointer hover:bg-gray-50">
-                
                 <div class="flex items-center justify-center flex-shrink-0 w-10 h-10 border border-gray-200 rounded-full bg-gray-50">
                   <span class="text-gray-600 material-symbols-outlined">person</span>
                 </div>
 
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
-                    <p class="text-sm font-bold text-[#3E5C65]">{{ notif.title }}</p>
-                    <span class="text-xs text-gray-400">{{ notif.time }}</span>
+                    <p class="text-sm font-bold text-[#3E5C65]">{{ notif.titre }}</p>
+                    <span class="text-xs text-gray-400">
+                      {{ notif.date_envoyee | date: 'dd/MM/yyyy' }}
+                    </span>
                   </div>
                   <p class="mt-0.5 text-sm text-gray-500 leading-snug line-clamp-2">
-                    {{ notif.message }}
+                    {{ notif.description }}
                   </p>
                 </div>
               </div>
             </ng-container>
+
 
             <ng-template #emptyState>
               <div class="flex flex-col items-center justify-center px-6 py-10 text-center">
