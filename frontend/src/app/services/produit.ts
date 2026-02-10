@@ -34,4 +34,8 @@ export class Produit {
   toggleAvailability(produitId: string): Observable<any> {
     return this.http.patch(`${this.apiUrl}/updateAvailability/${produitId}`, {});
   }
+
+  updatePromotion(id: string, promoData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/updatePromo/${id}`, { promotions: promoData });
   }
+}

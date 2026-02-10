@@ -21,6 +21,7 @@ export class Products  {
   private categorieService = inject(Categorie);
 
   searchTerm: string = '';
+  showOnlyPromos: boolean = false;
   productList: any[] = [];
   categories: any[] = [];
 
@@ -38,6 +39,12 @@ export class Products  {
   isNewCategorie = false;
   newCategoryName = '';
   allCategories: any[] = [];
+
+  promoData = {
+    pourcentage: 0,
+    dateDebut: '',
+    dateFin: ''
+  };
 
   constructor() {
     effect(() => {
@@ -58,31 +65,42 @@ export class Products  {
   ];
 
   get filteredProducts() {
-    return this.productList.filter(product => 
-      product.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+    return this.productList.filter(product => {
+      const matchesSearch = product.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
+      const matchesPromoFilter = this.showOnlyPromos ? product.isPromoActive : true;
+      
+      return matchesSearch && matchesPromoFilter;
+    });
   }
 
   loadData(boutiqueId: string) {
     // Charger les produits
     this.produitService.getProduitsByBoutique(boutiqueId).subscribe({
       next: (data) => {
-        this.productList = data.map(p => {
-          let stockStatus: string | number;
+        const now = new Date().getTime();
 
-          if (p.stock === null || p.stock === undefined) {
-            stockStatus = 'Not storable';
-          } 
-          else if (p.stock <= 0) {
-            stockStatus = 'Out of stock';
-          } 
-          else {
-            stockStatus = p.stock;
+        this.productList = data.map(p => {
+          let promoValide = false;
+          if (p.promotions && p.promotions.pourcentage > 0 && p.promotions.dateFin) {
+            const fin = new Date(p.promotions.dateFin).getTime();
+            const debut = new Date(p.promotions.dateDebut).getTime();
+            promoValide = now >= debut && now <= fin;
           }
+
+          const prixInitial = p.prix;
+          let prixFinal = prixInitial;
+          if (promoValide) {
+            prixFinal = prixInitial * (1 - p.promotions.pourcentage / 100);
+          }
+
+          let stockStatus = p.stock ?? 'Not storable';
+          if (p.stock <= 0 && p.stock !== null) stockStatus = 'Out of stock';
 
           return {
             ...p,
-            prix: `Ar ${p.prix.toLocaleString()}`,
+            prixInitial: prixInitial, 
+            isPromoActive: promoValide,
+            prix: `Ar ${prixFinal.toLocaleString()}`,
             stock: stockStatus
           };
         });
@@ -189,5 +207,73 @@ export class Products  {
         error: (err) => console.error('Update failed', err)
       });
     }
+  }
+
+  // Modal section promote
+  isModalPromoteOpen = false;
+  openModalPromoteOpen(product: any) {
+    this.selectedProduct = product;
+    if(product.promotions && product.promotions.pourcentage > 0) {
+      this.promoData = {
+        pourcentage: product.promotions.pourcentage,
+        dateDebut: new Date(product.promotions.dateDebut).toISOString().split('T')[0],
+        dateFin: new Date(product.promotions.dateFin).toISOString().split('T')[0]
+      };
+    } else {
+      this.promoData = { pourcentage: 0, dateDebut: '', dateFin: '' };
+    }
+    this.isModalPromoteOpen = true;
+  }
+
+  // prix final pour l'affichage dans la modale
+    get discountedPrice(): number {
+      if (!this.selectedProduct) return 0;
+      return this.selectedProduct.prixInitial * (1 - this.promoData.pourcentage / 100);
+    }
+
+  onConfirmPromo() {
+    this.produitService.updatePromotion(this.selectedProduct._id, this.promoData).subscribe({
+        next: () => {
+            this.productList = this.productList.map(p => {
+                if (p._id === this.selectedProduct._id) {
+                    return {
+                        ...p,
+                        promotions: { ...this.promoData },
+                        isPromoActive: true
+                    };
+                }
+                return p;
+            });
+
+            const bId = this.boutiqueService.currentBoutique()?._id;
+            if (bId) this.loadData(bId);
+
+            this.closeModalPromoteOpen();
+        },
+        error: (err) => console.error("Erreur promo:", err)
+    });
+  }
+
+  onCancelPromo() {
+    this.produitService.updatePromotion(this.selectedProduct._id, null).subscribe({
+      next: () => {
+        this.productList = this.productList.map(p => {
+          if (p._id === this.selectedProduct._id) {
+            return { 
+              ...p, 
+              promotions: null,
+              isPromoActive: false,
+              prix: `Ar ${p.prixInitial.toLocaleString()}`
+            };
+          }
+          return p;
+        });
+        this.closeModalPromoteOpen();
+      }
+    });
+  }
+
+  closeModalPromoteOpen() {
+    this.isModalPromoteOpen = false;
   }
 }
