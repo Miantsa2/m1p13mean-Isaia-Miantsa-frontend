@@ -13,6 +13,7 @@ import {Events} from './pages/admin/event/event';
 import { Products } from './pages/boutique/products/products';
 import { StoresProduct } from './pages/admin/stores-product/stores-product';
 import { Stock } from './pages/boutique/stock/stock';
+import {StoresEvent} from './pages/boutique/event/event';
 
 export const routes: Routes = 
 [
@@ -31,7 +32,14 @@ export const routes: Routes =
       {
         path: 'stock',
         component: Stock
+      },
+
+       {
+        path: 'event',
+        component: StoresEvent 
       }
+
+      
     ]
   },
   {
