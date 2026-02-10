@@ -62,6 +62,9 @@ export class Header {
     });
   }
 
+ 
+
+
 
   openSettings() {
     const boutique = this.boutiqueService.currentBoutique();

@@ -58,7 +58,7 @@
         </td>
        
         <td class="flex items-center gap-4 px-4 py-4">
-            @if (event.statut !== 'approuved') {
+            @if (event.statut === 'pending') {
                 <button 
                 (click)="openEditModal(event)" 
                 class="text-teal-500 transition-transform hover:scale-110">

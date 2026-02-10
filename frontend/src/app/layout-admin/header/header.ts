@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Output, signal , computed} from '@angular/core';
 import { ModalForm } from '../../components/modal-form/modal-form';
 import { CentreService } from '../../services/centre';
 import { FormsModule } from '@angular/forms';
@@ -35,19 +35,30 @@ export class Header {
     private router: Router
   ) {}
 
+  
   currentCenter: any = {
     horaires: [] 
   };
 
-  // Simulation notification (je pense ici faut juste adopter aux schéma du boutique)
-  notifications = signal<Notification[]>([
-    { id: 1, title: 'Event request', message: 'Your rent has been paid for the month of January.', time: '1j', isRead: false },
-    { id: 2, title: 'Something', message: 'Your sponsorship request has been rejected', time: '1h', isRead: false }
-  ]);
 
-  clearAll() {
-    this.notifications.set([]);
+
+   ngOnInit(): void {
+    this.loadCentre();
+
   }
+
+
+
+
+  // Simulation notification (je pense ici faut juste adopter aux schéma du boutique)
+  // notifications = signal<Notification[]>([
+  //   { id: 1, title: 'Event request', message: 'Your rent has been paid for the month of January.', time: '1j', isRead: false },
+  //   { id: 2, title: 'Something', message: 'Your sponsorship request has been rejected', time: '1h', isRead: false }
+  // ]);
+
+  // clearAll() {
+  //   this.notifications.set([]);
+  // }
 
   week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -63,6 +74,7 @@ export class Header {
     this.centreService.getCenter().subscribe({
       next: (res) => {
         this.currentCenter = res[0];
+        console.log("Centre chargé :", this.currentCenter);
       }
     });
   }
@@ -101,6 +113,26 @@ export class Header {
     );
   }
 
+
+  
+  clearAll() {
+    if (!this.currentCenter || !this.currentCenter._id) return;
+
+    this.centreService.markAllNotificationsAsRead(this.currentCenter._id).subscribe({
+      next: () => {
+        const updatedcentre = { ...this.currentCenter, notifications: [] };
+        console.log("Notifications vidées localement",updatedcentre);
+      },
+      error: (err) => console.error("Erreur lors du nettoyage :", err)
+    });
+  }
+
+
+  get unreadNotifications() {
+    return this.currentCenter?.notifications?.filter(
+      (notif: any) => notif.est_lue === false
+    ) || [];
+  }
   logout() {
     this.authService.logout();
     this.router.navigate(['/login']);

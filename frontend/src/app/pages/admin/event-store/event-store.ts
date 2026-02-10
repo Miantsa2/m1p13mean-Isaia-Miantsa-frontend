@@ -159,4 +159,17 @@ statutFormatted (statut : string): string {
   }
 
 
+   acceptEvent(eventId: string) {
+      this.evenementService.acceptEvent(eventId).subscribe({
+        next: (res) => {
+          this.loadEventStores();
+          console.log(`Event ${eventId} approuved`);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+  }
+
+
 }

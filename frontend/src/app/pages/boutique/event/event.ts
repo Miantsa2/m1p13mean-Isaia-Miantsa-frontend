@@ -6,6 +6,8 @@ import { ModalForm } from '../../../components/modal-form/modal-form';
 import { EvenementService } from '../../../services/evenement';
 import { FormsModule } from '@angular/forms';
 import { Boutique } from '../../../services/boutique';
+import { CentreService } from '../../../services/centre';
+
 
 
 
@@ -58,11 +60,15 @@ export class StoresEvent implements OnInit {
   };
 
   currentEditingId= '';
+  currentCenter: any;
+  currentCenterId: string = '';
   
 
   constructor(
     private evenementService: EvenementService,
-    private boutiqueService: Boutique
+    private boutiqueService: Boutique,
+    private centreService: CentreService
+
   ) {}
 
 
@@ -81,6 +87,7 @@ export class StoresEvent implements OnInit {
         this.boutiquecurrentId = data._id;
         console.log("Boutique chargée :", this.boutique);
             this.loadEvents();
+            this.loadCentre();
       },
 
       error: (err) => console.error('Erreur chargement boutique', err)
@@ -101,7 +108,9 @@ export class StoresEvent implements OnInit {
           description: event.description,
           dateDebut: new Date(event.dateDebut),
           dateFin: new Date(event.dateFin),
+          createdAt: new Date(event.createdAt),
           statut: event.statut,
+          createdAtFormatted: new Date(event.createdAt).toLocaleString(),
           dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
           dateFinFormatted: new Date(event.dateFin).toLocaleString()
         }));
@@ -109,6 +118,16 @@ export class StoresEvent implements OnInit {
 
       },
       error: (err) => console.error(err)
+    });
+  }
+
+  loadCentre(): void {
+    this.centreService.getCenter().subscribe({
+      next: (res) => {
+        this.currentCenter = res[0];
+        this.currentCenterId = res[0]._id;
+        console.log("Centre chargé :", this.currentCenter);
+      }
     });
   }
 
@@ -124,6 +143,19 @@ export class StoresEvent implements OnInit {
     console.log("Creating event with data:", this.newEvent);
     this.evenementService.addEvent(this.newEvent).subscribe({
       next: (res) => {
+         const notif = {
+          titre: 'Event Request',
+          description: `${this.boutique.nom} created an event .`
+        };
+
+        this.centreService.addNotif(this.currentCenterId, notif).subscribe({
+          next: () => {
+            console.log('Notification envoyée ');
+          },
+          error: (err) => {
+            console.error('Erreur notification', err);
+          }
+        });
         console.log('Success event create!');
         this.loadBoutique(); 
         this.resetEventForm();
@@ -150,8 +182,8 @@ export class StoresEvent implements OnInit {
   resetEventForm(){
       this.newEvent = {
       reference: '',
-      type: 'centre',
-      statut: 'approuved',
+      type: 'boutique',
+      statut: 'pending',
       description:'',
       dateDebut:'',
       dateFin:'',
@@ -171,13 +203,15 @@ export class StoresEvent implements OnInit {
     
     this.evenementService.filterStoreEvents(params).subscribe({
       next: (res) => {
-         this.events = res.map((event: any) => ({
+          this.events = res.map((event: any) => ({
           _id: event._id,
           reference: event.reference,
           description: event.description,
           dateDebut: new Date(event.dateDebut),
           dateFin: new Date(event.dateFin),
+          createdAt: new Date(event.createdAt),
           statut: event.statut,
+          createdAtFormatted: new Date(event.createdAt).toLocaleString(),
           dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
           dateFinFormatted: new Date(event.dateFin).toLocaleString()
         }));
