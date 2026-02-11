@@ -129,15 +129,15 @@ statutFormatted (statut : string): string {
   
  
 
- updateEventStore(eventId: string,nouveauStatut: string,storeId: string,eventReference: string): void {
-    const updateData = { statut: nouveauStatut };
+ updateEventStore(eventId: string,storeId: string,eventReference: string): void {
+    const updateData = { statut: 'refused' };
 
     this.evenementService.updateEvent(eventId, updateData).subscribe({
       next: () => {
 
         const notif = {
           titre: 'Event Request',
-          description: `The event ${eventReference} has been ${nouveauStatut}`
+          description: `The event ${eventReference} has been refused`
         };
 
         this.boutiqueService.addNotif(storeId, notif).subscribe({
@@ -149,7 +149,7 @@ statutFormatted (statut : string): string {
           }
         });
 
-        console.log(`Statut mis à jour : ${nouveauStatut}`);
+        console.log(`Statut mis à jour : refused`);
         this.loadEventStores();
       },
       error: (err) => {
@@ -159,9 +159,23 @@ statutFormatted (statut : string): string {
   }
 
 
-   acceptEvent(eventId: string) {
+   acceptEvent(eventId: string,eventReference: string, storeId:string) {
       this.evenementService.acceptEvent(eventId).subscribe({
         next: (res) => {
+          const notif = {
+          titre: 'Event Request',
+          description: `The event ${eventReference} has been approuved`
+        };
+
+        this.boutiqueService.addNotif(storeId, notif).subscribe({
+          next: () => {
+            console.log('Notification envoyée à la boutique');
+          },
+          error: (err) => {
+            console.error('Erreur notification', err);
+          }
+        });
+
           this.loadEventStores();
           console.log(`Event ${eventId} approuved`);
         },

@@ -15,6 +15,9 @@ import { StoresProduct } from './pages/admin/stores-product/stores-product';
 import { Stock } from './pages/boutique/stock/stock';
 import {StoresEvent} from './pages/boutique/event/event';
 import { Charge } from './pages/boutique/charge/charge';
+import { Rent } from './pages/boutique/rent/rent';
+import { RentAdmin } from './pages/admin/rent/rent';
+
 
 export const routes: Routes = 
 [
@@ -42,6 +45,11 @@ export const routes: Routes =
        {
         path: 'charges',
         component: Charge 
+      },
+
+       {
+        path: 'rent',
+        component: Rent 
       }
 
       
@@ -71,6 +79,10 @@ export const routes: Routes =
         {
         path: 'eventCenter',
         component: Events
+      },
+        {
+        path: 'rent',
+        component: RentAdmin 
       }
       
     ]

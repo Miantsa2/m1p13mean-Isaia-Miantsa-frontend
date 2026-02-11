@@ -75,5 +75,14 @@ export class ChargeService
   }
 
 
+  getLoyerPayes(boutiqueId: string, mois: number, annee: number): Observable<any> {
+    const params = new HttpParams()
+      .set('mois', mois.toString())
+      .set('annee', annee.toString());
+
+    return this.http.get<any>(`${this.apiUrl}/isloyerpaye/${boutiqueId}`, { params });
+  }
+
+
 
 }
