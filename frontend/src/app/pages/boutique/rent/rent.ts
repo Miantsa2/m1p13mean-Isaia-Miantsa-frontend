@@ -8,7 +8,6 @@ import { Boutique } from '../../../services/boutique';
 import { FormsModule } from '@angular/forms';
 import { ModalForm } from '../../../components/modal-form/modal-form';
 import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
-import { Payment } from '../../../services/payment';
 @Component({
   selector: 'app-rent',
   standalone: true,
@@ -19,7 +18,6 @@ export class Rent {
 
   private chargeService = inject(ChargeService);
   private boutiqueService = inject(Boutique);
-  private paymentService = inject(Payment);
   boutiqueId?: string;
 
   isAddModalOpen = false;
