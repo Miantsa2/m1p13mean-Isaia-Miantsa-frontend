@@ -83,8 +83,9 @@
         @if (eventStore.statut === 'pending') {
           <button
             (click)="acceptEvent(
-              eventStore._id
-          
+              eventStore._id,
+              eventStore.boutique._id,
+              eventStore.reference
             )"
             class="text-green-500 transition-transform hover:scale-110"
             title="Valider">
@@ -94,7 +95,6 @@
           <button
             (click)="updateEventStore(
               eventStore._id,
-              'refused',
               eventStore.boutique._id,
               eventStore.reference
             )"

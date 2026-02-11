@@ -37,9 +37,7 @@ export class StoresEvent implements OnInit {
   
   // Modal section
   isModalOpen = false;
-  isPriceModalOpen = false;
   isEditModalOpen = false;
-  isModalAssignOpen = false;
   
   filterOptions = {
     statut: 'all',
@@ -56,7 +54,7 @@ export class StoresEvent implements OnInit {
     description:'',
     dateDebut:'',
     dateFin:'',
-    boutique: ''
+    boutique: '',
   };
 
   currentEditingId= '';

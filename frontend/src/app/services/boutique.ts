@@ -55,9 +55,24 @@ export class Boutique {
   }
 
 
-  // Dans boutique.service.ts
   markAllNotificationsAsRead(boutiqueId: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/readNotif/${boutiqueId}/notifications/lue`, {});
   }
+
+  getLoyer(boutiqueId: string) {
+    return this.http.get<{ loyer: number }>(`${this.apiUrl}/loyer/${boutiqueId}`);
+  }
+
+
+  getBoutiquesByLoyer(mois: number, annee: number, statut : string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/loyernonpayees?mois=${mois}&annee=${annee}&statut=${statut}`);
+  }
+
+  getLoyersPayes(mois: number, annee: number) {
+    return this.http.get<any[]>(`${this.apiUrl}/loyerpaye?mois=${mois}&annee=${annee}`);  
+  }
+
+
+
 
 }
