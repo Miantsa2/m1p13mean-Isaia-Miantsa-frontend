@@ -152,6 +152,18 @@ export class RentAdmin {
 
   }
 
+
+   isFormInvalid(): boolean {
+    
+    const date_limite = new Date(this.paymentForm.date_limite);
+    const maintenant = new Date();
+    if (date_limite > maintenant) {
+      return true;
+    }
+
+    return false; 
+  }
+
   resertForm() {
       this.paymentForm = {
       reference:'',
