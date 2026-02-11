@@ -7,18 +7,34 @@ import { ChargeService } from '../../../services/charge';
 import { Boutique } from '../../../services/boutique';
 import { FormsModule } from '@angular/forms';
 import { ModalForm } from '../../../components/modal-form/modal-form';
-
+import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
+import { Payment } from '../../../services/payment';
 @Component({
   selector: 'app-rent',
   standalone: true,
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, FormsModule],
   templateUrl: './rent.html'
 })
 export class Rent {
 
   private chargeService = inject(ChargeService);
   private boutiqueService = inject(Boutique);
+  private paymentService = inject(Payment);
   boutiqueId?: string;
+
+  isAddModalOpen = false;
+
+  paymentForm = {
+    reference:'',
+    description:'',
+    boutique: this.boutiqueId,
+    date_limite: '',
+    valeur: 0,
+    du_centre: true,
+    statut: 'paye'
+  };
+
+
    
   constructor() {
      effect(() => {
@@ -43,8 +59,8 @@ export class Rent {
       if (!this.boutiqueId) return;
       this.loadLoyer(this.boutiqueId,mois, annee);
     }  
+  
   };
-
 
 
 
@@ -54,12 +70,58 @@ export class Rent {
         this.calendarOptions = {
           ...this.calendarOptions,
           events: events, 
-          eventColor: '#16a34a',
         };
       },
       error: (err) => console.error('Erreur chargement loyer', err)
     });
   }
+
+    openAddModal() {
+      this.paymentForm = {
+        boutique: this.boutiqueId || '',
+        date_limite: '',
+        valeur: 0,
+        statut: '',
+        du_centre: true,
+        reference: 'RENT001',
+        description: 'Rent of the month'
+
+      };
+
+
+    if (this.boutiqueId) {
+      this.boutiqueService.getLoyer(this.boutiqueId).subscribe({
+        next: (res) => {
+          this.paymentForm.valeur = res.loyer;
+        },
+        error: (err) => console.error('Erreur calcul loyer', err)
+      });
+    }
+
+    this.isAddModalOpen = true;
+  }
+
+    resertForm() {
+      this.paymentForm = {
+      reference:'',
+      description:'',
+      boutique: '',
+      date_limite: '',
+      valeur: 0,
+      du_centre: true,
+      statut: ''
+    };
+ }
+
+  closeAddModel() {
+    this.isAddModalOpen = false;
+    this.resertForm();
+  }
+
+
+
+
+
 
 
 
