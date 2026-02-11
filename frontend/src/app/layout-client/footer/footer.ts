@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CentreService } from '../../services/centre';
 
 export type FooterType = 'footer1' | 'footer2';
 

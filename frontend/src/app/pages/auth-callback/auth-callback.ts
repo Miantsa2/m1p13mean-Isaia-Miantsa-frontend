@@ -33,6 +33,10 @@ export class AuthCallbackComponent implements OnInit {
         case 'boutique':
           this.router.navigate(['/layout-boutique']);
           break;
+        
+        case 'client':
+          this.router.navigate(['/home']);
+          break;
       }
     } else {
       this.router.navigate(['/login']);
