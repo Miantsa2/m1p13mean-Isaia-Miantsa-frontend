@@ -40,7 +40,7 @@ export class LoginComponent {
       } 
 
        if (res.user.role === 'client') {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
       } 
      
     },

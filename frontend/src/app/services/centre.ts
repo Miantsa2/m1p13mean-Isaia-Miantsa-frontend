@@ -21,8 +21,6 @@ export class CentreService {
       return this.http.put(`${this.apiUrl}/updatePrice/${id}`, { prixMetreCarre: price });
     }
 
-
-
     addNotif(id: String, data: any): Observable<any> {
       return this.http.put(`${this.apiUrl}/updateNotif/${id}`, data);
     }

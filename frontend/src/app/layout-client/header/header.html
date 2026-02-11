@@ -1,24 +1,65 @@
-<header class="w-full bg-white border-b border-gray-100">
+<header class="fixed top-0 left-0 z-50 w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
   <ng-container [ngSwitch]="headerType">
     <!-- Header Type 1 -->
     <ng-container *ngSwitchCase="'header1'">
       <div class="flex items-center justify-between px-8 py-3 mx-auto max-w-7xl">
         <div class="flex flex-col items-center leading-tight items">
-          <span class="text-lg font-bold text-[#D9B570] tracking-widest leading-none">OLYMPIA</span>
-          <span class="text-[15px] text-[#D9B570] font-normal tracking-tighter">Tanjombato</span>
+          <span class="text-lg font-bold text-[#D9B570] tracking-widest leading-none">{{ centreInfo?.nom || 'SAMI' }}</span>
+          <span class="text-[15px] text-[#D9B570] font-normal tracking-tighter">Iavoloha</span>
         </div>
-
         <nav class="flex items-center gap-8 text-[16px] font-light text-[#1A4A54]">
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors ">HOME</a>
-          <a class="flex items-center gap-1 cursor-pointer hover:text-[#EBAD5A] transition-colors">
-            CATEGORIES <span class="text-sm material-symbols-outlined">expand_more</span>
-          </a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">EVENTS</a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">ABOUT US</a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
+          <a (click)="scrollToSection('home')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">HOME</a>
+          
+          <div class="relative group" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
+            <a class="flex items-center gap-1 cursor-pointer hover:text-[#EBAD5A] transition-colors">
+              CATEGORIES <span class="text-sm material-symbols-outlined transition-transform" [class.rotate-180]="showDropdown">expand_more</span>
+            </a>
+
+            <div *ngIf="showDropdown" 
+                class="absolute left-0 z-50 w-48 py-2 mt-0 bg-white border border-gray-100 rounded-md shadow-xl">
+              <a (click)="selectCategory('')" class="block px-4 py-2 text-sm text-[#1A4A54] hover:bg-gray-50 hover:text-[#EBAD5A] cursor-pointer">
+                All categories
+              </a>
+              <hr class="my-1 border-gray-50">
+              <a *ngFor="let cat of categories" 
+                (click)="selectCategory(cat._id)"
+                class="block px-4 py-2 text-sm text-[#1A4A54] hover:bg-gray-50 hover:text-[#EBAD5A] cursor-pointer">
+                {{ cat.nom }}
+              </a>
+            </div>
+          </div>
+
+          <a (click)="scrollToSection('events-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">EVENTS</a>
+          
+          <a (click)="scrollToSection('about-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">ABOUT US</a>
+          
+          <a (click)="scrollToSection('contact-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
         </nav>
 
-        <app-button-primaire text="VISIT" [route]="['/login']"></app-button-primaire>
+        <div class="flex items-center gap-4">
+          <div *ngIf="isLoggedIn" class="relative group">
+            <input
+              type="text"
+              (input)="onSearch($event)"
+              placeholder="Search stores..."
+              class="pl-4 pr-10 py-1.5 text-xs border border-gray-200 rounded-full w-48 bg-gray-50 outline-none focus:border-[#D9B570] focus:ring-1 focus:ring-[#D9B570] transition-all"
+            />
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-[#D9B570]">
+              search
+            </span>
+          </div>
+
+          <app-button-primaire 
+            *ngIf="!isLoggedIn" 
+            text="VISIT" 
+            [route]="['/login']">
+          </app-button-primaire>
+
+          <button *ngIf="isLoggedIn" (click)="logout()" class="text-[#1A4A54] hover:text-red-500 transition-colors">
+            <span class="material-symbols-outlined">logout</span>
+          </button>
+
+        </div>
       </div>
     </ng-container>
 

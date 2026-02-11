@@ -1,9 +1,9 @@
 <!-- Header -->
-<app-header headerType="header1"></app-header>
+<app-header headerType="header1" (categorySelected)="filterStores($event)" (searchChanged)="applyFilter($event)"></app-header>
 
-<main class="min-h-screen">
+<main class="min-h-screen pt-[72px]">
   
-  <section class="relative h-[620px] w-full overflow-hidden bg-gray-900">
+  <section id="home" class="relative h-[620px] w-full overflow-hidden bg-gray-900">
     <div class="absolute inset-0 transition-opacity duration-1000">
       <img [src]="slides[currentSlide()].img" class="object-cover w-full h-full opacity-60" [alt]="slides[currentSlide()].title">
       <div class="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
@@ -24,64 +24,85 @@
     </div>
   </section>
 
-  <app-section-divider title="EVENTS"></app-section-divider>
-  
-  <div class="grid grid-cols-1 gap-6 px-8 mx-auto max-w-7xl md:grid-cols-3">
-    <app-event-card
-      icon="calendar_month"
-      title="BLACK FRIDAY"
-      text="Just some text here"
-    />
+  <div id="events-section">
+    <app-section-divider title="EVENTS"></app-section-divider>
+  </div>
 
-    <app-event-card
-      icon="campaign"
-      title="NEW OFFER"
-      text="Limited time only"
-    />
+  <div class="relative flex items-center px-8 mx-auto max-w-7xl group">
+    <button 
+      *ngIf="canScrollLeftEvents"
+      (click)="scrollEvents('left', eventContainer)"
+      class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-4">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
+    </button>
+    
+    <div 
+      #eventContainer
+      (scroll)="checkScrollEvents()"
+      class="events-container flex w-full gap-6 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      
+      <div 
+        *ngFor="let ev of events()" 
+        class="flex-none w-full md:w-[calc((100%-3rem)/3)] snap-start">
+        <app-event-card
+          [icon]="ev.boutique ? 'campaign' : 'calendar_month'"
+          [title]="ev.reference"
+          [text]="ev.description"
+        />
+      </div>
 
-    <app-event-card
-      icon="notifications"
-      title="REMINDER"
-      text="Don't miss out"
-    />
+      <div *ngIf="events().length === 0" class="w-full py-10 text-center text-gray-400 italic">
+        No upcoming events at the moment.
+      </div>
+    </div>
+
+    <button 
+      *ngIf="canScrollRightEvents && events().length > 3"
+      (click)="scrollEvents('right', eventContainer)"
+      class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-4">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
+    </button>
   </div>
   
-  <app-section-divider title="ABOUT US"></app-section-divider>
+  <div id="about-section">
+    <app-section-divider title="ABOUT US"></app-section-divider>
+  </div>
 
-  <div class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
+  <div *ngIf="centreInfo" class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
     <div class="md:w-1/2">
-      <img src="/olympia.png" class="rounded-xl shadow-xl w-full h-[350px] object-cover" alt="Olympia">
+      <img [src]="centreInfo.logo" class="rounded-xl shadow-xl w-full h-[350px] object-cover" [alt]="centreInfo.nom">
     </div>
     <div class="space-y-6 md:w-1/2">
-      <h2 class="text-3xl font-bold text-[#355F68] leading-tight">OLYMPIA Tanjombato</h2>
+      <h2 class="text-3xl font-bold text-[#355F68] leading-tight">{{ centreInfo.nom }}</h2>
       <p class="text-base font-light leading-relaxed text-[#355F68]">
-        A contemporary shopping center designed to bring together shopping, dining, services and leisure in one welcoming and accessible place.
+        {{ centreInfo.description }}
       </p>
       <p class="text-base font-light leading-relaxed text-[#355F68]">
-        Our center hosts a diverse selection of local and international brands, restaurants, cafés and essential services, carefully curated to meet the everyday needs of our community. 
         <a class="text-[#D7B471] font-bold cursor-pointer hover:underline">View more...</a>
       </p>
     </div>
   </div>
   
-  <div class="grid grid-cols-1 gap-10 px-8 mx-auto mt-16 mb-20 max-w-7xl md:grid-cols-3">
+  <div *ngIf="centreInfo" class="grid grid-cols-1 gap-10 px-8 mx-auto mt-16 mb-20 max-w-7xl md:grid-cols-3">
     <app-about-card
       icon="browse_gallery"
-      description="Schedule: 9h - 21h"
+      [description]="firstDaySchedule" 
     />
 
     <app-about-card
       icon="local_parking"
-      description="Parking: 240 places"
+      [description]="'Parking: ' + centreInfo.placeParking + ' places'"
     />
 
     <app-about-card
       icon="location_on"
-      description="Tanjombato, Madagascar,102"
+      [description]="centreInfo.adresse"
     />
   </div>
 
-  <app-section-divider title=" OUR STORES"></app-section-divider>
+  <div id="stores-section">
+    <app-section-divider title=" OUR STORES"></app-section-divider>
+  </div>
 
   <div class="relative flex items-center px-4 mx-auto mb-24 max-w-7xl group">
     <button 
@@ -94,20 +115,24 @@
     <div 
       #storeContainer
       (scroll)="checkScroll(storeContainer)"
-      class="flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      class="flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide no-scrollbar">
       
       <div 
-        *ngFor="let store of stores" 
+        *ngFor="let store of stores()" 
         class="flex-none w-[calc((100%-4rem)/3)] snap-start pl-12">
         <app-store-card
-          [image]="store.image"
-          [description]="store.description">
+          [image]="store.logo || '/image.png'" 
+          [description]="store.nom">
         </app-store-card>
+      </div>
+
+      <div *ngIf="stores().length === 0" class="w-full text-center py-10 text-gray-400">
+        No stores found.
       </div>
     </div>
 
     <button 
-      *ngIf="canScrollRight"
+      *ngIf="canScrollRight && stores().length > 3"
       (click)="scroll('right', storeContainer)"
       class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2">
       <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
@@ -116,7 +141,9 @@
 </main>
 
 <!-- Footer -->
-<app-footer
-  footerType="footer1"
-  [footerData]="footerData">
-</app-footer>
+<div id="contact-section">
+  <app-footer
+    footerType="footer1"
+    [footerData]="footerData">
+  </app-footer>
+</div>
