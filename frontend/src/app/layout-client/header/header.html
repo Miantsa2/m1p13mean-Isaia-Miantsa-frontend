@@ -66,23 +66,24 @@
     <!-- Header Type 2 -->
     <ng-container *ngSwitchCase="'header2'">
       <div class="flex items-center justify-between px-8 py-4 mx-auto max-w-7xl">
-        <a routerLink="/" class="cursor-pointer contents">
+        <a routerLink="/home" class="cursor-pointer contents">
             <div class="font-black text-[#333] uppercase tracking-tighter text-[17px]">
                 EXPLORE
             </div>
         </a>
 
         <nav class="flex items-center gap-10 text-[16px] font-light text-[#1A4A54]">
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">HOME</a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">PRODUCTS</a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">EVENTS</a>
-          <a class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
+          <a (click)="scrollToSection('about-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">ABOUT</a>
+          <a (click)="scrollToSection('products-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">PRODUCTS</a>
+          <a (click)="scrollToSection('event-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">EVENTS</a>
+          <a (click)="scrollToSection('contact-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
         </nav>
 
         <div class="relative group">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Search products"
+            (input)="onSearch($event)"
             class="pl-4 pr-10 py-1.5 text-xs border border-gray-300 rounded-md w-48 bg-gray-50 outline-none focus:border-[#c99f55] focus:ring-1 focus:ring-[#c99f55] transition-all"
           />
           <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-[#c99f55]">search</span>

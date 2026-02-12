@@ -21,24 +21,24 @@
             </p>
 
             <div class="flex justify-center gap-3 mt-1">
-            <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
-                <img src="/facebook.png" alt="Facebook" class="object-contain max-w-full max-h-full">
-            </a>
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/facebook.png" alt="Facebook" class="object-contain max-w-full max-h-full">
+              </a>
 
-            <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
-                <img src="/instagram.png" alt="Instagram" class="object-contain max-w-full max-h-full">
-            </a>
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/instagram.png" alt="Instagram" class="object-contain max-w-full max-h-full">
+              </a>
 
-            <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
-                <img src="/twitter.png" alt="X" class="object-contain max-w-full max-h-full">
-            </a>
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/twitter.png" alt="X" class="object-contain max-w-full max-h-full">
+              </a>
             </div>
           </div>
         </div>
       </ng-container>
 
       <ng-container *ngSwitchCase="'footer2'">
-        <div class="flex items-start justify-between">
+        <div *ngIf="footerData" class="flex items-start justify-between">
           <div class="space-y-1">
             <h3 class="mb-4 font-bold uppercase tracking-wider text-[13px] text-[#3A626B]">
               {{ footerData.title }}
@@ -52,9 +52,17 @@
                  class="object-cover w-20 h-20 mb-3 rounded-full shadow-sm" alt="Pasta Logo" />
 
             <div class="flex justify-center gap-3">
-              <span class="material-symbols-outlined text-[20px] text-gray-600 cursor-pointer hover:text-[#1A4A54]">facebook</span>
-              <span class="material-symbols-outlined text-[20px] text-gray-600 cursor-pointer hover:text-[#1A4A54]">photo_camera</span>
-              <span class="material-symbols-outlined text-[20px] text-gray-600 cursor-pointer hover:text-[#1A4A54]">close</span>
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/facebook.png" alt="Facebook" class="object-contain max-w-full max-h-full">
+              </a>
+
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/instagram.png" alt="Instagram" class="object-contain max-w-full max-h-full">
+              </a>
+
+              <a href="#" target="_blank" class="flex items-center justify-center w-5 h-5 transition-opacity hover:opacity-75">
+                  <img src="/twitter.png" alt="X" class="object-contain max-w-full max-h-full">
+              </a>
             </div>
           </div>
         </div>

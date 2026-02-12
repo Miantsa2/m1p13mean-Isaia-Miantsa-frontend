@@ -1,6 +1,10 @@
-<div
-  class="w-56 rounded-2xl border border-[#D7B471] bg-white p-4 shadow-sm"
->
+<div class="relative w-56 rounded-2xl border border-[#D7B471] bg-white p-4 shadow-sm transition-all hover:shadow-md">
+  
+  <div *ngIf="isPromoActive" 
+       class="absolute top-2 right-2 z-10 bg-[#86A38B] text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+    -{{ promotions.pourcentage }}%
+  </div>
+
   <div class="flex justify-center">
     <img
       [src]="image"
@@ -14,13 +18,21 @@
   </p>
 
   <div class="mt-3 flex items-center justify-between">
-    <span class="text-sm font-medium text-[#3A626B]">
-      Ar {{ price }}
-    </span>
+    <div class="flex flex-col">
+      <span 
+        [ngClass]="{
+          'text-[11px] text-[#D9B570] line-through opacity-70': isPromoActive, 
+          'text-sm font-medium text-[#3A626B]': !isPromoActive
+        }">
+        Ar {{ price | number:'1.0-0' }}
+      </span>
 
-    <span
-      class="material-symbols-outlined cursor-pointer text-[#EBAD5A]"
-    >
+      <span *ngIf="isPromoActive" class="text-sm font-bold text-[#3A626B]">
+        Ar {{ discountedPrice | number:'1.0-0' }}
+      </span>
+    </div>
+
+    <span class="material-symbols-outlined cursor-pointer text-[#EBAD5A] hover:text-[#3A626B] transition-colors">
       shopping_cart
     </span>
   </div>

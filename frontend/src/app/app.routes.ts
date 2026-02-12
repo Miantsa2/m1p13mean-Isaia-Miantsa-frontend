@@ -17,6 +17,7 @@ import {StoresEvent} from './pages/boutique/event/event';
 import { Charge } from './pages/boutique/charge/charge';
 import { Rent } from './pages/boutique/rent/rent';
 import { RentAdmin } from './pages/admin/rent/rent';
+import { StoreDetail } from './pages/client/store-detail/store-detail';
 
 
 export const routes: Routes = 
@@ -37,8 +38,7 @@ export const routes: Routes =
         path: 'stock',
         component: Stock
       },
-
-       {
+      {
         path: 'event',
         component: StoresEvent 
       },
@@ -46,13 +46,10 @@ export const routes: Routes =
         path: 'charges',
         component: Charge 
       },
-
-       {
+      {
         path: 'rent',
         component: Rent 
-      }
-
-      
+      }      
     ]
   },
   {
@@ -95,6 +92,10 @@ export const routes: Routes =
     path: 'sign',
     component: SignComponent
   },
+  {
+    path: 'store/:id',
+    component: StoreDetail
+  }
 
 ];
 

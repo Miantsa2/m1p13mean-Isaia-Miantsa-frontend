@@ -11,6 +11,7 @@ import { CentreService } from '../../services/centre';
 import { FormsModule } from '@angular/forms';
 import { EvenementService } from '../../services/evenement';
 import { Boutique } from '../../services/boutique';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,8 @@ import { Boutique } from '../../services/boutique';
     Header,
     Footer,
     SectionDivider,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   templateUrl: './home.html',
 })

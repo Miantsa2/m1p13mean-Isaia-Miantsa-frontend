@@ -120,10 +120,12 @@
       <div 
         *ngFor="let store of stores()" 
         class="flex-none w-[calc((100%-4rem)/3)] snap-start pl-12">
-        <app-store-card
-          [image]="store.logo || '/image.png'" 
-          [description]="store.nom">
-        </app-store-card>
+        <a [routerLink]="['/store', store._id]" class="cursor-pointer block transition-transform hover:scale-105">
+          <app-store-card
+            [image]="store.logo || '/image.png'" 
+            [description]="store.nom">
+          </app-store-card>
+        </a>
       </div>
 
       <div *ngIf="stores().length === 0" class="w-full text-center py-10 text-gray-400">

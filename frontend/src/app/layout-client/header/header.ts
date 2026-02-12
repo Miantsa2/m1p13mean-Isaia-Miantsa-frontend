@@ -65,7 +65,11 @@ export class Header implements OnInit {
     const term = event.target.value;
     this.searchChanged.emit(term);
     if (term.length >= 2) {
-      this.scrollToSection('stores-section');
+      if(this.headerType === 'header2') {
+        this.scrollToSection('products-section');
+      }else {
+        this.scrollToSection('stores-section');
+      }
     }
   }
 
