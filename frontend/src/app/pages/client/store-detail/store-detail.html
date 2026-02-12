@@ -1,0 +1,108 @@
+<app-header headerType="header2" (searchChanged)="handleSearch($event)"></app-header>
+
+<main class="min-h-screen pt-24 bg-white">
+    <section id="about-section" class="py-12">
+        <div *ngIf="store" class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
+        
+        <div class="flex justify-center md:w-1/3">
+            <img 
+            [src]="store.logo" 
+            class="rounded-full shadow-lg w-64 h-64 object-cover border-4 border-[#F2EFEF]" 
+            [alt]="store.nom">
+        </div>
+
+        <div class="space-y-6 md:w-2/3">
+            <div class="inline-block px-3 py-1 bg-[#F2EFEF] text-[#D9B570] text-xs font-bold rounded-full uppercase tracking-widest">
+            About our store
+            </div>
+            <h2 class="text-4xl font-black text-[#1A4A54] leading-tight uppercase tracking-tighter">
+            {{ store.nom }}
+            </h2>
+            <p class="text-lg font-light leading-relaxed text-[#697F84] max-w-2xl">
+            {{ store.description }}
+            </p>
+        </div>
+
+        </div>
+    </section>
+
+    <div id="products-section" class="py-8 bg-white">
+        <app-section-divider title="OUR PRODUCTS"></app-section-divider>
+
+        <div class="flex flex-wrap justify-center gap-4 my-8 px-4">
+            <button 
+                (click)="filterByPromo()"
+                [ngClass]="showOnlyPromos ? 'bg-[#86A38B] text-white border-[#86A38B]' : 'text-[#86A38B] border-[#86A38B] hover:bg-[#86A38B] hover:text-white'"
+                class="flex items-center gap-2 px-6 py-2 text-sm font-bold uppercase rounded-full transition-all border shadow-sm">
+                <span class="material-symbols-outlined text-sm">sell</span>
+                On Sale
+            </button>
+
+            <div class="w-px h-8 bg-gray-200 hidden sm:block"></div>
+            <button 
+                (click)="filterByCategory('all')"
+                [ngClass]="selectedCategory === 'all' ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
+                class="px-8 py-2 text-sm font-bold uppercase rounded-full transition-all border border-transparent shadow-sm">
+                All Products
+            </button>
+
+            <button 
+                *ngFor="let cat of productCategories"
+                (click)="filterByCategory(cat._id)"
+                [ngClass]="selectedCategory === cat._id ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
+                class="px-8 py-2 text-sm font-bold uppercase rounded-full transition-all shadow-sm border border-transparent">
+                {{ cat.nom }}
+            </button>
+        </div>
+
+        <div class="relative flex items-center px-4 mx-auto mb-16 max-w-7xl group">
+            <button 
+                *ngIf="canScrollLeft"
+                (click)="scroll('left', productContainer)"
+                class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2">
+                <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
+            </button>
+            
+            <div 
+                #productContainer
+                (scroll)="checkScroll(productContainer)"
+                class="product-container flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+            
+                <div 
+                    *ngFor="let item of filteredProducts()" 
+                    class="flex-none w-[calc((100%-4rem)/3)] snap-start">
+                    <app-product-card
+                        [title]="item.nom"
+                        [price]="item.prix"
+                        [image]="item.description" 
+                        [promotions]="item.promotions"
+                        class="w-full">
+                    </app-product-card>
+                </div>
+
+                <div *ngIf="filteredProducts().length === 0" class="w-full text-center py-20 text-gray-400 italic">
+                    No products found.
+                </div>
+            </div>
+
+            <button 
+                *ngIf="canScrollRight && filteredProducts().length > 3"
+                (click)="scroll('right', productContainer)"
+                class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2">
+                <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="event-section">
+        <app-section-divider title="OUR EVENTS"></app-section-divider>
+    </div>
+  
+</main>
+
+<div id="contact-section">
+    <app-footer
+        footerType="footer2"
+        [footerData]="footerData">
+    </app-footer>
+</div>
