@@ -68,7 +68,11 @@
                                 class="px-4 py-1.5 text-white text-[12px] rounded-md hover:opacity-80 transition-all font-normal min-w-[100px]">
                             {{ product.isPromoActive ? 'On promotion' : 'Promote' }}
                         </button>
-                        <button class="px-4 py-1.5 bg-[#CDD486] text-white text-[12px] rounded-md hover:opacity-80 transition-all font-normal">Sponsor</button>
+
+                        <button  (click)="openSponsorModal(product)" [disabled]="isSponsorActive(product)" class="px-4 py-1.5 bg-[#CDD486] text-white text-[12px] rounded-md hover:opacity-80 transition-all font-normal">
+                             {{ isSponsorActive(product) ? 'Is Sponsored' : 'Sponsor' }}
+
+                        </button>
                         <button (click)="openEditModal(product)" class="px-4 py-1.5 bg-[#95AAD3] text-white text-[12px] rounded-md hover:opacity-80 transition-all font-normal">Edit</button>
                         
                         <button (click)="deleteProduct(product._id)" 
@@ -233,3 +237,51 @@
         </div>
     </div>
 </app-modal-form>
+
+
+<!-- Modal pour entrer sponsordata d'un produit dans la boutique -->
+<app-modal-form
+    title=" PRODUCT SPRONSORING"
+    buttonText="CONFIRM"
+    [isOpen]="isSponsorModalOpen"
+    (close)="closeSponsorModal()"
+    (submitForm)="openInvoiceModal()"
+    [disable]="!isFormValid()"
+>
+    <div class="grid grid-cols-2 mt-6 gap-x-8">
+        <div class="flex flex-col gap-2">
+            <label class="text-[13px] font-medium text-[#697F84]">Start Date</label>
+            <input type="date"
+                    readonly 
+                  [(ngModel)]="sponsorData.dateDebut" 
+                   class="w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed outline-none">
+        </div>
+
+         <div class="flex flex-col gap-1">
+            <label class="text-[13px] font-medium text-[#697F84]">End Date</label>
+            <input type="date" 
+                   [(ngModel)]="sponsorData.dateFin" 
+                   class="w-full px-4 py-2.5 bg-gray-100 border border-gray-200 rounded-lg text-gray-500 cursor-not-allowed outline-none">
+        </div>
+    </div>
+</app-modal-form>
+
+
+
+
+<app-invoice 
+    [isOpen]="isModalInvoiceOpen"
+     (close)="closeInvoiceModal()"
+    [columns]="invoiceColumns"
+    [amount]="invoice.amount"
+    [client]="clientData"
+    [summary]="invoiceSummary"
+    (submitForm)="confirmPayment()">
+    
+    <tr class="text-sm text-[#2D3748]">
+        <td class="px-4 py-4 text-center">{{ invoice.produitNom }}</td>
+        <td class="px-4 py-4 text-center">{{ invoice.produitPrix }}</td>
+        <td class="px-4 py-4 text-center">{{ invoice.duree }}</td>
+        <td class="px-4 py-4 text-center">{{ invoice.currency }}</td>
+    </tr>
+</app-invoice>
