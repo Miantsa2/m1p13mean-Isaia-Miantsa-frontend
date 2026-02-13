@@ -1,0 +1,81 @@
+<div *ngIf="isOpen" (click)="closeModal()" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 backdrop-blur-sm">
+    <div class="relative bg-white shadow-2xl w-full max-w-[600px] max-h-[90vh] overflow-y-auto p-8 rounded-sm border-t-4 border-[#1A434E]">
+
+    <button (click)="closeModal()" class="absolute top-6 right-6 flex items-center justify-center w-8 h-8 rounded-full bg-[#1A434E] text-white hover:bg-[#255a68] transition-colors">
+      <span class="text-xl leading-none">&times;</span>
+    </button>
+
+    <div class="flex justify-between items-start mb-12">
+      <div class="mt-10">
+        <h1 class="text-5xl font-bold text-[#5B6B79] tracking-[0.15em]">INVOICE</h1>
+      </div>
+      
+    </div>
+
+     <div class="flex justify-between mb-10">
+      <div class="text-sm text-[#4A5568]">
+        <h3 class="font-bold text-black uppercase mb-1">ISSUED TO:</h3>
+        <p>{{ client?.name || 'Client name' }}</p>
+        <p>{{ client?.email || 'Client email' }}</p>
+        <p>Client address</p>
+      </div>
+      <div class="text-right text-sm text-[#4A5568]">
+        <p>Creation date</p>
+        <p class="font-medium">{{ creationDate }}</p>
+      </div>
+    </div>
+
+    <!-- Tableau facture -->
+    <div class="mb-4">
+      <table class="w-full">
+      <thead>    
+        <tr class="border-t-2 border-b-2 border-[#5B6B79]">
+          <th
+          *ngFor="let col of columns"
+          class="px-4 py-2 text-left text-sm font-semibold text-[#4A5568]"
+        >
+          {{ col.label }}
+        </th>
+        </tr>
+      </thead>
+
+       <tbody>
+        <ng-content></ng-content>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between items-center border-t-2 border-b-2 border-[#5B6B79] py-2 mb-6 uppercase text-sm font-bold text-[#4A5568]">
+      <span>TOTAL</span>
+      <span>{{ amount | number }}</span>
+    </div>
+
+    <div class="flex justify-end mb-10">
+        <div class="w-64 border border-[#ADD8E6] p-4 text-sm space-y-2">
+            <div *ngFor="let item of summary" class="flex justify-between text-[#1A434E]" 
+                [ngClass]="{'font-bold': item.bold}">
+            <span>{{ item.label }}</span>
+            <span class="font-semibold">{{ item.value | number }}</span>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+    <div class="text-[12px] text-[#4A5568] flex gap-4 mb-10">
+      <span>This invoice is issued for the amount of:</span>
+      <span class="font-medium italic">{{ convertAmountToWords(amount) }} EURO</span>
+    </div>
+      
+    <div class="bg-slate-50 p-6 rounded-lg">
+      <label class="text-[11px] font-bold text-[#1A434E] uppercase mb-2 block">Secure Card Payment</label>
+      <div id="card-element" class="bg-white p-3 border border-slate-300 rounded-md shadow-sm"></div>
+      <div id="card-errors" class="text-red-500 text-xs mt-2 italic"></div>
+      
+      <div class="flex justify-end mt-6">
+        <app-button-primaire (click)="confirm()" [disabled]= "disable" [text]="buttonText"></app-button-primaire>
+      </div>
+    </div>
+  </div>
+</div>
