@@ -22,6 +22,8 @@ import { CentreService } from '../../../services/centre';
 export class RentAdmin {
   constructor(private boutiqueService: Boutique, private chargeService: ChargeService) {}
   stores: any[] = [];
+    mois = new Date().getMonth() + 1;
+  annee = new Date().getFullYear();
 
   
 
@@ -35,9 +37,10 @@ export class RentAdmin {
     },
 
     datesSet: (info: any) => {
-      const mois = info.start.getMonth() + 1;
-      const annee = info.start.getFullYear();
-      this.loadBoutiquesPayees(mois, annee);
+      const currentViewDate = info.view.currentStart || info.start;
+      this.mois = currentViewDate.getMonth() + 1;
+      this.annee = currentViewDate.getFullYear();
+      this.loadBoutiquesPayees(this.mois, this.annee);
     }
 
     
@@ -75,6 +78,8 @@ export class RentAdmin {
     statut: 'paye'
   };
 
+  editingChargeId : string = '';
+
   openAddModal(date: string, boutiqueId?: string) {
     this.paymentForm = {
       boutique: boutiqueId || '',
@@ -103,13 +108,26 @@ export class RentAdmin {
         },
         error: (err) => console.error('Erreur calcul loyer', err)
       });
+
+
+     this.chargeService.getLoyerByBoutiqueId(boutiqueId, mois, annee).subscribe({
+      next: (charge: any) => {     
+          if(charge) {
+          this.editingChargeId = charge._id; 
+        }
+      },
+      error: (err) => console.error('Erreur récupération charge', err)
+    });
     }
+
+   
 
     this.isAddModalOpen = true;
   }
 
   onBoutiqueChange(event: Event) {
     const boutiqueId = (event.target as HTMLSelectElement).value;
+    this.paymentForm.boutique = boutiqueId;
     if (!boutiqueId) return;
 
     this.boutiqueService.getLoyer(boutiqueId).subscribe(res => {
@@ -124,19 +142,48 @@ export class RentAdmin {
     this.resertForm();
   }
 
+  
+
+  updateCharge(currentEditingId : string) {
+    const newcharge = {
+      statut: 'paye'
+    };
+   console.log('Updating charge with data:', newcharge);
+    this.chargeService.updateCharge(currentEditingId, newcharge).subscribe({
+      next: (updatedCharge : any) => {
+          const notif = {
+          titre: 'Rent Validation',
+          description: `Your rent of ${updatedCharge.date_limite} has been paied`
+        };
+
+        this.boutiqueService.addNotif(updatedCharge.boutique, notif).subscribe({
+          next: () => {
+            console.log('Notification envoyée à la boutique');
+          },
+          error: (err) => {
+            console.error('Erreur notification', err);
+          }
+        }); 
+      },
+      error: (err) => console.error('Erreur update charge', err)
+
+    });
+  }
+
 
 
   
   createCharge() {
       console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
-        next: () => {
+        next: (createdCharge : any) => {
           const notif = {
           titre: 'Rent Validation',
-          description: `Your rent of ${this.paymentForm.date_limite} has been paied`
+          description: `Your rent of ${createdCharge.date_limite} has been paied`
         };
+        console.log('boutique', createdCharge.boutique);
 
-        this.boutiqueService.addNotif(this.paymentForm.boutique, notif).subscribe({
+        this.boutiqueService.addNotif(createdCharge.boutique, notif).subscribe({
           next: () => {
             console.log('Notification envoyée à la boutique');
           },
@@ -144,7 +191,7 @@ export class RentAdmin {
             console.error('Erreur notification', err);
           }
         });
-        this.closeAddModel();
+       
         },
         error: (err) => console.error('Erreur création charge', err)
       });
@@ -152,12 +199,25 @@ export class RentAdmin {
 
   }
 
+  confirmPayment() {
+    if (this.editingChargeId !== '' && this.editingChargeId !== undefined) {
+      this.updateCharge(this.editingChargeId); 
+    } else {
+      this.createCharge(); 
+    }
+     this.closeAddModel();
+     this.loadBoutiquesPayees(this.mois, this.annee);
+   }
+
 
    isFormInvalid(): boolean {
     
     const date_limite = new Date(this.paymentForm.date_limite);
     const maintenant = new Date();
-    if (date_limite > maintenant) {
+    if(!this.paymentForm.boutique || !this.paymentForm.date_limite || this.paymentForm.valeur <= 0) {
+      return true;
+    }
+    if (date_limite < maintenant) {
       return true;
     }
 

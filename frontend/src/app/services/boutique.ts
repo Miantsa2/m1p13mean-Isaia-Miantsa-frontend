@@ -60,7 +60,7 @@ export class Boutique {
   }
 
   getLoyer(boutiqueId: string) {
-    return this.http.get<{ loyer: number }>(`${this.apiUrl}/loyer/${boutiqueId}`);
+    return this.http.get<{ loyer: number,  clientSecret : string; }>(`${this.apiUrl}/loyer/${boutiqueId}`);
   }
 
 
