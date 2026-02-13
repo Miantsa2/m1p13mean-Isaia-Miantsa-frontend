@@ -38,4 +38,11 @@ export class Produit {
   updatePromotion(id: string, promoData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/updatePromo/${id}`, { promotions: promoData });
   }
+
+  makeInvoice(produitId: string, sponsorData: { dateDebut: string, dateFin: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/makeInvoiceSponsor/${produitId}`, { sponsorData });
+  }
+
+
+
 }
