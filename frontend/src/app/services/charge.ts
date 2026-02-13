@@ -32,6 +32,16 @@ export class ChargeService
     return this.http.get<any[]>(`${this.apiUrl}/getChargeByBoutiqueId/${boutiqueId}`);
   }
 
+   getLoyerByBoutiqueId(boutiqueId: string, mois: number, annee: number): Observable<any[]> {
+    const params = new HttpParams()
+      .set('mois', mois.toString())
+      .set('annee', annee.toString());
+    return this.http.get<any[]>(`${this.apiUrl}/getChargeLoyer/${boutiqueId}`, { params });
+  }
+
+
+
+
   filterCharges(filters: {
     duCentre?: boolean | null;
     ordre?: 'asc' | 'desc';
