@@ -41,8 +41,24 @@ export class EvenementService {
     return this.http.get<any[]>(`${this.apiUrl}/getEvent`, { params });
   }
 
+   getApprouvedEventsByBoutiqueId(boutiqueId: string, statut?: string): Observable<any[]> {
+    let params = new HttpParams(); 
+    
+    if (statut) {
+      params = params.set('statut', statut); 
+    }
+    return this.http.get<any[]>(`${this.apiUrl}/getEventByBoutiqueIdandStatut/${boutiqueId}`, { params });
+  }
+
+
+
+
   getEventsByBoutiqueId(boutiqueId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getEventByBoutiqueId/${boutiqueId}`);
+  }
+
+  getEventsBystatut(statut: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getEventByStatut/${statut}`);
   }
 
   filterStoreEvents(filters: { boutiqueId?: string, statut?: string, ordre?: 'asc' | 'desc' }): Observable<any[]> {

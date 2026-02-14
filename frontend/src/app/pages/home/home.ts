@@ -166,7 +166,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   loadEvents() {
-    this.eventService.getEventsByType().subscribe({
+    this.eventService.getEventsBystatut('approuved').subscribe({
       next: (data) => {
         this.events.set(data);
         setTimeout(() => this.checkScrollEvents(), 100);

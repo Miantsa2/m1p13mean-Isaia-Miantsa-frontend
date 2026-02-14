@@ -97,6 +97,46 @@
     <div id="event-section">
         <app-section-divider title="OUR EVENTS"></app-section-divider>
     </div>
+
+    
+  <div class="relative flex items-center px-8 mx-auto max-w-7xl group">
+    <button 
+      *ngIf="canScrollLeftEvents"
+      (click)="scrollEvents('left', eventContainer)"
+      class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-4">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
+    </button>
+    
+    <div 
+      #eventContainer
+      (scroll)="checkScrollEvents()"
+      class="events-container flex w-full gap-6 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      
+      <div 
+        *ngFor="let ev of events()" 
+        class="flex-none w-full md:w-[calc((100%-3rem)/3)] snap-start">
+        <app-event-card
+          [icon]="ev.boutique ? 'campaign' : 'calendar_month'"
+          [title]="ev.reference"
+          [text]="ev.description"
+          [dateStart]="ev.dateDebut "
+          [dateEnd]="ev.dateFin"
+          [owner]="ev.boutique ? ev.boutique.nom : 'Center'"
+        />
+      </div>
+
+      <div *ngIf="events().length === 0" class="w-full py-10 text-center text-gray-400 italic">
+        No upcoming events at the moment.
+      </div>
+    </div>
+
+    <button 
+      *ngIf="canScrollRightEvents && events().length > 3"
+      (click)="scrollEvents('right', eventContainer)"
+      class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-4">
+      <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
   
 </main>
 
