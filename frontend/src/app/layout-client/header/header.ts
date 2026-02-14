@@ -4,6 +4,7 @@ import { ButtonPrimaire } from '../../components/button-primaire/button-primaire
 import { Categorie } from '../../services/categorie';
 import { Router, RouterModule } from '@angular/router';
 import { CentreService } from '../../services/centre';
+import { CartService } from '../../services/cart-service';
 
 export type HeaderType = 'header1' | 'header2' | 'header3';
 
@@ -24,7 +25,11 @@ export class Header implements OnInit {
 
   isLoggedIn = false;
 
-  constructor(private categorieService: Categorie, private router: Router, private centreService: CentreService) {}
+  constructor(
+    private categorieService: Categorie, 
+    private router: Router, 
+    private centreService: CentreService,
+    public cartService : CartService) {}
 
   ngOnInit() {
     this.loadCentreData();
@@ -32,6 +37,10 @@ export class Header implements OnInit {
     this.categorieService.getCategories().subscribe(data => {
       this.categories = data;
     });
+  }
+
+  goBack() {
+    window.history.back();
   }
 
   checkLoginStatus() {

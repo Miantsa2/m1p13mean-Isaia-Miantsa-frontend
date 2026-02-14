@@ -18,6 +18,7 @@ import { Charge } from './pages/boutique/charge/charge';
 import { Rent } from './pages/boutique/rent/rent';
 import { RentAdmin } from './pages/admin/rent/rent';
 import { StoreDetail } from './pages/client/store-detail/store-detail';
+import { PanierDetail } from './pages/client/panier-detail/panier-detail';
 
 
 export const routes: Routes = 
@@ -95,6 +96,10 @@ export const routes: Routes =
   {
     path: 'store/:id',
     component: StoreDetail
+  },
+  {
+    path: 'cart',
+    component: PanierDetail
   }
 
 ];

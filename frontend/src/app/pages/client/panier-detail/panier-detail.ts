@@ -1,0 +1,55 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Header } from '../../../layout-client/header/header';
+import { Footer } from '../../../layout-client/footer/footer';
+import { CentreService } from '../../../services/centre';
+import { CartService } from '../../../services/cart-service';
+
+@Component({
+  selector: 'app-panier-detail',
+  standalone: true,
+  imports: [Header, Footer, CommonModule],
+  templateUrl: './panier-detail.html',
+})
+export class PanierDetail implements OnInit {
+  footerData: any = null;
+
+  constructor(private centreService: CentreService, public cartService: CartService) {}
+
+  ngOnInit() {
+    this.loadCentreData();
+  }
+
+  loadCentreData() {
+    this.centreService.getCenter().subscribe({
+      next: (data) => {
+        const center = Array.isArray(data) ? data[0] : data;
+        if (center) {
+          this.footerData = {
+            title: 'CONTACT',
+            phone: center.telephone || '032 58 861 59',
+            email: center.email || 'email@gmail.com',
+            logoUrl: center.logo || '/image.png'
+          };
+        }
+      },
+      error: (err) => console.error('Error getting info :', err)
+    });
+  }
+
+  confirmCart() {
+    const clientId = this.cartService.currentClient()?._id;
+    if (!clientId) return;
+
+    this.cartService.validateCart(clientId).subscribe({
+      next: (res) => {
+        alert('Order confirmed!');
+        this.cartService.refreshCart();
+      },
+      error: (err) => {
+        console.error('Validation error:', err);
+        alert('Error during validation');
+      }
+    });
+  }
+}
