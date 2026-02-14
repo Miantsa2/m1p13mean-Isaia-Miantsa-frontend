@@ -166,7 +166,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   loadEvents() {
-    this.eventService.getEventsByType().subscribe({
+    this.eventService.getEventsBystatut('approuved').subscribe({
       next: (data) => {
         this.events.set(data);
         setTimeout(() => this.checkScrollEvents(), 100);
@@ -191,6 +191,15 @@ export class Home implements OnInit, OnDestroy {
       this.canScrollRightEvents = el.scrollLeft < maxScroll - 1;
     }
   }
+
+  onEventClick(event: any) {
+    console.log(event);
+
+    // exemple : ouvrir un modal
+    // this.selectedEvent = event;
+    // this.openModal();
+  }
+
 
   // To get the first horaire in the data
   get firstDaySchedule(): string {

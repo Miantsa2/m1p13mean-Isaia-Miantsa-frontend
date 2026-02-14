@@ -48,6 +48,9 @@
           [icon]="ev.boutique ? 'campaign' : 'calendar_month'"
           [title]="ev.reference"
           [text]="ev.description"
+          [dateStart]="ev.dateDebut "
+          [dateEnd]="ev.dateFin"
+          [owner]="ev.boutique ? ev.boutique.nom : 'Center'"
         />
       </div>
 
