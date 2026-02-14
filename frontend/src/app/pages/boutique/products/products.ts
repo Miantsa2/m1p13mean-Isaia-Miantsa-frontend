@@ -60,7 +60,7 @@ export class Products  {
   productColumns: TableColumn[] = [
     {key: 'nom', label: 'Name'},
     {key: 'prix', label:'Unit price'},
-    {key: 'stock', label:'Stock'},
+    {key: 'stock', label:'Initial stock'},
     { key: 'actions', label: 'Actions' }
   ];
 

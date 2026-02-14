@@ -29,20 +29,20 @@
     <div id="products-section" class="py-8 bg-white">
         <app-section-divider title="OUR PRODUCTS"></app-section-divider>
 
-        <div class="flex flex-wrap justify-center gap-4 my-8 px-4">
+        <div class="flex flex-wrap justify-center gap-4 px-4 my-8">
             <button 
                 (click)="filterByPromo()"
                 [ngClass]="showOnlyPromos ? 'bg-[#86A38B] text-white border-[#86A38B]' : 'text-[#86A38B] border-[#86A38B] hover:bg-[#86A38B] hover:text-white'"
-                class="flex items-center gap-2 px-6 py-2 text-sm font-bold uppercase rounded-full transition-all border shadow-sm">
-                <span class="material-symbols-outlined text-sm">sell</span>
+                class="flex items-center gap-2 px-6 py-2 text-sm font-bold uppercase transition-all border rounded-full shadow-sm">
+                <span class="text-sm material-symbols-outlined">sell</span>
                 On Sale
             </button>
 
-            <div class="w-px h-8 bg-gray-200 hidden sm:block"></div>
+            <div class="hidden w-px h-8 bg-gray-200 sm:block"></div>
             <button 
                 (click)="filterByCategory('all')"
                 [ngClass]="selectedCategory === 'all' ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
-                class="px-8 py-2 text-sm font-bold uppercase rounded-full transition-all border border-transparent shadow-sm">
+                class="px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm">
                 All Products
             </button>
 
@@ -50,7 +50,7 @@
                 *ngFor="let cat of productCategories"
                 (click)="filterByCategory(cat._id)"
                 [ngClass]="selectedCategory === cat._id ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
-                class="px-8 py-2 text-sm font-bold uppercase rounded-full transition-all shadow-sm border border-transparent">
+                class="px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm">
                 {{ cat.nom }}
             </button>
         </div>
@@ -66,12 +66,13 @@
             <div 
                 #productContainer
                 (scroll)="checkScroll(productContainer)"
-                class="product-container flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar">
+                class="flex w-full gap-8 px-2 py-4 overflow-x-auto product-container scroll-smooth snap-x snap-mandatory no-scrollbar">
             
                 <div 
                     *ngFor="let item of filteredProducts()" 
                     class="flex-none w-[calc((100%-4rem)/3)] snap-start">
                     <app-product-card
+                        [id]="item._id"
                         [title]="item.nom"
                         [price]="item.prix"
                         [image]="item.description" 
@@ -80,7 +81,7 @@
                     </app-product-card>
                 </div>
 
-                <div *ngIf="filteredProducts().length === 0" class="w-full text-center py-20 text-gray-400 italic">
+                <div *ngIf="filteredProducts().length === 0" class="w-full py-20 italic text-center text-gray-400">
                     No products found.
                 </div>
             </div>

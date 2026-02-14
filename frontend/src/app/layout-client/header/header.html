@@ -89,27 +89,33 @@
           <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-[#c99f55]">search</span>
         </div>
       </div>
+
+      <!-- Icon flottante pour le panier -->
+      <div *ngIf="cartService.cartCount() > 0" 
+        routerLink="/cart"
+          class="fixed top-24 right-8 z-50 animate-bounce-in">
+        <div class="relative bg-white p-3 rounded-full shadow-xl border border-gray-100 cursor-pointer hover:scale-110 transition-transform">
+          <span class="material-symbols-outlined text-[#EBAD5A] text-3xl">shopping_cart</span>
+          
+          <span class="absolute -top-1 -right-1 bg-[#E15B5B] text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">
+            {{ cartService.cartCount() }}
+          </span>
+        </div>
+      </div>
     </ng-container>
 
     <!-- Header Type 3 -->
     <ng-container *ngSwitchCase="'header3'">
-        <div class="grid items-center grid-cols-3 px-8 py-3 mx-auto max-w-7xl">
-            
-            <div class="flex justify-start">
-                <div class="font-black text-[#333] uppercase tracking-tighter text-[17px]">EXPLORE</div>
-            </div>
+      <div class="grid items-center grid-cols-3 px-8 py-3 mx-auto max-w-7xl">
+          
+          <div (click)="goBack()" class="flex justify-start cursor-pointer">
+              <div class="font-black text-[#333] uppercase tracking-tighter text-[17px]">GO BACK</div>
+          </div>
 
-            <nav class="flex items-center justify-center gap-8 text-[16px] font-light text-[#1A4A54]">
-                <a routerLink="/home" routerLinkActive="text-[#EBAD5A] font-normal" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">HOME</a>
-                <a routerLink="/products" routerLinkActive="text-[#EBAD5A] font-normal" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">PRODUCTS</a>
-                <a routerLink="/events" routerLinkActive="text-[#EBAD5A] font-normal" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">EVENTS</a>
-                <a routerLink="/contact" routerLinkActive="text-[#EBAD5A] font-normal" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
-            </nav>
+          <div class="hidden md:block"></div>
 
-            <div class="hidden md:block"></div>
-
-        </div>
-        </ng-container>
+      </div>
+    </ng-container>
 
   </ng-container>
 </header>
