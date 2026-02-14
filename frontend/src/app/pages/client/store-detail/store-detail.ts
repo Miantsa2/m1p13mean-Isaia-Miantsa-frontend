@@ -7,11 +7,12 @@ import { Footer } from '../../../layout-client/footer/footer';
 import { CommonModule } from '@angular/common';
 import { SectionDivider } from '../../../components/section-divider/section-divider';
 import { ProductCard } from '../../../components/product-card/product-card';
-
+import { EvenementService } from '../../../services/evenement';
+import { EventCard } from '../../../components/event-card/event-card';
 @Component({
   selector: 'app-store-detail',
   standalone: true,
-  imports: [Header, ProductCard,Footer, CommonModule, SectionDivider],
+  imports: [Header, ProductCard,Footer, CommonModule, SectionDivider, EventCard],
   templateUrl: './store-detail.html',
 })
 export class StoreDetail implements OnInit {
@@ -21,6 +22,7 @@ export class StoreDetail implements OnInit {
   productCategories: any[] = []; 
   footerData: any = null;
   selectedCategory: string = 'all';
+  events = signal<any[]>([]);
 
   canScrollLeft = false;
   canScrollRight = false;
@@ -29,10 +31,16 @@ export class StoreDetail implements OnInit {
 
   searchTerm: string = '';
 
+  canScrollLeftEvents = false;
+  canScrollRightEvents = true;
+
+
   constructor(
     private route: ActivatedRoute,
     private boutiqueService: Boutique,
-    private produitService: Produit
+    private produitService: Produit,
+    private eventService: EvenementService,
+    
   ) {}
 
   ngOnInit() {
@@ -41,6 +49,8 @@ export class StoreDetail implements OnInit {
       this.loadStoreDetails(storeId);
       this.loadStoreCategories(storeId);
       this.loadStoreProducts(storeId);
+      this.loadEvents(storeId);
+
     }    
   }
 
@@ -76,6 +86,17 @@ export class StoreDetail implements OnInit {
       this.productCategories = data;
     });
   }
+
+  loadEvents(id: string) {
+    this.eventService.getApprouvedEventsByBoutiqueId(id,'approuved').subscribe({
+      next: (data) => {
+        this.events.set(data);
+        setTimeout(() => this.checkScrollEvents(), 100);
+      },
+      error: (err) => console.error('Error loading events:', err)
+    });
+  }
+
 
   handleSearch(term: string) {
     this.searchTerm = term.toLowerCase();
@@ -138,4 +159,25 @@ export class StoreDetail implements OnInit {
     this.canScrollLeft = element.scrollLeft > 0;
     this.canScrollRight = element.scrollLeft < (element.scrollWidth - element.clientWidth - 5);
   }
+
+  
+  scrollEvents(direction: 'left' | 'right', element: HTMLElement) {
+    const scrollAmount = element.clientWidth;
+    element.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  }
+
+  checkScrollEvents() {
+    const el = document.querySelector('.events-container') as HTMLElement;
+    if (el) {
+      this.canScrollLeftEvents = el.scrollLeft > 0;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      this.canScrollRightEvents = el.scrollLeft < maxScroll - 1;
+    }
+  }
+
+
+
 }

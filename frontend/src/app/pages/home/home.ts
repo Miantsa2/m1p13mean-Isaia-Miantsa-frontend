@@ -192,15 +192,6 @@ export class Home implements OnInit, OnDestroy {
     }
   }
 
-  onEventClick(event: any) {
-    console.log(event);
-
-    // exemple : ouvrir un modal
-    // this.selectedEvent = event;
-    // this.openModal();
-  }
-
-
   // To get the first horaire in the data
   get firstDaySchedule(): string {
     if (this.centreInfo?.horaires?.length > 0) {
