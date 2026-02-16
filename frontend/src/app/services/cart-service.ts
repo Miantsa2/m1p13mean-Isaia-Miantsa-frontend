@@ -82,6 +82,7 @@ export class CartService {
     });
   }
 
+ 
   removeProduct(produitId: string) {
     const clientId = this.currentClient()?._id;
     if (clientId) {
@@ -103,4 +104,19 @@ export class CartService {
   validateCart(clientId: string): Observable<any> {
     return this.http.post(`${this.apiPanier}/validate`, { clientId });
   }
+
+  setRecuperation(panierId: string, lat: number, lng: number) {
+    return this.http.put(`${this.apiPanier}/set-recuperation/${panierId}`, {
+      coo_x: lat,
+      coo_y: lng
+    });
+  }
+
+  makeInvoiceCart(panierId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiPanier}/makeInvoice/cart/${panierId}`);
+  }
+
+
+
+  
 }

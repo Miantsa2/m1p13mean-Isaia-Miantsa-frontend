@@ -1,6 +1,13 @@
-<app-header headerType="header2" ></app-header>
+<app-header headerType="header3"></app-header>
+
+
 
 <main class="min-h-screen pt-24 bg-white">
+   <div class="bg-[#EEEEEE] py-8">
+    <h1 class="mt-8 text-4xl font-black text-center uppercase tracking-tight text-[#3A626B]">
+      <span>{{ cartService.currentClient()?.nom || 'CLIENT' }}</span>'S CART
+    </h1>
+  </div>
   <section id="map-section" class="py-12">
     <div class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
       <div class=" map-container flex justify-center md:w-5/6">  
@@ -14,16 +21,21 @@
           <p class="text-lg font-light leading-relaxed text-[#697F84] max-w-2xl">
             Show in the map, where can we deliver your products
           </p>
+          <div class="inline-block  py-1">
+            <app-button-primaire text="CONFIRM" [disabled]="!deliveryMarker" [route]="'/invoiceCart'"></app-button-primaire>
+           
+          </div>
       </div>
     </div>
   </section>
 
+  
 </main>
 
 
 <div id="contact-section">
     <app-footer
-        footerType="footer2"
-        >
+        footerType="footer1"
+        [footerData]="footerData">
     </app-footer>
 </div>

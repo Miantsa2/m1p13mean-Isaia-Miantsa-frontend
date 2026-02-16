@@ -1,0 +1,119 @@
+<app-header headerType="header3"></app-header>
+<main class="min-h-screen pt-24 bg-gray-50 flex justify-center items-start px-4">
+  <div
+    class="relative bg-white shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-10 rounded-xl border-t-4 border-[#1A434E]"
+  >
+
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-12">
+      <div>
+        <h1
+          class="text-4xl md:text-5xl font-bold text-[#5B6B79] tracking-widest"
+        >
+          INVOICE
+        </h1>
+      </div>
+    </div>
+
+    <!-- Client -->
+    <div class="flex flex-col md:flex-row justify-between gap-6 mb-10">
+      <div class="text-sm text-gray-600">
+        <h3 class="font-bold text-black uppercase mb-2">Issued to</h3>
+        <p>{{ clientData.name || 'Client name' }}</p>
+        <p>{{ clientData.email || 'Client email' }}</p>
+      </div>
+
+      <div class="text-sm text-gray-600 md:text-right">
+        <p>Creation date</p>
+        <p class="font-medium">{{ creationDate }}</p>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="mb-6 overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr
+            class="border-t-2 border-b-2 border-[#5B6B79] text-sm text-gray-600 uppercase"
+          >
+            <th class="py-3 text-left">Produit</th>
+            <th class="py-3 text-center">Quantity</th>
+            <th class="py-3 text-center">Unit price</th>
+            <th class="py-3 text-right">Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (produit of invoice.produits; track produit.produitId) {
+          <tr class="border-b text-sm text-gray-700">
+            <td class="py-3">{{ produit.nom }}</td>
+            <td class="py-3 text-center">{{ produit.quantite }}</td>
+            <td class="py-3 text-center">{{ produit.prixUnitaire | number }}</td>
+            <td class="py-3 text-right font-medium">
+              {{ produit.subtotal | number }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Résumé -->
+    <div class="flex justify-end mb-10">
+      <div
+        class="w-full md:w-72 border border-[#ADD8E6] p-5 text-sm space-y-3 rounded-lg bg-slate-50"
+      >
+        <div class="flex justify-between text-[#1A434E]">
+          <span>Total</span>
+          <span class="font-semibold">{{ invoice.totalPanier | number }}</span>
+        </div>
+
+        <div class="flex justify-between text-[#1A434E]">
+          <span>Delivery</span>
+          <span class="font-semibold">{{ invoice.prixLivraison | number }}</span>
+        </div>
+
+        <div
+          class="flex justify-between text-lg font-bold text-[#1A434E] border-t pt-2"
+        >
+          <span>Final amount</span>
+          <span>{{ invoice.totalAPayer | number }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paiement -->
+    <div class="bg-gray-50 p-6 rounded-xl border">
+      <label
+        class="text-xs font-bold text-[#1A434E] uppercase mb-2 block"
+      >
+        Secure card payment
+      </label>
+
+      <div
+        id="card-element"
+        class="bg-white p-3 border border-slate-300 rounded-md shadow-sm focus-within:ring-2 focus-within:ring-[#1A434E]"
+      ></div>
+
+      <div
+        id="card-errors"
+        class="text-red-500 text-xs mt-2 italic"
+      ></div>
+
+      <div class="flex justify-end mt-6">
+        <app-button-primaire
+          (click)="confirmPayment()"
+          text="CONFIRM"
+          [disabled]="invoice.totalAPayer <= 0"
+        ></app-button-primaire>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="contact-section">
+    <app-footer
+        footerType="footer1"
+        [footerData]="footerData">
+    </app-footer>
+</div>

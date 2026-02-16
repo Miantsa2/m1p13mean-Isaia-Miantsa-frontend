@@ -17,7 +17,6 @@
         <h3 class="font-bold text-black uppercase mb-1">ISSUED TO:</h3>
         <p>{{ client?.name || 'Client name' }}</p>
         <p>{{ client?.email || 'Client email' }}</p>
-        <p>Client address</p>
       </div>
       <div class="text-right text-sm text-[#4A5568]">
         <p>Creation date</p>
@@ -63,11 +62,7 @@
 
     
 
-    <div class="text-[12px] text-[#4A5568] flex gap-4 mb-10">
-      <span>This invoice is issued for the amount of:</span>
-      <span class="font-medium italic">{{ convertAmountToWords(amount) }} EURO</span>
-    </div>
-      
+
     <div class="bg-slate-50 p-6 rounded-lg">
       <label class="text-[11px] font-bold text-[#1A434E] uppercase mb-2 block">Secure Card Payment</label>
       <div id="card-element" class="bg-white p-3 border border-slate-300 rounded-md shadow-sm"></div>
