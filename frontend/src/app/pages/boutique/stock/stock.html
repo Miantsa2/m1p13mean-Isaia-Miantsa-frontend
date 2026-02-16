@@ -14,42 +14,42 @@
 
     <div class="flex items-center gap-4 mb-8">
     
-    <div class="relative inline-block group">
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
-            <span class="text-[#3A626B] font-normal text-sm">Categories</span>
-            <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
-                expand_more
-            </span>
-            <select 
-                [ngModel]="selectedCategory()"
-                (change)="selectedCategory.set($any($event.target).value)"
-                class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
-                <option value="all">All Categories</option>
-                @for (cat of categories(); track cat._id) {
-                    <option [value]="cat._id">{{ cat.nom }}</option>
-                }
-            </select>
+        <div class="relative inline-block group">
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
+                <span class="text-[#3A626B] font-normal text-sm">Categories</span>
+                <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
+                    expand_more
+                </span>
+                <select 
+                    [ngModel]="selectedCategory()"
+                    (change)="selectedCategory.set($any($event.target).value)"
+                    class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
+                    <option value="all">All Categories</option>
+                    @for (cat of categories(); track cat._id) {
+                        <option [value]="cat._id">{{ cat.nom }}</option>
+                    }
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="relative inline-block group">
-        <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
-            <span class="text-[#3A626B] font-normal text-sm">Status</span>
-            <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
-                filter_list
-            </span>
-            <select 
-                [ngModel]="selectedStatus()"
-                (change)="selectedStatus.set($any($event.target).value)"
-                class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
-                <option value="all">All Status</option>
-                <option value="Available">Available</option>
-                <option value="Low stock">Low stock</option>
-                <option value="Out of stock">Out of stock</option>
-            </select>
+        <div class="relative inline-block group">
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-[#F1F4F5] rounded-lg hover:bg-gray-100 transition-colors relative">
+                <span class="text-[#3A626B] font-normal text-sm">Status</span>
+                <span class="material-symbols-outlined text-[#3A626B] text-sm transition-transform group-hover:rotate-180">
+                    filter_list
+                </span>
+                <select 
+                    [ngModel]="selectedStatus()"
+                    (change)="selectedStatus.set($any($event.target).value)"
+                    class="absolute inset-0 w-full h-full opacity-0 appearance-none cursor-pointer">
+                    <option value="all">All Status</option>
+                    <option value="Available">Available</option>
+                    <option value="Low stock">Low stock</option>
+                    <option value="Out of stock">Out of stock</option>
+                </select>
+            </div>
         </div>
     </div>
-</div>
     @if (loading()) {
         <div class="flex justify-center py-10">
             <div class="animate-pulse text-[#3A626B]">Loading inventory...</div>

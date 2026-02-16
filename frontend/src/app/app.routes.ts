@@ -19,6 +19,7 @@ import { Rent } from './pages/boutique/rent/rent';
 import { RentAdmin } from './pages/admin/rent/rent';
 import { StoreDetail } from './pages/client/store-detail/store-detail';
 import { PanierDetail } from './pages/client/panier-detail/panier-detail';
+import { Vente } from './pages/boutique/vente/vente';
 
 
 export const routes: Routes = 
@@ -50,6 +51,10 @@ export const routes: Routes =
       {
         path: 'rent',
         component: Rent 
+      },
+      {
+        path: 'sales',
+        component: Vente
       }      
     ]
   },
@@ -100,7 +105,7 @@ export const routes: Routes =
   {
     path: 'cart',
     component: PanierDetail
-  }
+  },
 
 ];
 
