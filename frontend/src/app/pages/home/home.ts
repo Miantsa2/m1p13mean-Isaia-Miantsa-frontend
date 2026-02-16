@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { EvenementService } from '../../services/evenement';
 import { Boutique } from '../../services/boutique';
 import { RouterModule } from '@angular/router';
+import { FloatingAd } from '../../components/floating-ad/floating-ad';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,8 @@ import { RouterModule } from '@angular/router';
     Footer,
     SectionDivider,
     FormsModule,
-    RouterModule
+    RouterModule,
+    FloatingAd
   ],
   templateUrl: './home.html',
 })
