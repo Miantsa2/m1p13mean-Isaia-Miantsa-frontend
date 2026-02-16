@@ -39,7 +39,7 @@
     <div 
       #eventContainer
       (scroll)="checkScrollEvents()"
-      class="events-container flex w-full gap-6 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide">
+      class="flex w-full gap-6 py-4 overflow-x-auto events-container scroll-smooth snap-x snap-mandatory scrollbar-hide">
       
       <div 
         *ngFor="let ev of events()" 
@@ -54,7 +54,7 @@
         />
       </div>
 
-      <div *ngIf="events().length === 0" class="w-full py-10 text-center text-gray-400 italic">
+      <div *ngIf="events().length === 0" class="w-full py-10 italic text-center text-gray-400">
         No upcoming events at the moment.
       </div>
     </div>
@@ -123,7 +123,7 @@
       <div 
         *ngFor="let store of stores()" 
         class="flex-none w-[calc((100%-4rem)/3)] snap-start pl-12">
-        <a [routerLink]="['/store', store._id]" class="cursor-pointer block transition-transform hover:scale-105">
+        <a [routerLink]="['/store', store._id]" class="block transition-transform cursor-pointer hover:scale-105">
           <app-store-card
             [image]="store.logo || '/image.png'" 
             [description]="store.nom">
@@ -131,7 +131,7 @@
         </a>
       </div>
 
-      <div *ngIf="stores().length === 0" class="w-full text-center py-10 text-gray-400">
+      <div *ngIf="stores().length === 0" class="w-full py-10 text-center text-gray-400">
         No stores found.
       </div>
     </div>
@@ -145,6 +145,10 @@
   </div>
 </main>
 
+<!-- Publicité -->
+<app-floating-ad>
+  
+</app-floating-ad>
 <!-- Footer -->
 <div id="contact-section">
   <app-footer
