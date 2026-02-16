@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment'; 
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -57,11 +58,14 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  // getHome() {
-  //   this.http.get('http://localhost:5000/mean/client/home').subscribe(console.log);
-  // }
-
-  //  getHome2() {
-  //   this.http.get('http://localhost:5000/mean/client/test').subscribe(console.log);
-  // }
+  getUserIdFromToken(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const decoded: any = jwtDecode(token);
+      return decoded.id;
+    } catch (error) {
+      return null;
+    }
+  }
 }

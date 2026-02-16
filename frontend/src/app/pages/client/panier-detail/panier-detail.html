@@ -1,0 +1,101 @@
+<app-header headerType="header3"></app-header>
+
+<main class="min-h-screen bg-[#fffdfd]">
+  <div class="bg-[#EEEEEE] py-8">
+    <h1 class="mt-8 text-4xl font-black text-center uppercase tracking-tight text-[#3A626B]">
+      <span>{{ cartService.currentClient()?.nom || 'CLIENT' }}</span>'S CART
+    </h1>
+  </div>
+
+  <div class="px-8 py-12 mx-auto max-w-7xl">
+    <div class="flex flex-col gap-8 lg:flex-row">
+      
+      <div class="flex-grow overflow-hidden bg-white rounded-sm shadow-sm">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-[#E9AD59] text-[#355F68] uppercase text-sm tracking-widest">
+              <th class="px-6 py-4 font-bold">Products</th>
+              <th class="px-6 py-4 font-bold text-center">Price</th>
+              <th class="px-6 py-4 font-bold text-center">Quantity</th>
+              <th class="px-6 py-4 font-bold text-right">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr *ngIf="!cartService.currentPanier()?.produits?.length" class="h-64 italic text-center text-gray-400">
+              <td colspan="4">Your cart items will appear here...</td>
+            </tr>
+
+            <tr *ngFor="let item of cartService.currentPanier()?.produits" class="transition-colors hover:bg-gray-50/50">
+              <td class="flex items-center gap-4 px-6 py-6">
+                <button (click)="cartService.removeProduct(item.id._id)" 
+                        class="text-xl font-light text-gray-400 hover:text-red-500">×</button>
+                
+                <img [src]="item.id.description || '/placeholder-product.png'" 
+                     class="object-cover w-12 h-12 border border-gray-100 rounded-full" alt="Product">
+                
+                <span class="text-xs font-semibold text-[#1A4A54] uppercase tracking-tighter">
+                  {{ item.id.nom }}
+                </span>
+              </td>
+
+              <td class="px-6 py-6 text-center text-[11px] font-bold text-[#3A626B]">
+                Ar {{ item.sous_total / item.quantite | number:'1.0-0' }}
+              </td>
+
+              <td class="px-6 py-6 text-center">
+                <div class="inline-flex items-center bg-white border border-gray-300 shadow-sm h-9">
+                  <button (click)="cartService.updateQuantity(item.id._id, item.quantite - 1, item.id.prix)"
+                          class="h-full px-3 text-gray-500 transition-colors border-r border-gray-300 hover:bg-gray-50">
+                    −
+                  </button>
+                  <span class="px-6 text-xs font-bold text-[#3A626B] min-w-[50px]">
+                    {{ item.quantite }}
+                  </span>
+                  <button (click)="cartService.updateQuantity(item.id._id, item.quantite + 1, item.id.prix)"
+                          class="h-full px-3 text-gray-500 transition-colors border-l border-gray-300 hover:bg-gray-50">
+                    +
+                  </button>
+                </div>
+              </td>
+
+              <td class="px-6 py-6 text-right text-[11px] font-bold text-[#3A626B]">
+                Ar {{ item.sous_total | number:'1.0-0' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="p-6 text-right">
+            <button (click)="cartService.clearCart()" 
+                    class="text-[#D9B570] font-bold underline uppercase text-sm hover:text-[#3A626B] transition-colors">
+              Clear my cart
+            </button>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-80">
+        <div class="p-6 bg-white border border-gray-200 shadow-sm">
+          <h2 class="text-[#3A626B] text-lg font-medium mb-4">Cart summary</h2>
+          <hr class="mb-6">
+          
+          <div class="flex justify-between items-center mb-4 text-xs font-bold text-[#697F84]">
+            <span>Items</span>
+            <span>{{ cartService.currentPanier()?.produits?.length || 0 }}</span>
+          </div>
+          
+          <div class="flex justify-between items-center mb-10 text-xs font-bold text-[#3A626B]">
+            <span>TOTAL</span>
+            <span class="text-sm">Ar {{ cartService.currentPanier()?.total | number:'1.0-0' }}</span>
+          </div>
+
+          <button (click)="confirmCart()" class="w-full bg-[#698481] text-white py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#57706d] transition-all shadow-md active:scale-95">
+            Confirm cart
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<app-footer footerType="footer1" [footerData]="footerData"></app-footer>

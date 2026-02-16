@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CartService } from '../../services/cart-service';
 @Component({
   selector: 'app-product-card',
   imports: [CommonModule],
@@ -11,8 +12,11 @@ export class ProductCard implements OnInit {
   @Input() image!: string;
   @Input() promotions: any = null;
 
+  @Input() id!: string;
   discountedPrice: number = 0;
   isPromoActive: boolean = false;
+
+  constructor(private cartService: CartService) {}
 
   ngOnInit() {
     this.checkPromotion();
@@ -29,5 +33,10 @@ export class ProductCard implements OnInit {
         this.discountedPrice = this.price - (this.price * this.promotions.pourcentage / 100);
       }
     }
+  }
+
+  onAddToCart() {
+    const priceToSend = this.isPromoActive ? this.discountedPrice : this.price;
+    this.cartService.addToCart(this.id, priceToSend);
   }
 }
