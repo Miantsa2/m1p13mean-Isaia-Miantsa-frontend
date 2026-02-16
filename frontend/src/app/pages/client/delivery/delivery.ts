@@ -2,54 +2,62 @@ import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { Header } from '../../../layout-client/header/header';
 import { Footer } from '../../../layout-client/footer/footer';
-import { Boutique } from '../../../services/boutique';
+import { CentreService } from '../../../services/centre';
 import { ActivatedRoute } from '@angular/router';
+import { CartService } from '../../../services/cart-service';
+import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
+import { InvoiceCorps , clientData, InvoiceColumn, InvoiceSummaryItem} from '../../../components/invoice/invoice';
+import { environment } from '../../../../environments/environment';
+import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 
 
 @Component({
   selector: 'app-delivery',
   templateUrl: './delivery.html',
   styleUrls: ['./delivery.css'],
-  imports: [Header,Footer],
+  imports: [Header,Footer, ButtonPrimaire],
   standalone: true
 })
 export class Delivery implements OnInit {
 
   private map!: L.Map;
-  footerData: any = null;
-  store: any = null;
+  footerData: any = {};
+  public deliveryMarker: L.CircleMarker | null = null;
 
 
   constructor(
-    private boutiqueService: Boutique,
-    private route: ActivatedRoute,) {
+    private centreService: CentreService,
+    private route: ActivatedRoute,
+    public cartService: CartService) {
 
   }
 
   
-  // loadStoreDetails(id: string) {
-  //   this.boutiqueService.getBoutiquesById(id).subscribe({
-  //     next: (data) => {
-  //       this.store = data;
-        
-  //       this.footerData = {
-  //         title: data.nom,
-  //         phone: data.telephone,
-  //         email: data.user?.email,
-  //         logoUrl: data.logo || '/image.png'
-  //       };
-  //     },
-  //     error: (err) => console.error('Error stores:', err)
-  //   });
-  // }
-
-
-  ngOnInit(): void {
-    // const storeId = this.route.snapshot.paramMap.get('id');
+  ngOnInit() {
+    this.loadCentreData();
     this.initMap();
     this.markPlace();
-    // this.loadStoreDetails(storeId)
   }
+
+    loadCentreData() {
+    this.centreService.getCenter().subscribe({
+      next: (data) => {
+        const center = Array.isArray(data) ? data[0] : data;
+        if (center) {
+          this.footerData = {
+            title: 'CONTACT',
+            phone: center.telephone || '032 58 861 59',
+            email: center.email || 'email@gmail.com',
+            logoUrl: center.logo || '/image.png'
+          };
+        }
+      },
+      error: (err) => console.error('Error getting info :', err)
+    });
+  }
+
+  
+
 
   
 
@@ -59,6 +67,10 @@ export class Delivery implements OnInit {
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
+
+     if (this.deliveryMarker) {
+      this.map.removeLayer(this.deliveryMarker);
+    }
 
     L.circleMarker([-18.9583, 47.5257], {
       radius: 10,         
@@ -80,8 +92,24 @@ export class Delivery implements OnInit {
     this.map.on('click', (e: any) => {
     const lat = e.latlng.lat;
     const lng = e.latlng.lng;
+    if (this.deliveryMarker) {
+      this.map.removeLayer(this.deliveryMarker);
+    }
 
-    L.circleMarker([lat, lng], {
+   this.cartService.setRecuperation(this.cartService.currentPanier()?._id, lat, lng)
+    .subscribe({
+      next: (res) => {
+        console.log("Saved", res);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
+    
+
+
+    this.deliveryMarker=L.circleMarker([lat, lng], {
       radius: 10,         
       color: 'green',         
       fillColor: 'rgb(19, 202, 123)',   
@@ -91,5 +119,8 @@ export class Delivery implements OnInit {
     console.log('Position:', lat, lng);
   });
   }
+ 
+
+
 
 }

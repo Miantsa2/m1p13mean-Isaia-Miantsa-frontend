@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../layout-client/header/header';
 import { Footer } from '../../../layout-client/footer/footer';
 import { CentreService } from '../../../services/centre';
 import { CartService } from '../../../services/cart-service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-panier-detail',
   standalone: true,
-  imports: [Header, Footer, CommonModule],
+  imports: [Header, Footer, CommonModule, RouterModule ],
   templateUrl: './panier-detail.html',
 })
 export class PanierDetail implements OnInit {
-  footerData: any = null;
+  footerData: any = {};
 
   constructor(private centreService: CentreService, public cartService: CartService) {}
 
@@ -37,19 +38,5 @@ export class PanierDetail implements OnInit {
     });
   }
 
-  confirmCart() {
-    const clientId = this.cartService.currentClient()?._id;
-    if (!clientId) return;
 
-    this.cartService.validateCart(clientId).subscribe({
-      next: (res) => {
-        alert('Order confirmed!');
-        this.cartService.refreshCart();
-      },
-      error: (err) => {
-        console.error('Validation error:', err);
-        alert('Error during validation');
-      }
-    });
-  }
 }
