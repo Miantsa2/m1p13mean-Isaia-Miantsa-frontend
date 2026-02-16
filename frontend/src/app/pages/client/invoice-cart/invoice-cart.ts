@@ -9,6 +9,8 @@ import { CentreService } from '../../../services/centre';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../../services/cart-service';
 import { Router } from '@angular/router';
+import { Boutique } from '../../../services/boutique';
+
 
 @Component({
   selector: 'app-invoice-cart',
@@ -56,7 +58,8 @@ export class InvoiceCart {
     private centreService: CentreService,
     private route: ActivatedRoute,
     public cartService: CartService,
-    private router: Router) {
+    private router: Router,
+    private boutiqueService: Boutique) {
 
   }
 
@@ -128,8 +131,26 @@ export class InvoiceCart {
 
     this.cartService.validateCart(clientId).subscribe({
       next: (res) => {
-        alert('Order confirmed!');
+        this.cartService.currentPanier().produits.forEach((produit: any) => {
+          console.log(produit);
+           const notif = {
+            titre: 'New Sale',
+            description: ` Mr/Ms ${this.cartService.currentClient()?.nom} ordered a  ${produit.id.nom} `
+          };
+
+          this.boutiqueService.addNotif(produit.id.boutique._id, notif).subscribe({
+            next: () => {
+              console.log('Notification envoyée à la boutique');
+            },
+            error: (err) => {
+              console.error('Erreur notification', err);
+            }
+          }); 
+        });
+         alert('Order confirmed!');
         this.cartService.refreshCart();
+
+        
       },
       error: (err) => {
         console.error('Validation error:', err);
