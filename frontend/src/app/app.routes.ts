@@ -24,6 +24,7 @@ import { InvoiceCart } from './pages/client/invoice-cart/invoice-cart';
 import { InvoiceSponsor } from './pages/boutique/invoice-sponsor/invoice-sponsor';
 import { Vente } from './pages/boutique/vente/vente';
 import { Livraison } from './pages/client/livraison/livraison';
+import { Dashboard } from './pages/boutique/dashboard/dashboard';
 
 export const routes: Routes = 
 [
@@ -39,6 +40,15 @@ export const routes: Routes =
     path: 'layout-boutique', 
     component: MainLayout, 
     children: [
+      {
+        path: '', 
+        redirectTo: 'dashboard', 
+        pathMatch: 'full' 
+      },
+      {
+        path: 'dashboard',
+        component: Dashboard
+      },
       {
         path: 'products',
         component: Products 
