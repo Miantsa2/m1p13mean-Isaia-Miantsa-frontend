@@ -114,8 +114,16 @@
 
           <div class="hidden md:block"></div>
 
+          <div class="flex justify-end">
+          <!-- Bouton Export PDF dans le header -->
+          <div *ngIf="invoiceElement" class="no-pdf">
+            <app-button-primaire text="Export PDF" (click)="downloadPDF()"></app-button-primaire>
+          </div>
+      </div>
+
       </div>
     </ng-container>
+
 
   </ng-container>
 </header>

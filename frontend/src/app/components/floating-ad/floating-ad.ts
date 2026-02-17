@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Produit } from '../../services/produit';
+
 
 @Component({
   selector: 'app-floating-ad',
@@ -8,21 +10,36 @@ import { CommonModule } from '@angular/common';
   templateUrl: './floating-ad.html',
 })
 export class FloatingAd implements OnInit, OnDestroy{
-  //Remplacer par les données réelles
-  adsList = [
-    { id: 1, produit: 'Sandwich Spécial', boutique: 'Snack Fast', link: '/produit/1' },
-    { id: 2, produit: 'T-shirt Summer', boutique: 'Fashion Store', link: '/produit/2' },
-    { id: 3, produit: 'Jus Naturel', boutique: 'Healthy Bar', link: '/produit/3' }
-  ];
+
+  constructor(private produitService: Produit) {}
  
+  adsList: any[] = [];
+
+  loadSponsorisedProduits() {
+    this.produitService.getSponsorisedProduits().subscribe({
+      next: (data) => {
+        this.adsList = data.map((p: any) => ({
+          id: p._id,
+          produit: p.nom,
+          boutique: p.boutique?.nom,
+          link: `/store/${p.boutique?._id}`
+        }));
+      },
+      error: (err) => {
+        console.error('Erreur sponsor:', err);
+      }
+    });
+  }
   currentIndex = signal(0);
   isVisible = signal(true);
   private timer: any;
 
   ngOnInit() {
+    this.loadSponsorisedProduits();
     this.timer = setInterval(() => {
       this.currentIndex.set((this.currentIndex() + 1) % this.adsList.length);
     }, 15000);
+
   }
 
   ngOnDestroy() {

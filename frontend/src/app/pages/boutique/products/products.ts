@@ -7,21 +7,22 @@ import { Boutique } from '../../../services/boutique';
 import { Produit } from '../../../services/produit';
 import { FormsModule } from '@angular/forms';
 import { Categorie } from '../../../services/categorie';
-import { InvoiceCorps , clientData, InvoiceColumn, InvoiceSummaryItem} from '../../../components/invoice/invoice';
-import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
-import { environment } from '../../../../environments/environment';
-import { CentreService } from '../../../services/centre';
+import { Router } from '@angular/router';
+import { ChargeService } from '../../../services/charge';
+
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, ModalForm, TableCorps, ButtonPrimaire, FormsModule, InvoiceCorps],
+  imports: [CommonModule, ModalForm, TableCorps, ButtonPrimaire, FormsModule],
   templateUrl: './products.html',
 })
 export class Products  {
   private produitService = inject(Produit);
   private boutiqueService = inject(Boutique);
   private categorieService = inject(Categorie);
+  private chargeService = inject(ChargeService);
+  
 
   searchTerm: string = '';
   showOnlyPromos: boolean = false;
@@ -54,47 +55,16 @@ export class Products  {
     dateFin: ''
   };
 
-  clientData: clientData = {
-    name: '',
-    email: ''
-  };
-
-  stripe!: Stripe | null;
-  elements!: StripeElements;
-  card: any;
-  clientSecret: string = '';
-
-  private key = environment.STRIPE_PUBLIC_KEY;
-
-   currentCenter: any;
-  currentCenterId: string = '';
-
-    ngOnInit(): void {
-      this.loadCentre();
-
-    }
 
 
-  loadCentre(): void {
-    this.centreService.getCenter().subscribe({
-      next: (res) => {
-        this.currentCenter = res[0];
-        this.currentCenterId = res[0]._id;
-        console.log("Centre chargé :", this.currentCenter);
-      }
-    });
-  }
-
-
-  constructor(private centreService: CentreService) {
+  constructor(private router: Router) {
     effect(() => {
       const boutique = this.boutiqueService.currentBoutique();
       
       if (boutique && boutique._id) {
         console.log("Boutique chargée :", boutique._id);
         this.loadData(boutique._id);
-        this.clientData.name = boutique.nom || '';
-        this.clientData.email = boutique.user?.email || '';
+       
       }
     });
   }
@@ -108,23 +78,6 @@ export class Products  {
 
 
 
-  invoice={
-    produitId: '',
-    produitNom: '',
-    produitPrix: 0,
-    dateDebut: '',
-    dateFin: '',
-    duree: '',
-    currency: '',
-    amount: 0,
-  }
-
-  invoiceColumns: InvoiceColumn[] = [
-    {key: 'produitNom', label: 'Produit'},
-    {key: 'produitPrix', label:'Unit price'},
-    {key: 'duree', label:'Duration'},
-    { key: 'currency', label: 'Currency' }
-  ];
 
   get filteredProducts() {
     return this.productList.filter(product => {
@@ -271,6 +224,8 @@ export class Products  {
     }
   }
 
+
+
   // Modal section promote
   isModalPromoteOpen = false;
   openModalPromoteOpen(product: any) {
@@ -340,37 +295,7 @@ export class Products  {
   }
 
 
-  onUpdateSponsor() {
-    if (this.selectedProduct) {
-      const body = {
-      sponsor: {
-        dateDebut: this.sponsorData.dateDebut,
-        dateFin: this.sponsorData.dateFin
-      }
-    };
-      this.produitService.updateProduit(this.selectedProduct._id, body).subscribe({
-        next: () => {
-          console.log('update sponsor success');
-          const notif = {
-            titre: 'Sponsor Payement',
-            description: `Store  ${this.boutiqueService.currentBoutique()?.nom} has paid a sponsor for ${this.selectedProduct.reference}. `
-          }; 
 
-          this.centreService.addNotif(this.currentCenterId, notif).subscribe({
-            next: () => {
-              console.log('Notification envoyée au centre');
-            },
-
-            error: (err) => {
-              console.error('Erreur notification', err);
-            }
-        }); 
-        },
-
-        error: (err) => console.error('Update failed', err)
-      });
-    }
-  }
 
   isSponsorModalOpen = false;
 
@@ -379,71 +304,21 @@ export class Products  {
     this.isSponsorModalOpen = true;
   }
 
-  private async initStripe() {
-    this.stripe = await loadStripe(this.key);
-    if (!this.stripe) {
-      console.error("Impossible de charger Stripe");
-      return;
-    }
+  goToInvoiceModal() {
 
-    this.elements = this.stripe.elements();
-    this.card = this.elements.create('card', { hidePostalCode: true });
-    setTimeout(() => {
-      this.card.mount('#card-element');
-    }, 0);
+    const data = {
+      produit: this.selectedProduct,
+      sponsorData: this.sponsorData
+    };
 
-
-  }
-
-  isModalInvoiceOpen= false;
-  invoiceSummary: InvoiceSummaryItem[] = [];
-
-
-  openInvoiceModal() {
     this.closeSponsorModal();
-    this.produitService.makeInvoice(this.selectedProduct._id, this.sponsorData).subscribe({
-      next: (res) => {
-        this.invoice = res.invoice;
-        this.clientSecret = res.clientSecret;
-        this.invoiceSummary = [
-          { label: 'Total', value: res.invoice.amount },
-          { label: 'Delivery', value: 5000 },
-          { label: 'Final amount', value: res.invoice.amount + 5000, bold: true },
-        ];
 
-        this.initStripe(); 
-      },
-      error: (err) => {
-        console.error('Invoice generation failed', err);
-      }
-      
-      
+    this.router.navigate(['/layout-boutique/invoice-sponsor'], {
+      state: data
     });
-    this.isModalInvoiceOpen = true;
-  }
-
- 
+}
 
 
-  
-  async confirmPayment() {
-    if (!this.stripe || !this.card) return;
-
-    const result = await this.stripe.confirmCardPayment(this.clientSecret, {
-      payment_method: { card: this.card }
-    });
-
-    if (result.error) {
-      const el = document.getElementById('card-errors');
-      if (el) el.textContent = result.error.message!;
-    } 
-    else if (result.paymentIntent?.status === 'succeeded') {
-      alert("Paiement réussi !");
-      this.onUpdateSponsor();
-       
-      this.closeInvoiceModal();
-    }
-  }
 
   isSponsorActive(product: any): boolean {
   if (!product?.sponsor?.dateDebut || !product?.sponsor?.dateFin) {
@@ -461,18 +336,6 @@ isFormValid(): boolean {
   return this.sponsorData.dateDebut !== '' && this.sponsorData.dateFin !== '' && new Date(this.sponsorData.dateDebut) < new Date(this.sponsorData.dateFin);
 }
 
-
-
-
-
-
-
-  
-
-
-  closeInvoiceModal() {
-    this.isModalInvoiceOpen = false;
-  }
 
   closeSponsorModal() {
     this.isSponsorModalOpen = false;
