@@ -245,7 +245,7 @@
     buttonText="CONFIRM"
     [isOpen]="isSponsorModalOpen"
     (close)="closeSponsorModal()"
-    (submitForm)="openInvoiceModal()"
+    (submitForm)=" goToInvoiceModal()"
     [disable]="!isFormValid()"
 >
     <div class="grid grid-cols-2 mt-6 gap-x-8">
@@ -269,19 +269,3 @@
 
 
 
-<app-invoice 
-    [isOpen]="isModalInvoiceOpen"
-     (close)="closeInvoiceModal()"
-    [columns]="invoiceColumns"
-    [amount]="invoice.amount"
-    [client]="clientData"
-    [summary]="invoiceSummary"
-    (submitForm)="confirmPayment()">
-    
-    <tr class="text-sm text-[#2D3748]">
-        <td class="px-4 py-4 text-center">{{ invoice.produitNom }}</td>
-        <td class="px-4 py-4 text-center">{{ invoice.produitPrix }}</td>
-        <td class="px-4 py-4 text-center">{{ invoice.duree }}</td>
-        <td class="px-4 py-4 text-center">{{ invoice.currency }}</td>
-    </tr>
-</app-invoice>

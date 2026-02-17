@@ -9,6 +9,7 @@ import { SectionDivider } from '../../../components/section-divider/section-divi
 import { ProductCard } from '../../../components/product-card/product-card';
 import { EvenementService } from '../../../services/evenement';
 import { EventCard } from '../../../components/event-card/event-card';
+
 @Component({
   selector: 'app-store-detail',
   standalone: true,

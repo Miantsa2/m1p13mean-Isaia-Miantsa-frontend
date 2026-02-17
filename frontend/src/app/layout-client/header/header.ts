@@ -5,6 +5,8 @@ import { Categorie } from '../../services/categorie';
 import { Router, RouterModule } from '@angular/router';
 import { CentreService } from '../../services/centre';
 import { CartService } from '../../services/cart-service';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 export type HeaderType = 'header1' | 'header2' | 'header3';
 
@@ -18,6 +20,7 @@ export class Header implements OnInit {
   @Input() headerType: HeaderType = 'header1';
   @Output() categorySelected = new EventEmitter<string>();
   @Output() searchChanged = new EventEmitter<string>();
+  @Input() invoiceElement!: HTMLElement | null;
 
   categories: any[] = [];
   showDropdown = false;
@@ -88,4 +91,33 @@ export class Header implements OnInit {
     this.isLoggedIn = false;
     this.router.navigate(['/login']);
   }
+
+
+   
+
+  async downloadPDF() {
+    if (!this.invoiceElement) {
+      console.error("No invoice element provided");
+      return;
+    }
+
+    // Capture avec html2canvas
+    const canvas = await html2canvas(this.invoiceElement, {
+      scale: 2,           
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      ignoreElements: (el) => el.classList.contains('no-pdf')
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4'); // format A4 portrait
+
+    const pdfWidth = 180; // largeur du contenu dans PDF en mm (210 max pour A4 avec marge)
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight); // 15 mm de marge
+    pdf.save('invoice.pdf');
+  }
+
 }

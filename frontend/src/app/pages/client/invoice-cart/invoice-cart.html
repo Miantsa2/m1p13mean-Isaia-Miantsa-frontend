@@ -1,17 +1,17 @@
-<app-header headerType="header3"></app-header>
+<app-header headerType="header3" [invoiceElement]="invoiceContent"></app-header>
 <main class="min-h-screen pt-24 bg-gray-50 flex justify-center items-start px-4">
-  <div
-    class="relative bg-white shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-10 rounded-xl border-t-4 border-[#1A434E]"
+  <div  
+    class="relative bg-white shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-10 rounded-xl border-t-4 border-[#1A434E]" 
   >
-
+  <div #invoiceContent id="invoice-content">
     <!-- Header -->
-    <div class="flex justify-between items-start mb-12">
+    <div class="flex justify-between items-start mb-12 ">
       <div>
         <h1
-          class="text-4xl md:text-5xl font-bold text-[#5B6B79] tracking-widest"
-        >
+          class="text-4xl md:text-5xl font-bold text-[#5B6B79] tracking-widest">
           INVOICE
         </h1>
+      
       </div>
     </div>
 
@@ -58,6 +58,11 @@
       </table>
     </div>
 
+     <div class="flex justify-between items-center border-t-2 border-b-2 border-[#5B6B79] py-2 mb-6 uppercase text-sm font-bold text-[#4A5568]">
+      <span>TOTAL</span>
+      <span>{{ invoice.totalPanier  | number }}</span>
+    </div>
+
     <!-- Résumé -->
     <div class="flex justify-end mb-10">
       <div
@@ -81,6 +86,7 @@
         </div>
       </div>
     </div>
+  </div>
 
     <!-- Paiement -->
     <div class="bg-gray-50 p-6 rounded-xl border">

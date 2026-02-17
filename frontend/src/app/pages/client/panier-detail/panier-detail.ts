@@ -5,11 +5,13 @@ import { Footer } from '../../../layout-client/footer/footer';
 import { CentreService } from '../../../services/centre';
 import { CartService } from '../../../services/cart-service';
 import { RouterModule } from '@angular/router';
+import { FloatingAd } from '../../../components/floating-ad/floating-ad';
+
 
 @Component({
   selector: 'app-panier-detail',
   standalone: true,
-  imports: [Header, Footer, CommonModule, RouterModule ],
+  imports: [Header, Footer, CommonModule, RouterModule,FloatingAd ],
   templateUrl: './panier-detail.html',
 })
 export class PanierDetail implements OnInit {
