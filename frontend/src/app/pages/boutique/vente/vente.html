@@ -1,0 +1,124 @@
+<div class="min-h-screen p-4 bg-[#fffdfd]">
+    <div class="flex items-center justify-between mb-11">
+        <h1 class="text-2xl font-bold text-[#3A626B] tracking-tight uppercase">Sales</h1>
+        <div class="flex items-center gap-4">
+            <div class="relative">
+                <input type="text" 
+                    placeholder="Search client" 
+                    [(ngModel)]="searchTerm"
+                    (input)="applyFilters()"
+                    class="px-4 py-2 bg-[#F1F4F5] border-none rounded-lg text-sm w-64 outline-none text-gray-600 focus:ring-1 focus:ring-[#67949E]">
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-12 mb-8">
+        <div class="relative group">
+            <div class="flex items-center gap-4 cursor-pointer">
+                <span class="text-sm font-semibold text-[#3A626B] uppercase tracking-wider">
+                    Status: <span class="text-sm font-normal text-[#697F84] lowercase ml-2">{{ currentStatus === 'all' ? 'All' : currentStatus }}</span>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#3A626B]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+            <div class="absolute z-10 hidden bg-white border border-gray-100 rounded shadow-lg group-hover:block min-w-[150px]">
+                <p (click)="setStatusFilter('all')" class="px-4 py-2 text-xs lowercase cursor-pointer hover:bg-gray-50">All Sales</p>
+                <p (click)="setStatusFilter('To deliver')" class="px-4 py-2 text-xs cursor-pointer hover:bg-gray-50">To deliver</p>
+                <p (click)="setStatusFilter('To be checked')" class="px-4 py-2 text-xs cursor-pointer hover:bg-gray-50">To be checked</p>
+                <p (click)="setStatusFilter('checked')" class="px-4 py-2 text-xs cursor-pointer hover:bg-gray-50">Checked</p>
+            </div>
+        </div>
+
+        <div (click)="toggleSortOrder()" class="flex items-center gap-3 cursor-pointer group">
+            <span class="text-sm font-semibold text-[#3A626B] uppercase tracking-wider">
+                {{ sortOrder === 'recent' ? 'Most recent sales' : 'Oldest sales' }}
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#3A626B]" [ngClass]="{'rotate-180': sortOrder === 'old'}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+            </svg>
+        </div>
+    </div>
+
+    <app-table-corps [columns]="salesColumns">
+        @for (sale of filteredSales; track sale.produitId) {
+            <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50/50">
+                <td class="px-4 py-6 text-[#3A626B] font-bold">{{ sale.clientNom }}</td>
+                
+                <td class="px-4 py-6 text-[#3A626B]">{{ sale.nomProduit }} (x{{sale.quantite}})</td>
+
+                <td class="px-4 py-6 text-[#3A626B] font-medium">
+                    {{ sale.totalOrder | number:'1.0-0' }}
+                </td>
+                
+                <td class="px-4 py-6 text-[#3A626B]">
+                    {{ sale.orderDate | date:'dd-MM-yyyy' }}
+                </td>
+
+                <td class="px-4 py-6">
+                    <span class="text-[13px] font-bold uppercase tracking-wide" [ngClass]="{
+                        'text-green-600': sale.status === 'To be checked',
+                        'text-orange-400': sale.status === 'To deliver'
+                    }">
+                        {{ sale.status }}
+                    </span>
+                </td>
+
+                <td class="px-4 py-6">
+                    @if (sale.status === 'To deliver') {
+                        <button (click)="openModalDelivery(sale)" class="px-8 py-2 bg-orange-400 text-white text-[12px] font-bold uppercase tracking-widest rounded shadow-sm hover:bg-orange-500 transition-all min-w-[130px]">
+                            Plan deliver
+                        </button>
+                    } @else if (sale.status === 'To be checked') {
+                        <button (click)="checkSale(sale)" class="px-8 py-2 bg-[#67949E] text-white text-[12px] font-bold uppercase tracking-widest rounded shadow-sm hover:bg-[#527a82] transition-all min-w-[130px]">
+                            Check now
+                        </button>
+                    } @else {
+                        <button disabled class="px-8 py-2 bg-gray-200 text-gray-500 text-[12px] font-bold uppercase tracking-widest rounded min-w-[130px] cursor-not-allowed">
+                            Completed
+                        </button>
+                    }
+                </td>
+            </tr>
+        } @empty{
+            <tr>
+                <td [attr.colspan]="salesColumns.length" class="py-10 text-center text-gray-400">
+                    No sales found
+                </td>
+            </tr>
+        }
+    </app-table-corps>
+</div>
+
+<!-- Modal pour make delivery -->
+<app-modal-form
+    title="PLAN HOUR DELIVERY"
+    buttonText="CONFIRM"
+    [isOpen]="isModalDeliverOpen"
+    (close)="closeModalDelivery()"
+    (submitForm)="confirmDelivery()"
+>
+    <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3" *ngIf="selectedSale">
+        <div class="p-3 text-sm text-gray-600 bg-gray-100 border border-gray-200 rounded">
+            {{ selectedSale.nomProduit }} (x{{ selectedSale.quantite }})
+        </div>
+
+        <div class="p-3 text-sm text-gray-600 bg-gray-100 border border-gray-200 rounded">
+            GPS: {{ selectedSale.coo_x }}, {{ selectedSale.coo_y }}
+        </div>
+
+        <div class="p-3 text-sm text-gray-600 bg-gray-100 border border-gray-200 rounded">
+            Client: {{ selectedSale.clientNom }}
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+        <label class="text-xs font-bold text-[#3A626B] uppercase">Delivery time</label>
+        <input 
+            type="datetime-local" 
+            [(ngModel)]="deliveryDate"
+            name="deliveryDate"
+            class="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-[#67949E] outline-none"
+        >
+    </div>    
+</app-modal-form>

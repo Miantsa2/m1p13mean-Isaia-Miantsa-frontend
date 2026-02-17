@@ -22,6 +22,8 @@ import {Delivery} from './pages/client/delivery/delivery';
 import { PanierDetail } from './pages/client/panier-detail/panier-detail';
 import { InvoiceCart } from './pages/client/invoice-cart/invoice-cart';
 import { InvoiceSponsor } from './pages/boutique/invoice-sponsor/invoice-sponsor';
+import { Vente } from './pages/boutique/vente/vente';
+import { Livraison } from './pages/client/livraison/livraison';
 
 export const routes: Routes = 
 [
@@ -57,11 +59,14 @@ export const routes: Routes =
         path: 'rent',
         component: Rent 
       },
-       {
+      {
         path: 'invoice-sponsor',
         component: InvoiceSponsor 
-      }   
-      
+      },   
+      {
+        path: 'sales',
+        component: Vente
+      }
       
     ]
   },
@@ -112,6 +117,10 @@ export const routes: Routes =
   {
     path: 'cart',
     component: PanierDetail
+  },
+  {
+    path: 'livraison',
+    component: Livraison
   }
 
 ];
