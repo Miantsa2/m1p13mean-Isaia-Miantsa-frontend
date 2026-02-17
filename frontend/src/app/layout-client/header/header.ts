@@ -7,6 +7,8 @@ import { CentreService } from '../../services/centre';
 import { CartService } from '../../services/cart-service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { AuthService } from '../../services/auth';
+
 
 export type HeaderType = 'header1' | 'header2' | 'header3';
 
@@ -32,7 +34,8 @@ export class Header implements OnInit {
     private categorieService: Categorie, 
     private router: Router, 
     private centreService: CentreService,
-    public cartService : CartService) {}
+    public cartService : CartService,
+    private authService: AuthService, ) {}
 
   ngOnInit() {
     this.loadCentreData();
@@ -87,7 +90,7 @@ export class Header implements OnInit {
 
   // logout client
   logout() {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.isLoggedIn = false;
     this.router.navigate(['/login']);
   }

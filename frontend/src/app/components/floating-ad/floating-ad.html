@@ -1,12 +1,13 @@
-@if (isVisible()) {
+ @if (isVisible() && adsList && adsList[currentIndex()]) {
   <div class="fixed top-14 right-6 z-[9999] w-64 animate-bounce-subtle">
     
     <button (click)="isVisible.set(false)" 
             class="absolute -top-2 -right-2 bg-[#3A626B] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-lg hover:bg-red-500 transition-colors z-10">
       ×
     </button>
+    
 
-    <a [href]="adsList[currentIndex()].link" 
+    <a [href]="adsList[currentIndex()]?.link" 
        class="block p-5 bg-white border-b-4 border-[#E9AD59] rounded-xl shadow-2xl hover:scale-105 transition-transform duration-300 no-underline">
       
       <div class="flex flex-col gap-2">
