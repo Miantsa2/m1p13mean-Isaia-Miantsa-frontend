@@ -6,12 +6,17 @@
   </div>
 
   <div class="flex items-center gap-6">
-    <div class="relative">
-      <select class="appearance-none bg-gray-50 border border-gray-200 text-gray-600 text-sm rounded-lg pl-4 pr-10 py-1.5 focus:outline-none cursor-pointer">
-        <option selected>2026</option>
-        <option>2025</option>
+    <div class="relative group">
+      <select 
+        (change)="onYearChange($event)"
+        class="appearance-none min-w-[110px] bg-white border border-gray-200 text-[#3A626B] text-sm font-bold rounded-lg pl-4 pr-10 py-2 cursor-pointer shadow-sm hover:border-[#67949E] hover:bg-gray-50 transition-all outline-none focus:ring-2 focus:ring-[#3A626B]/10">
+        <option value="2026" selected>2026</option>
+        <option value="2025">2025</option>
       </select>
-      <span class="absolute text-xl text-gray-400 -translate-y-1/2 pointer-events-none material-symbols-outlined right-2 top-1/2">expand_more</span>
+      
+      <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none material-symbols-outlined text-[20px] text-[#EBAD5A] group-hover:text-[#3A626B] transition-colors">
+        expand_more
+      </span>
     </div>
 
     <div class="flex items-center gap-5">
