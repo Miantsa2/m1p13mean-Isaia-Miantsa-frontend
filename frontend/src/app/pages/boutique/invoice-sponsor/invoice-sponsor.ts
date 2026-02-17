@@ -8,6 +8,8 @@ import { Boutique } from '../../../services/boutique';
 import { ChargeService } from '../../../services/charge';
 import { Produit } from '../../../services/produit';
 import { CentreService } from '../../../services/centre';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 
 
@@ -235,6 +237,39 @@ export class InvoiceSponsor {
     };
   }
 
+
+
+
+
+  
+  async downloadPDF() {
+    const element = document.getElementById('invoice-content');
+      if (!element) {
+      console.error("Invoice not found");
+      return;
+    }
+
+    // Capture avec html2canvas
+    const canvas = await html2canvas(element , {
+      scale: 2,           
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      ignoreElements: (el) => el.classList.contains('no-pdf')
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4'); // format A4 portrait
+
+    const pdfWidth = 180; // largeur du contenu dans PDF en mm (210 max pour A4 avec marge)
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 15, 15, pdfWidth, pdfHeight); // 15 mm de marge
+    pdf.save('invoice.pdf');
+  }
+
+
+ 
 
 
 }

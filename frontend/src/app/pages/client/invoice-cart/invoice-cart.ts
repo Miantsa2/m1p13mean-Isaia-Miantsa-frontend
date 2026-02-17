@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges  } from '@angular/core';
+import { Component, ViewChild, ElementRef  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
 import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { Boutique } from '../../../services/boutique';
 
 
+
 @Component({
   selector: 'app-invoice-cart',
    imports: [CommonModule,ButtonPrimaire, Footer, Header],
@@ -20,6 +21,7 @@ import { Boutique } from '../../../services/boutique';
   styleUrl: './invoice-cart.css',
 })
 export class InvoiceCart {
+  @ViewChild('invoiceContentRef') invoiceContent!: ElementRef<HTMLElement>;
 
    invoice = {
       produits: [] as Array<{
@@ -198,6 +200,8 @@ export class InvoiceCart {
       currency: 'eur',
     };
   }
+
+
 
 
 
