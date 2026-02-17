@@ -7,7 +7,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class SiteStat {
 
-  private apiUrl = `${environment.apiUrl}/mean/siteStat`;
+  private apiUrl = `${environment.apiUrl}/mean/dashboardAdmin`;
 
   constructor(private http: HttpClient) {}
 
