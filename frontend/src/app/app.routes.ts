@@ -24,6 +24,7 @@ import { InvoiceCart } from './pages/client/invoice-cart/invoice-cart';
 import { InvoiceSponsor } from './pages/boutique/invoice-sponsor/invoice-sponsor';
 import { Vente } from './pages/boutique/vente/vente';
 import { Livraison } from './pages/client/livraison/livraison';
+import { Dashboard } from './pages/admin/dashboard/dashboard';
 
 export const routes: Routes = 
 [
@@ -68,6 +69,7 @@ export const routes: Routes =
         component: Vente
       }
       
+      
     ]
   },
   {
@@ -98,6 +100,10 @@ export const routes: Routes =
         {
         path: 'rent',
         component: RentAdmin 
+      },
+       {
+        path: 'dashboard',
+        component: Dashboard
       }
       
     ]
