@@ -21,6 +21,7 @@ import { StoreDetail } from './pages/client/store-detail/store-detail';
 import {Delivery} from './pages/client/delivery/delivery';
 import { PanierDetail } from './pages/client/panier-detail/panier-detail';
 import { InvoiceCart } from './pages/client/invoice-cart/invoice-cart';
+import { InvoiceSponsor } from './pages/boutique/invoice-sponsor/invoice-sponsor';
 
 export const routes: Routes = 
 [
@@ -55,7 +56,13 @@ export const routes: Routes =
       {
         path: 'rent',
         component: Rent 
-      }      
+      },
+       {
+        path: 'invoice-sponsor',
+        component: InvoiceSponsor 
+      }   
+      
+      
     ]
   },
   {
