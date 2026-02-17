@@ -43,6 +43,13 @@ export class Produit {
     return this.http.post<any>(`${this.apiUrl}/makeInvoiceSponsor/${produitId}`, { sponsorData });
   }
 
+  getSponsorisedProduits() {
+    return this.http.get<any[]>(`${this.apiUrl}/getSponsorisedProduit`);
+  }
+
+
+
+
 
 
 }
