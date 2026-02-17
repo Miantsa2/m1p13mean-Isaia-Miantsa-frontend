@@ -71,8 +71,4 @@ export class Boutique {
   getLoyersPayes(mois: number, annee: number) {
     return this.http.get<any[]>(`${this.apiUrl}/loyerpaye?mois=${mois}&annee=${annee}`);  
   }
-
-
-
-
 }

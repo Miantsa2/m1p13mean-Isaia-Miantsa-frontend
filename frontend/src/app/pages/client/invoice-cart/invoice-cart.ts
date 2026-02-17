@@ -11,8 +11,6 @@ import { CartService } from '../../../services/cart-service';
 import { Router } from '@angular/router';
 import { Boutique } from '../../../services/boutique';
 
-
-
 @Component({
   selector: 'app-invoice-cart',
    imports: [CommonModule,ButtonPrimaire, Footer, Header],
@@ -23,49 +21,46 @@ import { Boutique } from '../../../services/boutique';
 export class InvoiceCart {
   @ViewChild('invoiceContentRef') invoiceContent!: ElementRef<HTMLElement>;
 
-   invoice = {
-      produits: [] as Array<{
-        produitId: string,
-        nom: string,
-        prixUnitaire: number,
-        quantite: number,
-        subtotal: number
-      }>,
-      totalPanier: 0,
-      prixLivraison: 0,
-      totalAPayer: 0,
-      currency: 'eur',
-    };
+  invoice = {
+    produits: [] as Array<{
+      produitId: string,
+      nom: string,
+      prixUnitaire: number,
+      quantite: number,
+      subtotal: number
+    }>,
+    totalPanier: 0,
+    prixLivraison: 0,
+    totalAPayer: 0,
+    currency: 'eur',
+  };
 
   
-    clientData = {
-        name: '',
-        email: '', 
-      };
+  clientData = {
+    name: '',
+    email: '', 
+  };
       
-    creationDate: string = new Date().toISOString().split('T')[0];
+  creationDate: string = new Date().toISOString().split('T')[0];
    
+  stripe!: Stripe | null;
+  elements!: StripeElements;
+  card: any;
+  clientSecret: string = '';
+  footerData: any = {};
 
         
-    stripe!: Stripe | null;
-    elements!: StripeElements;
-    card: any;
-    clientSecret: string = '';
-    footerData: any = {};
+  private key = environment.STRIPE_PUBLIC_KEY;
 
-        
-    private key = environment.STRIPE_PUBLIC_KEY;
-
-    constructor(
+  constructor(
     private centreService: CentreService,
     private route: ActivatedRoute,
     public cartService: CartService,
     private router: Router,
     private boutiqueService: Boutique) {
-
   }
 
-   private async initStripe() {
+  private async initStripe() {
     this.stripe = await loadStripe(this.key);
     if (!this.stripe) {
       console.error("Impossible de charger Stripe");
@@ -77,15 +72,8 @@ export class InvoiceCart {
     setTimeout(() => {
       this.card.mount('#card-element');
     }, 0);
-   
-
-
   }
 
-
-
-
-   
   ngOnInit() {
     this.loadCentreData();
     this.loadInvoice();
@@ -151,8 +139,6 @@ export class InvoiceCart {
         });
          alert('Order confirmed!');
         this.cartService.refreshCart();
-
-        
       },
       error: (err) => {
         console.error('Validation error:', err);
@@ -162,7 +148,6 @@ export class InvoiceCart {
   }
 
 
-  
   async confirmPayment() {
     if (!this.stripe || !this.card) return;
 
@@ -175,17 +160,15 @@ export class InvoiceCart {
       if (el) el.textContent = result.error.message!;
     } 
     else if (result.paymentIntent?.status === 'succeeded') {
-      alert("Paiement réussi !");
+      alert("Payment successful !");
       this.confirmCart();
-      //insertion vente iciiiiii
       this.router.navigate(['/home']);
-       
     }
     this.resertForm();
 
   }
 
-    resertForm() {
+  resertForm() {
     this.invoice = {
       produits: [] as Array<{
         produitId: string,
@@ -200,16 +183,4 @@ export class InvoiceCart {
       currency: 'eur',
     };
   }
-
-
-
-
-
 }
-
-
-
-
-
-
-

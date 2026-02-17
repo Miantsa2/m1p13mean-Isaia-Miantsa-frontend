@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 z-50 w-full bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+<header class="fixed top-0 left-0 z-50 w-full border-b border-gray-100 shadow-sm bg-white/90 backdrop-blur-sm">
   <ng-container [ngSwitch]="headerType">
     <!-- Header Type 1 -->
     <ng-container *ngSwitchCase="'header1'">
@@ -12,7 +12,7 @@
           
           <div class="relative group" (mouseenter)="showDropdown = true" (mouseleave)="showDropdown = false">
             <a class="flex items-center gap-1 cursor-pointer hover:text-[#EBAD5A] transition-colors">
-              CATEGORIES <span class="text-sm material-symbols-outlined transition-transform" [class.rotate-180]="showDropdown">expand_more</span>
+              CATEGORIES <span class="text-sm transition-transform material-symbols-outlined" [class.rotate-180]="showDropdown">expand_more</span>
             </a>
 
             <div *ngIf="showDropdown" 
@@ -59,6 +59,14 @@
             <span class="material-symbols-outlined">logout</span>
           </button>
 
+          <div class="flex items-center cursor-pointer">
+            <span routerLink="/cart" class="material-symbols-outlined text-[#EBAD5A] text-2xl">shopping_cart</span>
+          </div>
+
+          <div class="flex items-center cursor-pointer">
+            <span routerLink="/livraison" class="material-symbols-outlined text-[#EBAD5A] text-2xl">delivery_truck_bolt</span>
+          </div>
+
         </div>
       </div>
     </ng-container>
@@ -79,22 +87,34 @@
           <a (click)="scrollToSection('contact-section')" class="cursor-pointer hover:text-[#EBAD5A] transition-colors">CONTACT</a>
         </nav>
 
-        <div class="relative group">
-          <input
-            type="text"
-            placeholder="Search products"
-            (input)="onSearch($event)"
-            class="pl-4 pr-10 py-1.5 text-xs border border-gray-300 rounded-md w-48 bg-gray-50 outline-none focus:border-[#c99f55] focus:ring-1 focus:ring-[#c99f55] transition-all"
-          />
-          <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-[#c99f55]">search</span>
+        <div class="flex items-center gap-4 group">
+          <div class="relative">
+            <input
+              type="text"
+              placeholder="Search products"
+              (input)="onSearch($event)"
+              class="pl-4 pr-10 py-1.5 text-xs border border-gray-300 rounded-md w-48 bg-gray-50 outline-none focus:border-[#c99f55] focus:ring-1 focus:ring-[#c99f55] transition-all"
+            />
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-[#c99f55]">
+              search
+            </span>
+          </div>
+
+          <div class="flex items-center cursor-pointer">
+            <span routerLink="/cart" class="material-symbols-outlined text-[#EBAD5A] text-3xl">shopping_cart</span>
+          </div>
+
+          <div class="flex items-center cursor-pointer">
+            <span routerLink="/livraison" class="material-symbols-outlined text-[#EBAD5A] text-3xl">delivery_truck_bolt</span>
+          </div>
         </div>
       </div>
 
       <!-- Icon flottante pour le panier -->
       <div *ngIf="cartService.cartCount() > 0" 
         routerLink="/cart"
-          class="fixed top-24 right-8 z-50 animate-bounce-in">
-        <div class="relative bg-white p-3 rounded-full shadow-xl border border-gray-100 cursor-pointer hover:scale-110 transition-transform">
+          class="fixed z-50 top-24 right-8 animate-bounce-in">
+        <div class="relative p-3 transition-transform bg-white border border-gray-100 rounded-full shadow-xl cursor-pointer hover:scale-110">
           <span class="material-symbols-outlined text-[#EBAD5A] text-3xl">shopping_cart</span>
           
           <span class="absolute -top-1 -right-1 bg-[#E15B5B] text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">

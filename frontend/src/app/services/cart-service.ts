@@ -114,9 +114,19 @@ export class CartService {
 
   makeInvoiceCart(panierId: string): Observable<any> {
     return this.http.get<any>(`${this.apiPanier}/makeInvoice/cart/${panierId}`);
+  } 
+
+  getSalesByBoutique(boutiqueId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiPanier}/boutique/${boutiqueId}`);
   }
 
+  updateRecuperationDate(panierId: string, produitId: string, date: string) : Observable<any> {
+    return this.http.put(`${this.apiPanier}/update-delivery/${panierId}/${produitId}`, { 
+      date_recuperation: date 
+    });
+  }
 
-
-  
+  getDeliveryHistory(clientId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiPanier}/client/${clientId}`);
+  }
 }
