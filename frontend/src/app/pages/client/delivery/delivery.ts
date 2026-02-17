@@ -6,16 +6,14 @@ import { CentreService } from '../../../services/centre';
 import { ActivatedRoute } from '@angular/router';
 import { CartService } from '../../../services/cart-service';
 import { ButtonPrimaire } from '../../../components/button-primaire/button-primaire';
-import { InvoiceCorps , clientData, InvoiceColumn, InvoiceSummaryItem} from '../../../components/invoice/invoice';
-import { environment } from '../../../../environments/environment';
-import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
+import { FloatingAd } from '../../../components/floating-ad/floating-ad';
 
 
 @Component({
   selector: 'app-delivery',
   templateUrl: './delivery.html',
   styleUrls: ['./delivery.css'],
-  imports: [Header,Footer, ButtonPrimaire],
+  imports: [Header,Footer, ButtonPrimaire,FloatingAd],
   standalone: true
 })
 export class Delivery implements OnInit {
