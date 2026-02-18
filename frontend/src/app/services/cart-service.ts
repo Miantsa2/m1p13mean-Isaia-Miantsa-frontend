@@ -36,7 +36,7 @@ export class CartService {
   refreshCart() {
     const clientId = this.currentClient()?._id;
     if (clientId) {
-      this.http.get(`${this.apiPanier}/client/${clientId}`).subscribe({
+      this.http.get(`${this.apiPanier}/my-cart/${clientId}`).subscribe({
         next: (panier: any) => {
           this.currentPanier.set(panier);
           const count = panier?.produits?.reduce((acc: number, p: any) => acc + p.quantite, 0) || 0;

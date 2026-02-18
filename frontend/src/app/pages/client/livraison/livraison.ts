@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Header } from '../../../layout-client/header/header';
 import { Footer } from '../../../layout-client/footer/footer';
 import { CentreService } from '../../../services/centre';
@@ -18,16 +18,24 @@ export class Livraison implements OnInit {
   filteredDeliveries: any[] = [];
   stores: string[] = [];
   
+  
   selectedStore: string = 'all';
   sortOrder: 'recent' | 'old' = 'recent';
-  constructor(private centreService: CentreService, public cartService: CartService) {}
+  constructor(private centreService: CentreService, public cartService: CartService) {
+    effect(() => {
+      const client = this.cartService.currentClient();
+      if (client && client._id) {
+        this.loadDeliveries(client._id);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.loadCentreData();
-    const clientId = this.cartService.currentClient()?._id;
-    if (clientId) {
-      this.loadDeliveries(clientId);
-    }
+    // const clientId = this.cartService.currentClient()?._id;
+    // if (clientId) {
+    //   this.loadDeliveries(clientId);
+    // }
   }
 
   loadDeliveries(clientId: string) {
