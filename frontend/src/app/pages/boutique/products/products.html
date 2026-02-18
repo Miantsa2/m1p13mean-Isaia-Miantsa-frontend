@@ -1,4 +1,4 @@
-<div class="min-h-screen p-4">
+<div class="min-h-screen p-4 bg-white">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-xl font-normal text-[#3A626B] tracking-tight">LIST OF PRODUCTS</h1>
         <div class="flex items-center gap-4">
@@ -16,11 +16,22 @@
     
         <div class="relative inline-block group">
             <div class="flex items-center gap-2 cursor-pointer">
-                <span class="text-[#3A626B] font-normal">Categories ({{categories.length}})</span>
+                <span class="text-[#3A626B] font-normal">
+                    Category: {{ selectedCategory === 'all' ? 'All' : 'Filtered' }} ({{categories.length}})
+                </span>
                 <span class="material-symbols-outlined text-[#3A626B] transition-transform group-hover:rotate-180">expand_more</span>
             </div>
+            
             <div class="absolute z-10 hidden w-48 py-2 mt-1 bg-white border border-gray-100 rounded-lg shadow-xl group-hover:block">
-                <a *ngFor="let cat of categories" class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50">
+                <a (click)="selectedCategory = 'all'" 
+                class="block px-4 py-2 text-sm font-bold text-gray-600 border-b cursor-pointer hover:bg-gray-50 border-gray-50">
+                    All Categories
+                </a>
+
+                <a *ngFor="let cat of categories" 
+                (click)="selectedCategory = cat._id"
+                class="block px-4 py-2 text-sm text-gray-600 cursor-pointer hover:bg-gray-50"
+                [ngClass]="{'bg-gray-100 text-[#3A626B]': selectedCategory === cat._id}">
                     {{ cat.nom }}
                 </a>
             </div>
@@ -107,10 +118,19 @@
                 class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
         </div>
 
-        <div class="flex flex-col gap-2">
-            <label class="text-[13px] font-medium text-[#697F84]">Description (Image)</label>
-            <input type="text" [(ngModel)]="newProduct.description"
-                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] transition-colors">
+        <div class="flex flex-col col-span-2 gap-2">
+            <label class="text-[13px] font-medium text-[#697F84]">Product Photo</label>
+            <div class="relative group">
+                <input type="text" readonly [value]="selectedFileName || 'No file chosen'"
+                    (click)="fileInput.click()"
+                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg outline-none focus:border-[#3A626B] bg-white cursor-pointer transition-colors text-sm text-gray-500">
+                
+                <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-[#3A626B] pointer-events-none">
+                    attach_file
+                </span>
+                
+                <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*" />
+            </div>
         </div>
         
         <div class="flex flex-col gap-2">

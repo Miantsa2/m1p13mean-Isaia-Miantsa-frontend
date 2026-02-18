@@ -13,6 +13,7 @@ import { EvenementService } from '../../services/evenement';
 import { Boutique } from '../../services/boutique';
 import { RouterModule } from '@angular/router';
 import { FloatingAd } from '../../components/floating-ad/floating-ad';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ import { FloatingAd } from '../../components/floating-ad/floating-ad';
   templateUrl: './home.html',
 })
 export class Home implements OnInit, OnDestroy {
-
+  readonly apiUrl = environment.apiUrl;
   constructor(
     private centreService: CentreService,
     private eventService: EvenementService,

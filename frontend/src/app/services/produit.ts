@@ -46,10 +46,4 @@ export class Produit {
   getSponsorisedProduits() {
     return this.http.get<any[]>(`${this.apiUrl}/getSponsorisedProduit`);
   }
-
-
-
-
-
-
 }

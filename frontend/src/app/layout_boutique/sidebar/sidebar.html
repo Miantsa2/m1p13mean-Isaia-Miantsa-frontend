@@ -2,9 +2,11 @@
   <div>
     <div class="flex items-center gap-3 p-6">
       <div class="flex items-center justify-center w-10 h-10 overflow-hidden rounded-full">
-         <img [src]="boutiqueService.currentBoutique()?.logo || '/image.png'" 
-               [alt]="boutiqueService.currentBoutique()?.nom" 
-               class="object-contain w-full h-full">
+          <img [src]="boutiqueService.currentBoutique()?.logo 
+                      ? (apiUrl + boutiqueService.currentBoutique()?.logo) 
+                      : '/image.png'" 
+              [alt]="boutiqueService.currentBoutique()?.nom" 
+              class="object-cover w-full h-full">
       </div>
       <h1 class="font-bold text-[#425466] text-[13px] tracking-wide">
         {{ boutiqueService.currentBoutique()?.nom || 'Loading...' }}

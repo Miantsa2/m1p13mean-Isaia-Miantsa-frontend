@@ -9,6 +9,7 @@ import { SectionDivider } from '../../../components/section-divider/section-divi
 import { ProductCard } from '../../../components/product-card/product-card';
 import { EvenementService } from '../../../services/evenement';
 import { EventCard } from '../../../components/event-card/event-card';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-store-detail',
@@ -17,6 +18,8 @@ import { EventCard } from '../../../components/event-card/event-card';
   templateUrl: './store-detail.html',
 })
 export class StoreDetail implements OnInit {
+  readonly api_url = environment.apiUrl;
+
   store: any = null;
   allProducts: any[] = [];
   filteredProducts = signal<any[]>([]);
@@ -53,6 +56,16 @@ export class StoreDetail implements OnInit {
       this.loadEvents(storeId);
 
     }    
+  }
+
+  getProductImage(imagePath: string): string {
+    if (!imagePath) return '/image.png';
+    
+    if (imagePath.startsWith('/uploads')) {
+      return `${this.api_url}${imagePath}`;
+    }
+    
+    return imagePath;
   }
 
   loadStoreDetails(id: string) {
