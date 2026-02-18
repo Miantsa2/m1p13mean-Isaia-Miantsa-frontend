@@ -1,22 +1,61 @@
 <div class="p-6 bg-gray-50 min-h-screen">
-  <h2 class="text-2xl font-black text-[#3A626B] mb-6 uppercase tracking-tight">
-    Tableau de Bord
-  </h2>
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide">Dashboard</h1>
+    
+  </div>
+  <div class="flex flex-wrap items-center gap-8 mb-8">
+  
+   <div class="relative flex items-center gap-2 text-[#3A626B]">
+      <span class="font-normal">Month</span>
+      <div class="relative flex items-center">
+        <select 
+          [(ngModel)]="selectedMonth" 
+          (change)="applyFilters()"
+          class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+          <option value="all">All</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
 
-    <div class="flex flex-wrap gap-4 mb-6">
-    <div>
-      <label class="block text-gray-600 font-bold mb-1">Mois</label>
-      <select [(ngModel)]="selectedMonth" class="border rounded p-2" (change)="applyFilters()">
-        <option value="">Tous</option>
-        <option *ngFor="let m of months" [value]="m.value">{{ m.name }}</option>
-      </select>
+        </select>
+        <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+          arrow_downward
+        </span>
+      </div>
     </div>
 
-    
+
+    <div class="relative flex items-center gap-2 text-[#3A626B]">
+      <span class="font-normal">Year</span>
+      <div class="relative flex items-center">
+        <select 
+          [(ngModel)]="selectedYear" 
+          (change)="applyFilters()"
+          class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+          <option value="all">All</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+
+        </select>
+        <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+          arrow_downward
+        </span>
+      </div>
+    </div>
   </div>
 
 
-  <!-- KPIs : une par ligne sur mobile, 2 par ligne sur tablette, 3 par ligne sur desktop -->
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- Visiteurs -->

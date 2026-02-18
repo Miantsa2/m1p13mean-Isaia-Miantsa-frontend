@@ -70,65 +70,81 @@ export class Dashboard implements OnInit {
   }
 
   applyFilters() {
-    this.loadStats();
-    this.loadEvolution();
-    this.loadRepartition();
+    const year = this.selectedYear === 'all' || !this.selectedYear
+      ? undefined
+      : Number(this.selectedYear);
+
+    const month = this.selectedMonth === 'all' || !this.selectedMonth
+      ? undefined
+      : Number(this.selectedMonth);
+
+    this.loadStats(year, month);
+    this.loadEvolution(year, month);
+    this.loadRepartition(year);
   }
 
-  loadRepartition() {
-    this.dashboardService.getRepartition(this.selectedYear).subscribe((res: any) => {
-      this.pieChartData = {
-        labels: ['Loyers', 'Sponsors'],
-        datasets: [
-          {
-            data: [res.loyers, res.sponsors]
-          }
-        ]
-      };
-    });
+  loadRepartition(year?: number) {
+    this.dashboardService.getRepartition(year)
+      .subscribe((res: any) => {
+        this.pieChartData = {
+          labels: ['Loyers', 'Sponsors'],
+          datasets: [
+            {
+              data: [res.loyers, res.sponsors]
+            }
+          ]
+        };
+      });
   }
 
 
-  loadStats() {
-    this.loading= true;
-    
-    this.dashboardService.getVisitors(this.selectedYear, this.selectedMonth).subscribe({
+
+  loadStats(year?: number, month?: number) {
+    this.loading = true;
+
+    this.dashboardService.getVisitors(year, month).subscribe({
       next: (res) => {
-        this.visitors = res.nombre_visite,
-        console.log(this.visitors)
-      }, // Ajustez .count selon la réponse de votre API
-      error: (err) => console.error(err)
+        this.visitors = res.nombre_visite;
+      }
     });
 
-    this.dashboardService.getStores(this.selectedYear, this.selectedMonth).subscribe(res => this.stores= res.total_boutiques);
-    this.dashboardService.getProducts(this.selectedYear, this.selectedMonth).subscribe(res => this.totalProducts= res.total_produits);
-    this.dashboardService.getRoomsLibres().subscribe(res => this.roomsLibres= res.salles_libres);
-    
-    this.dashboardService.getChiffreAffaire(this.selectedYear, this.selectedMonth).subscribe({
+    this.dashboardService.getStores(year, month)
+      .subscribe(res => this.stores = res.total_boutiques);
+
+    this.dashboardService.getProducts(year, month)
+      .subscribe(res => this.totalProducts = res.total_produits);
+
+    this.dashboardService.getRoomsLibres()
+      .subscribe(res => this.roomsLibres = res.salles_libres);
+
+    this.dashboardService.getChiffreAffaire(year, month).subscribe({
       next: (res) => {
-        this.chiffreAffaire= res.chiffre_affaire;
-        this.loading= false;
+        this.chiffreAffaire = res.chiffre_affaire;
+        this.loading = false;
       }
     });
   }
 
-  loadEvolution() {
-  this.dashboardService.getEvolutionMensuelle().subscribe((res: any) => {
-    const labels = res.map((item: any) => item.month);
-    const values = res.map((item: any) => item.total);
+  loadEvolution(year?: number, month?: number) {
+    this.dashboardService.getEvolutionMensuelle(year, month)
+      .subscribe((res: any) => {
 
-    this.lineChartData = {
-      labels,
-      datasets: [
-        {
-          data: values,
-          label: 'Chiffre d\'affaire',
-          fill: true,
-          tension: 0.4
-        }
-      ]
-    };
-  });
-}
+        const labels = res.map((item: any) => item.month);
+        const values = res.map((item: any) => item.total);
+
+        this.lineChartData = {
+          labels,
+          datasets: [
+            {
+              data: values,
+              label: "Chiffre d'affaire",
+              fill: true,
+              tension: 0.4
+            }
+          ]
+        };
+      });
+  }
+
 
 }

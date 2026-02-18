@@ -12,41 +12,41 @@ export class DashboardService {
 
   constructor(private http: HttpClient) {}
 
-  getChiffreAffaire(year?: string, month?: string) {
+  getChiffreAffaire(year?: number, month?: number) {
     let params = new HttpParams();
     if (year) params = params.set('year', year);
     if (month) params = params.set('month', month);
     return this.http.get<any>(`${this.api}/centre/chiffre-affaire`, { params });
   }
 
-  getRepartition(year?: string) {
+  getRepartition(year?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
     return this.http.get<any>(`${this.api}/centre/chiffre-affaire/repartition`, { params });
   }
 
-  getEvolutionMensuelle(year?: string, month?: string) {
+  getEvolutionMensuelle(year?: number, month?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
     if (month) params = params.set('month', month);
     return this.http.get<any[]>(`${this.api}/centre/chiffre-affaire/evolution/mensuel`, { params });
   }
 
-  getVisitors(year?: string, month?: string) {
+  getVisitors(year?: number, month?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
     if (month) params = params.set('month', month);
     return this.http.get<any>(`${this.api}/visitors`, { params });
   }
 
-  getStores(year?: string, month?: string) {
+  getStores(year?: number, month?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
     if (month) params = params.set('month', month);
     return this.http.get<any>(`${this.api}/stores/count`, { params });
   }
 
-  getProducts(year?: string, month?: string) {
+  getProducts(year?: number, month?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
     if (month) params = params.set('month', month);
