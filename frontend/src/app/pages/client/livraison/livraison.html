@@ -10,13 +10,32 @@
     <div class="px-12">
         <div class="flex items-center gap-12 mb-8 mt-11">
             <div class="relative group">
-                <div class="flex items-center gap-2 cursor-pointer">
-                    <span class="text-sm font-semibold text-[#3A626B] uppercase">Stores</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M19 9l-7 7-7-7" /></svg>
+                <div class="flex items-center gap-2 pb-2 transition-opacity cursor-pointer hover:opacity-80">
+                    <span class="text-sm font-semibold text-[#3A626B] uppercase tracking-wide">Stores</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" 
+                        class="w-4 h-4 text-[#EBAD5A] transition-transform duration-300 group-hover:rotate-180" 
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
                 </div>
-                <div class="absolute hidden group-hover:block bg-white shadow-xl border rounded mt-2 z-10 min-w-[150px]">
-                    <p (click)="selectedStore='all'; applyFilters()" class="p-2 text-sm cursor-pointer hover:bg-gray-100">All Stores</p>
-                    <p *ngFor="let store of stores" (click)="selectedStore=store; applyFilters()" class="p-2 text-sm cursor-pointer hover:bg-gray-100">{{store}}</p>
+
+                <div class="absolute hidden group-hover:block pt-2 z-50 min-w-[200px] left-0 animate-in fade-in slide-in-from-top-1 duration-200">
+                    <div class="py-1 overflow-hidden bg-white border border-gray-100 shadow-2xl rounded-xl">
+                        
+                        <p (click)="selectedStore='all'; applyFilters()" 
+                        class="px-4 py-2.5 text-xs font-bold text-[#3A626B] uppercase cursor-pointer hover:bg-[#F1F4F5] transition-colors border-b border-gray-50 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#EBAD5A]"></span>
+                        All Stores
+                        </p>
+
+                        <div class="max-h-[280px] overflow-y-auto custom-scrollbar">
+                            <p *ngFor="let store of stores" 
+                            (click)="selectedStore=store; applyFilters()" 
+                            class="px-4 py-2.5 text-sm text-gray-600 cursor-pointer hover:bg-[#F1F4F5] hover:text-[#3A626B] transition-colors">
+                            {{store}}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
     
