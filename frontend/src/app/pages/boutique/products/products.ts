@@ -25,12 +25,17 @@ export class Products  {
   
 
   searchTerm: string = '';
+  selectedCategory: string = 'all';
   showOnlyPromos: boolean = false;
   productList: any[] = [];
   categories: any[] = [];
 
   selectedProduct: any = null;
   newPrice: number = 0;
+
+  selectedFile: File | null = null;
+  selectedFileName: string = '';
+  imagePreview: string | null = null;
 
   newProduct = {
     nom:'',
@@ -55,8 +60,6 @@ export class Products  {
     dateFin: ''
   };
 
-
-
   constructor(private router: Router) {
     effect(() => {
       const boutique = this.boutiqueService.currentBoutique();
@@ -77,16 +80,19 @@ export class Products  {
   ];
 
 
-
-
   get filteredProducts() {
     return this.productList.filter(product => {
       const matchesSearch = product.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
       const matchesPromoFilter = this.showOnlyPromos ? product.isPromoActive : true;
       
-      return matchesSearch && matchesPromoFilter;
+      const matchesCategory = this.selectedCategory === 'all' || 
+                            product.categorie?._id === this.selectedCategory || 
+                            product.categorie === this.selectedCategory;
+
+      return matchesSearch && matchesPromoFilter && matchesCategory;
     });
   }
+
 
   loadData(boutiqueId: string) {
     // Charger les produits
@@ -147,6 +153,20 @@ export class Products  {
     this.isNewCategorie = (this.newProduct.categorie === 'OTHER');
   }
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+          this.imagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   async onCreateProduct() {
     const boutique = this.boutiqueService.currentBoutique();
     const boutiqueId = boutique?._id;
@@ -158,25 +178,36 @@ export class Products  {
       try {
         const res = await this.categorieService.createCategory({ nom: this.newCategoryName}).toPromise();
         finalCategoryId = res._id;
-      }catch(err) {
+      } catch(err) {
         console.error("Error creating categories", err);
         return;
       }
     }
 
-    // 2. 
-    const productToSave = {
-      ...this.newProduct,
-      categorie: finalCategoryId,
-      boutique: boutiqueId
-    };
+    const formData = new FormData();
+    
+    formData.append('nom', this.newProduct.nom);
+    formData.append('prix', String(this.newProduct.prix));
+    formData.append('categorie', finalCategoryId); 
+    formData.append('boutique', boutiqueId);
 
-    // 3.
-    this.produitService.createProduit(productToSave).subscribe({
+    if (this.newProduct.stock !== null && this.newProduct.stock !== undefined) {
+      formData.append('stock', String(this.newProduct.stock));
+    }
+
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    } else {
+      formData.append('description', this.newProduct.description);
+    }
+
+    this.produitService.createProduit(formData).subscribe({
       next: () => {
         this.loadData(boutiqueId);
         this.closeAddModal();
         this.resetCreateForm();
+        this.selectedFile = null;
+        this.selectedFileName = '';
       },
       error: (err) => console.error("Error creating product", err)
     });
@@ -186,6 +217,8 @@ export class Products  {
     this.newProduct = { nom: '', description: '', prix: 0, stock: null, categorie: '' };
     this.isNewCategorie = false;
     this.newCategoryName = '';
+    this.selectedFile = null;  
+    this.selectedFileName = '';
   }
 
   // Appeler loadCategories à l'ouverture de la modale

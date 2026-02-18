@@ -27,7 +27,6 @@ import { FilterService } from '../../services/filter-service';
 export class Header {
   @Output() onToggle = new EventEmitter<void>();
 
-  
   constructor(
     private authService: AuthService, 
     private router: Router,
@@ -36,6 +35,9 @@ export class Header {
   
   boutiqueService = inject(Boutique);
   notifications: any[] = [];
+
+  selectedLogoFile: File | null = null;
+  logoPreview: string | null = null;
 
   // Modal section
   isModalOpen = false;
@@ -66,9 +68,6 @@ export class Header {
       error: (err) => console.error("Erreur lors du nettoyage :", err)
     });
   }
-
- 
-
 
 
   openSettings() {
@@ -135,19 +134,40 @@ export class Header {
     }
   }
 
+  onLogoSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedLogoFile = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.logoPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   // save the changes
   saveChanges() {
     const id = this.boutiqueService.currentBoutique()?._id;
-    const updatePayload = {
-      nom: this.storeData.name,
-      telephone: this.storeData.phone,
-      horaires: this.storeData.horaires,
-    };
+    if(!id) return;
 
-    this.boutiqueService.updateBoutique(id, updatePayload).subscribe({
+    const formData = new FormData();
+    formData.append('nom', this.storeData.name);
+    formData.append('telephone', this.storeData.phone);
+    
+    formData.append('horaires', JSON.stringify(this.storeData.horaires));
+
+    if (this.selectedLogoFile) {
+      formData.append('logo', this.selectedLogoFile);
+    }
+
+    this.boutiqueService.updateBoutique(id, formData).subscribe({
       next: (res) => {
         this.boutiqueService.loadCurrentBoutique();
         this.closeSettings();
+        this.selectedLogoFile = null;
+        this.logoPreview = null;
       },
       error: (err) => console.error(err)
     });
