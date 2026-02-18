@@ -19,16 +19,17 @@ export class DashboardService {
     return this.http.get<any>(`${this.api}/centre/chiffre-affaire`, { params });
   }
 
-  getRepartition(year?: number) {
+  getRepartition(year?: number, month?: number) {
      let params = new HttpParams();
+    if (month) params = params.set('month', month);
     if (year) params = params.set('year', year);
     return this.http.get<any>(`${this.api}/centre/chiffre-affaire/repartition`, { params });
   }
 
-  getEvolutionMensuelle(year?: number, month?: number) {
+  getEvolutionMensuelle(year?: number) {
      let params = new HttpParams();
     if (year) params = params.set('year', year);
-    if (month) params = params.set('month', month);
+   
     return this.http.get<any[]>(`${this.api}/centre/chiffre-affaire/evolution/mensuel`, { params });
   }
 
@@ -56,4 +57,24 @@ export class DashboardService {
   getRoomsLibres() {
     return this.http.get<any>(`${this.api}/rooms/libres/count`);
   }
+
+  getRoomsRepartition(year?: number, month?: number) {
+    let params = new HttpParams();
+    if (year) params = params.set('year', year);
+    if (month) params = params.set('month', month);
+
+    return this.http.get<any>(`${this.api}/rooms/repartition`, { params });
+  }
+
+  getPerformance(year?: number, month?: number) {
+    let params = new HttpParams();
+
+    if (month) params = params.set('month',month);
+    if (year) params = params.set('year', year);
+
+    return this.http.get<any[]>(`${this.api}/products/performance`, { params });
+  }
+
+
+
 }

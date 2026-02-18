@@ -14,20 +14,30 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './dashboard.html',
  
 })
-export class Dashboard implements OnInit {
+export class DashboardAdmin implements OnInit {
 
   selectedMonth: string = '';
   selectedYear: string = '';
 
+  roomsPieChart: any = {
+  labels: ['Occupied ', 'Free'],
+  datasets: [
+      {
+        data: [0, 0]
+      }
+    ]
+  };
+
+
 
   pieChartData: any = {
-  labels: ['Loyers', 'Sponsors'],
+  labels: ['Rents', 'Sponsors'],
   datasets: [
-    {
-      data: [0, 0]
-    }
-  ]
-};
+      {
+        data: [0, 0]
+      }
+    ]
+  };
 
 
   lineChartData: ChartConfiguration<'line'>['data'] = {
@@ -35,7 +45,7 @@ export class Dashboard implements OnInit {
     datasets: [
       {
         data: [],
-        label: 'Chiffre d\'affaire',
+        label: 'Turnover',
         fill: true,
         tension: 0.4
       }
@@ -49,14 +59,33 @@ export class Dashboard implements OnInit {
     }
   };
 
+  productsChartData: ChartConfiguration<'bar'>['data'] = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Top stores by products'
+      }
+    ]
+  };
+
+  productsChartOptions: ChartConfiguration<'bar'>['options'] = {
+    responsive: true,
+    indexAxis: 'y', 
+    plugins: {
+      legend: { display: true }
+    }
+  };
+
+  
+  
+
 
 
   // Signals pour stocker nos données
   visitors : number = 0;
   stores : number = 0;
-  totalProducts : number = 0;
   chiffreAffaire : number = 0;
-  roomsLibres : number = 0;
   
   loading :boolean= true;
 
@@ -67,7 +96,11 @@ export class Dashboard implements OnInit {
     this.loadStats();
     this.loadEvolution();
     this.loadRepartition();
+    this.loadRooms();
+    this.loadProducts();
   }
+
+
 
   applyFilters() {
     const year = this.selectedYear === 'all' || !this.selectedYear
@@ -79,15 +112,17 @@ export class Dashboard implements OnInit {
       : Number(this.selectedMonth);
 
     this.loadStats(year, month);
-    this.loadEvolution(year, month);
-    this.loadRepartition(year);
+    this.loadEvolution(year);
+    this.loadRepartition(year,month);
+    this.loadRooms(year, month);
+    this.loadProducts(year, month);
   }
 
-  loadRepartition(year?: number) {
-    this.dashboardService.getRepartition(year)
+  loadRepartition(year?: number,month?: number) {
+    this.dashboardService.getRepartition(year, month)
       .subscribe((res: any) => {
         this.pieChartData = {
-          labels: ['Loyers', 'Sponsors'],
+          labels: ['Rents', 'Sponsors'],
           datasets: [
             {
               data: [res.loyers, res.sponsors]
@@ -111,12 +146,6 @@ export class Dashboard implements OnInit {
     this.dashboardService.getStores(year, month)
       .subscribe(res => this.stores = res.total_boutiques);
 
-    this.dashboardService.getProducts(year, month)
-      .subscribe(res => this.totalProducts = res.total_produits);
-
-    this.dashboardService.getRoomsLibres()
-      .subscribe(res => this.roomsLibres = res.salles_libres);
-
     this.dashboardService.getChiffreAffaire(year, month).subscribe({
       next: (res) => {
         this.chiffreAffaire = res.chiffre_affaire;
@@ -125,8 +154,8 @@ export class Dashboard implements OnInit {
     });
   }
 
-  loadEvolution(year?: number, month?: number) {
-    this.dashboardService.getEvolutionMensuelle(year, month)
+  loadEvolution(year?: number) {
+    this.dashboardService.getEvolutionMensuelle(year)
       .subscribe((res: any) => {
 
         const labels = res.map((item: any) => item.month);
@@ -137,7 +166,7 @@ export class Dashboard implements OnInit {
           datasets: [
             {
               data: values,
-              label: "Chiffre d'affaire",
+              label: "Turnover",
               fill: true,
               tension: 0.4
             }
@@ -145,6 +174,47 @@ export class Dashboard implements OnInit {
         };
       });
   }
+
+  loadRooms(year?: number, month?: number) {
+    
+      this.dashboardService.getRoomsRepartition(year, month).subscribe(res => {
+        this.roomsPieChart = {
+          labels: ['Occupied', 'Free'],
+          datasets: [
+            {
+              data: [res.occupes, res.libres]
+            }
+          ]
+        };
+      });
+  }
+
+ loadProducts(year?: number, month?: number) {
+  this.dashboardService.getPerformance(year, month).subscribe({
+    next: (res) => {
+      const labels = res.map((item: any) => item._id || 'Store');
+      const values = res.map((item: any) => item.total);
+
+      this.productsChartData = {
+        labels,
+        datasets: [
+          {
+            data: values,
+            label: 'Top stores by products',
+            backgroundColor: [
+              '#4dc9f6', '#291102', '#f53794', '#537bc4', 
+              '#acc236', '#166a8f', '#00a950', '#58595b', '#8549ba', '#ff6384'
+            ],
+            barThickness: 15,      
+            maxBarThickness: 20,   
+            minBarLength: 2     
+          }
+        ]
+      };
+    },
+    error: () => console.error("Erreur performance produits")
+  });
+}
 
 
 }
