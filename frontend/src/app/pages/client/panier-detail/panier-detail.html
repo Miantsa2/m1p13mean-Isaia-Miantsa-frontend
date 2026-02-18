@@ -88,7 +88,7 @@
             <span class="text-sm">Ar {{ cartService.currentPanier()?.total | number:'1.0-0' }}</span>
           </div>
 
-          <button [routerLink]="['/delivery']" class="w-full bg-[#698481] text-white py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#57706d] transition-all shadow-md active:scale-95">
+          <button [routerLink]="['/delivery']"  [disabled]="cartService.currentPanier()?.total <=0" class="w-full bg-[#698481] text-white py-3 text-[11px] font-bold uppercase tracking-widest hover:bg-[#57706d] transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400">
             Confirm cart
           </button>
         </div>

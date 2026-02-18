@@ -93,8 +93,8 @@ export class Delivery implements OnInit {
     if (this.deliveryMarker) {
       this.map.removeLayer(this.deliveryMarker);
     }
-
-   this.cartService.setRecuperation(this.cartService.currentPanier()?._id, lat, lng)
+    if(this.cartService.currentPanier()?._id){
+      this.cartService.setRecuperation(this.cartService.currentPanier()?._id, lat, lng)
     .subscribe({
       next: (res) => {
         console.log("Saved", res);
@@ -104,6 +104,10 @@ export class Delivery implements OnInit {
       }
     });
 
+
+    }
+
+   
     
 
 
