@@ -78,6 +78,7 @@ export const routes: Routes =
         component: Vente
       }
       
+      
     ]
   },
   {
@@ -108,6 +109,10 @@ export const routes: Routes =
         {
         path: 'rent',
         component: RentAdmin 
+      },
+       {
+        path: 'dashboard',
+        component: Dashboard
       }
       
     ]
