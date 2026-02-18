@@ -8,6 +8,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth';
+import { FilterService } from '../../services/filter-service';
 
 // interface Notification {
 //   id: number;
@@ -29,7 +30,8 @@ export class Header {
   
   constructor(
     private authService: AuthService, 
-    private router: Router
+    private router: Router,
+    private filtreService: FilterService
   ) {}
   
   boutiqueService = inject(Boutique);
@@ -47,6 +49,9 @@ export class Header {
 
   unreadCount = computed(() => this.unreadNotifications().length);
 
+  onYearChange(event: any) {
+    this.filtreService.setYear(Number(event.target.value));
+  }
 
   clearAll() {
     const boutique = this.boutiqueService.currentBoutique();
