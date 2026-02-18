@@ -129,4 +129,8 @@ export class CartService {
   getDeliveryHistory(clientId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiPanier}/client/${clientId}`);
   }
+
+   getDeliveryPlace(clientId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiPanier}/panier/${clientId}`);
+  }
 }

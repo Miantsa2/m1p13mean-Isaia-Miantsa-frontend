@@ -4,6 +4,8 @@ import { Footer } from '../../../layout-client/footer/footer';
 import { CentreService } from '../../../services/centre';
 import { CartService } from '../../../services/cart-service';
 import { CommonModule } from '@angular/common';
+import * as L from 'leaflet';
+
 
 @Component({
   selector: 'app-livraison',
@@ -11,6 +13,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [Footer, Header,CommonModule],
   templateUrl: './livraison.html',
+  styleUrls: ['./livraison.css'],
 })
 export class Livraison implements OnInit {
   footerData: any = {};
@@ -18,6 +21,8 @@ export class Livraison implements OnInit {
   filteredDeliveries: any[] = [];
   stores: string[] = [];
   
+  private map!: L.Map;
+  public deliveryMarker: L.CircleMarker | null = null;
   
   selectedStore: string = 'all';
   sortOrder: 'recent' | 'old' = 'recent';
@@ -26,6 +31,7 @@ export class Livraison implements OnInit {
       const client = this.cartService.currentClient();
       if (client && client._id) {
         this.loadDeliveries(client._id);
+        this.initMap(client._id);
       }
     });
   }
@@ -81,4 +87,54 @@ export class Livraison implements OnInit {
       error: (err) => console.error('Error getting info :', err)
     });
   }
+
+
+
+   private initMap(clientId: string): void {
+      this.map = L.map('map').setView([-18.9583, 47.5257], 14); // centrée sur Tanjombato
+  
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(this.map);
+  
+       
+  
+      L.circleMarker([-18.9583, 47.5257], {
+        radius: 10,         
+        color: 'red',         
+        fillColor: '#f03',   
+        fillOpacity: 0.5
+      }).addTo(this.map)
+        .bindPopup('Here we are')
+        .openPopup();
+      this.cartService.getDeliveryPlace(clientId).subscribe({
+      next: (data) => {
+        if (!Array.isArray(data)) return;
+
+        data.forEach((panier, index) => {
+
+          const lat = panier.recuperation?.coo_x;
+          const lng = panier.recuperation?.coo_y;
+
+          if (lat && lng) {
+            L.circleMarker([lat, lng], {
+              radius: 8,
+              color: 'green',
+              fillColor: 'rgb(19, 202, 123)',
+              fillOpacity: 0.6
+            })
+            .addTo(this.map)
+            .bindPopup(`<b>Cart ${data.length - index}</b>`)
+            .openPopup();
+          }
+
+        });
+      },
+      error: (err) => console.error('Error deliveries:', err)
+    });
+ 
+    setTimeout(() => {
+        this.map.invalidateSize();
+      }, 200);
+    }
 }
