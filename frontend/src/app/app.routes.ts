@@ -25,6 +25,8 @@ import { InvoiceSponsor } from './pages/boutique/invoice-sponsor/invoice-sponsor
 import { Vente } from './pages/boutique/vente/vente';
 import { Livraison } from './pages/client/livraison/livraison';
 import { Dashboard } from './pages/boutique/dashboard/dashboard';
+import { DashboardAdmin } from './pages/admin/dashboard/dashboard';
+
 
 export const routes: Routes = 
 [
@@ -86,6 +88,11 @@ export const routes: Routes =
     component: MainLayoutAdmin,
     children: [
       {
+        path: '', 
+        redirectTo: 'dashboardAdmin', 
+        pathMatch: 'full' 
+      },
+      {
         path: 'rooms', 
         component: Rooms 
       },
@@ -111,8 +118,8 @@ export const routes: Routes =
         component: RentAdmin 
       },
        {
-        path: 'dashboard',
-        component: Dashboard
+        path: 'dashboardAdmin',
+        component: DashboardAdmin
       }
       
     ]

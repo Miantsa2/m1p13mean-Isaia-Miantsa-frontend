@@ -8,6 +8,20 @@
     </div>
 
     <nav class="px-4 mt-4 space-y-2">
+
+        <a routerLink="/layout-admin/dashboardAdmin" 
+          routerLinkActive="bg-gray-50" 
+          #rlaDashboard="routerLinkActive"
+          class="relative flex items-center gap-4 px-4 py-3 transition-all rounded-xl group">
+            <span class="material-symbols-outlined text-[24px]" 
+                  [ngClass]="rlaDashboard.isActive ? 'text-[#3A626B]' : 'text-[#697F84]'">analytics</span>
+            <span class="text-[15px] font-medium" 
+                  [ngClass]="rlaDashboard.isActive ? 'text-[#3A626B]' : 'text-[#3A626B] group-hover:text-[#EBAD5A]'">Analytics</span>
+            @if (rlaDashboard.isActive) {
+              <div class="absolute bottom-0 left-4 right-8 h-[3px] bg-[#EBAD5A] rounded-full"></div>
+            }
+        </a>
+
         <a routerLink="/layout-admin/stores" 
             routerLinkActive="bg-gray-50" 
             #rlaStores="routerLinkActive"
