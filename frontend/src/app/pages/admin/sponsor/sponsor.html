@@ -1,0 +1,40 @@
+<div class="min-h-screen p-4">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-normal text-[#697F84] uppercase tracking-wide">Sponsorised Products</h1>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-8 mb-8">
+ 
+    <div class="relative flex items-center gap-2 text-[#3A626B]">
+        <span class="font-normal">Stores</span>
+        <div class="relative flex items-center">
+        <select [(ngModel)]="selectedStore" (change)="filterByStore()"
+                class="py-0 pr-8 text-[gray] bg-transparent border-none appearance-none cursor-pointer focus:ring-0">
+            <option value="">All stores</option>
+            @for (s of stores; track s._id) {
+             <option [value]="s.nom">{{ s.nom }}</option>
+
+            }
+        </select>
+        <span class="absolute right-0 text-sm pointer-events-none material-symbols-outlined">
+            arrow_downward
+        </span>
+        </div>
+    </div>
+
+
+</div>
+
+  <app-table-corps [columns]="adsColumns">
+    @for (ad of filteredAdsList; track ad._id) {
+      <tr class="transition-colors border-b border-gray-100 hover:bg-gray-50">
+        <td class="px-4 py-4 font-bold text-[#697F84]">{{ ad.produit }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ ad.boutique }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ ad.dateDebut }}</td>
+        <td class="px-4 py-4 text-[#375E67]">{{ ad.dateFin }}</td>
+        <td class="flex items-center gap-4 px-4 py-4">
+        </td>
+      </tr>
+    }
+  </app-table-corps>
+</div>

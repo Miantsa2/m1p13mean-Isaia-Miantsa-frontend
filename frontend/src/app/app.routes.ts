@@ -26,6 +26,8 @@ import { Vente } from './pages/boutique/vente/vente';
 import { Livraison } from './pages/client/livraison/livraison';
 import { Dashboard } from './pages/boutique/dashboard/dashboard';
 import { DashboardAdmin } from './pages/admin/dashboard/dashboard';
+import { Sponsor } from './pages/admin/sponsor/sponsor';
+
 
 
 export const routes: Routes = 
@@ -117,6 +119,12 @@ export const routes: Routes =
         path: 'rent',
         component: RentAdmin 
       },
+
+      {
+        path: 'sponsor',
+        component: Sponsor 
+      },
+
        {
         path: 'dashboardAdmin',
         component: DashboardAdmin
