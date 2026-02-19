@@ -170,16 +170,18 @@ export class RentAdmin {
       console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
         next: (createdCharge : any) => {
-          const notif = {
+          this.loadBoutiquesPayees(this.mois, this.annee);
+const dateLimite = new Date(createdCharge.date_limite); // convertit ISO string en Date
+
+  const formattedDate = dateLimite.toLocaleDateString('fr-FR');          const notif = {
           titre: 'Rent Validation',
-          description: `Your rent of ${createdCharge.date_limite} has been paied`
+          description: `Your rent of ${formattedDate} has been paied`
         };
         console.log('boutique', createdCharge.boutique);
 
         this.boutiqueService.addNotif(createdCharge.boutique, notif).subscribe({
           next: () => {
             console.log('Notification envoyée à la boutique');
-             this.loadBoutiquesPayees(this.mois, this.annee);
           },
           error: (err) => {
             console.error('Erreur notification', err);

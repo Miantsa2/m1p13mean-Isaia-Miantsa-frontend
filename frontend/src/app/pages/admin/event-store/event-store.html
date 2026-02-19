@@ -82,7 +82,7 @@
       <td class="flex items-center gap-4 px-4 py-4">
         @if (eventStore.statut === 'pending') {
           <button
-            (click)="acceptEvent(
+            (click)="acceptEventStore(
               eventStore._id,
               eventStore.boutique._id,
               eventStore.reference

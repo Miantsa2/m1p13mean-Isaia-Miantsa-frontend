@@ -177,6 +177,8 @@ export class Rent {
       console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
          next: () => {
+          this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
+
         const notif = {
           titre: 'Rent Payement',
           description: `Store  ${this.boutiqueService.currentBoutique()?.nom} has paid the rent ${this.paymentForm.date_limite}. `
@@ -184,7 +186,6 @@ export class Rent {
         this.centreService.addNotif(this.currentCenterId, notif).subscribe({
           next: () => {
             console.log('Notification envoyée au centre');
-             this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
           },
           error: (err) => {
             console.error('Erreur notification', err);
