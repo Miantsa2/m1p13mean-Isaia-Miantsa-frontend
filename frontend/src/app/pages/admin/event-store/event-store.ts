@@ -129,7 +129,7 @@ statutFormatted (statut : string): string {
   
  
 
- updateEventStore(eventId: string,storeId: string,eventReference: string): void {
+ updateEventStore(eventId: string,storeId: string, eventReference: string): void {
     const updateData = { statut: 'refused' };
 
     this.evenementService.updateEvent(eventId, updateData).subscribe({
@@ -159,7 +159,7 @@ statutFormatted (statut : string): string {
   }
 
 
-   acceptEvent(eventId: string,eventReference: string, storeId:string) {
+   acceptEventStore(eventId: string,  storeId:string, eventReference: string) {
       this.evenementService.acceptEvent(eventId).subscribe({
         next: (res) => {
           const notif = {

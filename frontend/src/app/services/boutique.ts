@@ -63,6 +63,10 @@ export class Boutique {
     return this.http.get<{ loyer: number,  clientSecret : string; }>(`${this.apiUrl}/loyer/${boutiqueId}`);
   }
 
+  getLoyerAdminPay(boutiqueId: string) {
+    return this.http.get<{ loyer: number,  clientSecret : string; }>(`${this.apiUrl}/loyer/adminPay/${boutiqueId}`);
+  }
+
 
   getBoutiquesByLoyer(mois: number, annee: number, statut : string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/loyernonpayees?mois=${mois}&annee=${annee}&statut=${statut}`);

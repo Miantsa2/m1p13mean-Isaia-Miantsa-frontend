@@ -111,6 +111,8 @@ export class Rent {
   }
 
   edditingChargeId : string = '';
+  errorMessage : string = '';
+
   async openPayModal() {
     this.paymentForm = {
       boutique: this.boutiqueId || '',
@@ -121,6 +123,7 @@ export class Rent {
       reference: 'RENT001',
       description: 'Rent of the month'
     };
+    this.errorMessage='';
     console.log('date_limite', this.paymentForm.date_limite);
 
     if (this.boutiqueId) {
@@ -130,7 +133,9 @@ export class Rent {
            this.clientSecret = res.clientSecret;
           this.initStripe(); // Initialisation Stripe après récupération du loyer
         },
-        error: (err) => console.error('Erreur calcul loyer', err)
+        error: (err) => {
+              this.errorMessage= err?.error?.message || "Une erreur est survenue";
+            }
       });
 
       this.chargeService.getLoyerByBoutiqueId(this.boutiqueId, this.mois, this.annee).subscribe({
@@ -139,7 +144,9 @@ export class Rent {
                 this.edditingChargeId = charge._id; 
               }
             },
-            error: (err) => console.error('Erreur récupération charge', err)
+            error: (err) => {
+                alert(err?.error?.message || "Une erreur est survenue") ;
+            }
           });
 
   
@@ -170,6 +177,8 @@ export class Rent {
       console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
          next: () => {
+          this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
+
         const notif = {
           titre: 'Rent Payement',
           description: `Store  ${this.boutiqueService.currentBoutique()?.nom} has paid the rent ${this.paymentForm.date_limite}. `
@@ -204,6 +213,7 @@ export class Rent {
         this.centreService.addNotif(this.currentCenterId, notif).subscribe({
           next: () => {
             console.log('Notification envoyée au centre');
+             this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
           },
           error: (err) => {
             console.error('Erreur notification', err);
@@ -239,8 +249,15 @@ export class Rent {
       
         }
       this.closePayModel();
-      this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
     }
+  }
+
+   isFormInvalid(): boolean {
+    if(!this.paymentForm.boutique || !this.paymentForm.date_limite || this.paymentForm.valeur <= 0) {
+      return true;
+    }
+
+    return false; 
   }
 
   resertForm() {

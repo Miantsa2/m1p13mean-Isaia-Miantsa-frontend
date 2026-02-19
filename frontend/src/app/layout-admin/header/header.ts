@@ -121,6 +121,7 @@ export class Header {
     this.centreService.markAllNotificationsAsRead(this.currentCenter._id).subscribe({
       next: () => {
         const updatedcentre = { ...this.currentCenter, notifications: [] };
+        this.loadCentre()
         console.log("Notifications vidées localement",updatedcentre);
       },
       error: (err) => console.error("Erreur lors du nettoyage :", err)
