@@ -24,7 +24,7 @@ export class RentAdmin {
   stores: any[] = [];
     mois = new Date().getMonth() + 1;
   annee = new Date().getFullYear();
-
+  errorMessage = '';
   
 
   calendarOptions: CalendarOptions = {
@@ -47,8 +47,6 @@ export class RentAdmin {
   };
 
    loadBoutiquesPayees(mois: number, annee: number) {
-    
-
     this.boutiqueService.getLoyersPayes(mois, annee).subscribe((events: any) => {
       this.calendarOptions = {
         plugins: [dayGridPlugin, interactionPlugin],
@@ -101,15 +99,7 @@ export class RentAdmin {
     });
 
 
-    if (boutiqueId) {
-      this.boutiqueService.getLoyer(boutiqueId).subscribe({
-        next: (res) => {
-          this.paymentForm.valeur = res.loyer;
-        },
-        error: (err) => console.error('Erreur calcul loyer', err)
-      });
-
-
+    if (boutiqueId) {    
      this.chargeService.getLoyerByBoutiqueId(boutiqueId, mois, annee).subscribe({
       next: (charge: any) => {     
           if(charge) {
@@ -119,9 +109,6 @@ export class RentAdmin {
       error: (err) => console.error('Erreur récupération charge', err)
     });
     }
-
-   
-
     this.isAddModalOpen = true;
   }
 
@@ -130,8 +117,13 @@ export class RentAdmin {
     this.paymentForm.boutique = boutiqueId;
     if (!boutiqueId) return;
 
-    this.boutiqueService.getLoyer(boutiqueId).subscribe(res => {
-      this.paymentForm.valeur = res.loyer;
+    this.boutiqueService.getLoyerAdminPay(boutiqueId).subscribe({
+      next: (res) => {
+        this.paymentForm.valeur = res.loyer;
+      },
+      error: (err) => {
+          this.errorMessage = err?.error?.message || "Une erreur est survenue";
+      }
     });
   }
 
@@ -159,6 +151,7 @@ export class RentAdmin {
         this.boutiqueService.addNotif(updatedCharge.boutique, notif).subscribe({
           next: () => {
             console.log('Notification envoyée à la boutique');
+             this.loadBoutiquesPayees(this.mois, this.annee);
           },
           error: (err) => {
             console.error('Erreur notification', err);
@@ -186,17 +179,15 @@ export class RentAdmin {
         this.boutiqueService.addNotif(createdCharge.boutique, notif).subscribe({
           next: () => {
             console.log('Notification envoyée à la boutique');
+             this.loadBoutiquesPayees(this.mois, this.annee);
           },
           error: (err) => {
             console.error('Erreur notification', err);
           }
         });
-       
         },
         error: (err) => console.error('Erreur création charge', err)
       });
-    
-
   }
 
   confirmPayment() {
@@ -206,7 +197,6 @@ export class RentAdmin {
       this.createCharge(); 
     }
      this.closeAddModel();
-     this.loadBoutiquesPayees(this.mois, this.annee);
    }
 
 
@@ -214,6 +204,8 @@ export class RentAdmin {
     
     const date_limite = new Date(this.paymentForm.date_limite);
     const maintenant = new Date();
+    date_limite.setHours(0, 0, 0, 0);
+    maintenant.setHours(0, 0, 0, 0);
     if(!this.paymentForm.boutique || !this.paymentForm.date_limite || this.paymentForm.valeur <= 0) {
       return true;
     }
