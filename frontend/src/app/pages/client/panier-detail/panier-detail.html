@@ -30,7 +30,7 @@
                 <button (click)="cartService.removeProduct(item.id._id)" 
                         class="text-xl font-light text-gray-400 hover:text-red-500">×</button>
                 
-                <img [src]="item.id.description || '/placeholder-product.png'" 
+                <img [src]="getProductImage(item.id.description)" 
                      class="object-cover w-12 h-12 border border-gray-100 rounded-full" alt="Product">
                 
                 <span class="text-xs font-semibold text-[#1A4A54] uppercase tracking-tighter">

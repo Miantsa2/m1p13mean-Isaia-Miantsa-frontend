@@ -8,6 +8,7 @@ import { Categorie } from '../../../services/categorie';
 import { SalleService } from '../../../services/salle';
 import { UserService } from '../../../services/user';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-stores',
@@ -16,6 +17,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './stores.html',
 })
 export class Stores {
+  readonly apiUrl = environment.apiUrl;
+
   stores: any[] = [];
   filteredStores: any[] = [];
   categories: any[] = [];
@@ -43,6 +46,16 @@ export class Stores {
     this.loadCategories();
     this.loadBoutiques();
     this.loadFreeRooms();
+  }
+
+  getStoreImage(imagePath: string): string {
+    if (!imagePath) return '/image.png';
+    
+    if (imagePath.startsWith('/uploads')) {
+      return `${this.apiUrl}${imagePath}`;
+    }
+    
+    return imagePath;
   }
 
   loadCategories() {

@@ -6,6 +6,7 @@ import { CentreService } from '../../../services/centre';
 import { CartService } from '../../../services/cart-service';
 import { RouterModule } from '@angular/router';
 import { FloatingAd } from '../../../components/floating-ad/floating-ad';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { FloatingAd } from '../../../components/floating-ad/floating-ad';
   templateUrl: './panier-detail.html',
 })
 export class PanierDetail implements OnInit {
+  readonly apiUrl = environment.apiUrl;
+  
   footerData: any = {};
 
   constructor(private centreService: CentreService, public cartService: CartService) {}
@@ -40,5 +43,14 @@ export class PanierDetail implements OnInit {
     });
   }
 
+  getProductImage(imagePath: string): string {
+    if (!imagePath) return '/image.png';
+    
+    if (imagePath.startsWith('/uploads')) {
+      return `${this.apiUrl}${imagePath}`;
+    }
+    
+    return imagePath;
+  }
 
 }

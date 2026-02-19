@@ -59,7 +59,7 @@
             <app-store-card-admin 
                 (deleted)="loadBoutiques()"
                 [boutiqueId]="item._id"
-                [logo]="item.logo"
+                [logo]="getStoreImage(item.logo)"
                 [name]="item.nom"
                 [salle_ref]="item.salle?.reference"
                 [metre_carre]="item.salle?.tailleMetreCarre">
