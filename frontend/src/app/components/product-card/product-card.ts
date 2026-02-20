@@ -11,6 +11,7 @@ export class ProductCard implements OnInit {
   @Input() price!: number;
   @Input() image!: string;
   @Input() promotions: any = null;
+  @Input() stock: number | null = null;
 
   @Input() id!: string;
   discountedPrice: number = 0;

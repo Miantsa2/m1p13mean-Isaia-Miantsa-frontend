@@ -28,7 +28,9 @@
             <tr *ngFor="let item of cartService.currentPanier()?.produits" class="transition-colors hover:bg-gray-50/50">
               <td class="flex items-center gap-4 px-6 py-6">
                 <button (click)="cartService.removeProduct(item.id._id)" 
-                        class="text-xl font-light text-gray-400 hover:text-red-500">×</button>
+                        class="text-xl font-light text-gray-400 transition-colors hover:text-red-500">
+                  ×
+                </button>
                 
                 <img [src]="getProductImage(item.id.description)" 
                      class="object-cover w-12 h-12 border border-gray-100 rounded-full" alt="Product">

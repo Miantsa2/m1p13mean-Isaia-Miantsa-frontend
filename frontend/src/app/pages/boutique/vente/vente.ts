@@ -95,16 +95,18 @@ export class Vente implements OnInit {
   }
 
   checkSale(sale: any) {
-    sale.status = 'checked';
-
-    const index = this.salesData.findIndex(s => s.produitId === sale.produitId && s.panierId === sale.panierId);
-    if (index !== -1) {
-      this.salesData[index].status = 'checked';
-    }
-
-    this.applyFilters();
-    
-    console.log('Sale manually checked');
+    this.cartService.checkProductInPanier(sale.panierId, sale.produitId).subscribe({
+        next: () => {
+            sale.status = 'checked';
+            const index = this.salesData.findIndex(s => s.produitId === sale.produitId && s.panierId === sale.panierId);
+            if (index !== -1) {
+                this.salesData[index].status = 'checked';
+            }
+            this.applyFilters();
+            console.log('Sale saved as checked in Database');
+        },
+        error: (err) => console.error('Error saving status', err)
+    });
   }
 
   // Modal planning deliver

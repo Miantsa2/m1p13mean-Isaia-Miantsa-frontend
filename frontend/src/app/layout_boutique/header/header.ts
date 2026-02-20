@@ -10,14 +10,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth';
 import { FilterService } from '../../services/filter-service';
 
-// interface Notification {
-//   id: number;
-//   title: string;
-//   message: string;
-//   time: string;
-//   isRead: boolean;
-// }
-
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -27,6 +19,7 @@ import { FilterService } from '../../services/filter-service';
 export class Header {
   @Output() onToggle = new EventEmitter<void>();
 
+  availableDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   constructor(
     private authService: AuthService, 
     private router: Router,
@@ -118,12 +111,22 @@ export class Header {
     return JSON.stringify(this.storeData.horaires) !== JSON.stringify(original);
   }
 
+  canAddHoraire(): boolean {
+    return this.storeData.horaires.length < 7;
+  }
+
   addHoraire() {
-    this.storeData.horaires.push({
-      jour: '',
-      ouverture: '',
-      fermeture: ''
-    });
+    if (this.canAddHoraire()) {
+      this.storeData.horaires.push({
+        jour: '', 
+        ouverture: '09:00',
+        fermeture: '19:00'
+      });
+    }
+  }
+
+  isDaySelected(day: string, currentIndex: number): boolean {
+    return this.storeData.horaires.some((h: any, index: number) => h.jour === day && index !== currentIndex);
   }
 
   removeHoraire(index: number) {

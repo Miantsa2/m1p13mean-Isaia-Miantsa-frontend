@@ -86,11 +86,23 @@
     </div>
   </div>
   
-  <div *ngIf="centreInfo" class="grid grid-cols-1 gap-10 px-8 mx-auto mt-16 mb-20 max-w-7xl md:grid-cols-3">
-    <app-about-card
-      icon="browse_gallery"
-      [description]="firstDaySchedule" 
-    />
+  <div *ngIf="centreInfo" class="grid grid-cols-1 gap-10 px-8 mx-auto mt-16 mb-20 max-w-7xl md:grid-cols-3">  
+    <div class="relative group">
+      <app-about-card
+        icon="browse_gallery"
+        [description]="'Open Today: ' + todaySchedule" 
+      />
+      
+      <div class="absolute left-0 right-0 z-20 invisible p-4 mt-2 transition-all duration-300 bg-white border opacity-0 rounded-xl border-[#D7B471] shadow-xl group-hover:visible group-hover:opacity-100 group-hover:translate-y-1">
+        <h4 class="mb-3 text-xs font-bold tracking-widest text-[#3A626B] uppercase border-b pb-2">Weekly Opening Hours</h4>
+        <div class="space-y-2">
+          <div *ngFor="let h of allSchedules" class="flex justify-between text-[11px] font-medium">
+            <span class="text-[#5F6566]">{{ h.jour }}</span>
+            <span class="text-[#3A626B]">{{ h.ouverture }} - {{ h.fermeture }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <app-about-card
       icon="local_parking"
