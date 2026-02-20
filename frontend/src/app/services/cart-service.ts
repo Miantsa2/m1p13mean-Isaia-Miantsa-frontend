@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +12,7 @@ import { AuthService } from './auth';
 export class CartService {
   private apiPanier = `${environment.apiUrl}/mean/cart`;
   private apiClient = `${environment.apiUrl}/mean/client`;
+  private router = inject(Router);
 
   cartCount = signal<number>(0);
   currentPanier = signal<any>(null);
@@ -52,7 +55,11 @@ export class CartService {
 
   addToCart(produitId: string, prix: number) {
     const clientId = this.currentClient()?._id;
-    if (!clientId) return alert("You have to connect first!");
+    if (!clientId) {
+      alert("You must be logged in to add products to your cart.");
+      this.router.navigate(['/login']);
+      return; 
+    }
 
     this.http.post(`${this.apiPanier}/add`, {
       clientId,
@@ -85,9 +92,16 @@ export class CartService {
  
   removeProduct(produitId: string) {
     const clientId = this.currentClient()?._id;
-    if (clientId) {
+    if (!clientId) return;
+
+    if (confirm("Are you sure you want to remove this item?")) {
       this.http.delete(`${this.apiPanier}/remove-product/${clientId}/${produitId}`)
-        .subscribe(() => this.refreshCart());
+        .subscribe({
+          next: () => {
+            this.refreshCart(); 
+          },
+          error: (err) => console.error("Error removing product", err)
+        });
     }
   }
 
@@ -124,6 +138,10 @@ export class CartService {
     return this.http.put(`${this.apiPanier}/update-delivery/${panierId}/${produitId}`, { 
       date_recuperation: date 
     });
+  }
+
+  checkProductInPanier(panierId: string, produitId: string) {
+    return this.http.patch(`${this.apiPanier}/check-item/${panierId}/${produitId}`, {});
   }
 
   getDeliveryHistory(clientId: string): Observable<any[]> {

@@ -23,7 +23,6 @@ export class Products  {
   private categorieService = inject(Categorie);
   private chargeService = inject(ChargeService);
   
-
   searchTerm: string = '';
   selectedCategory: string = 'all';
   showOnlyPromos: boolean = false;
@@ -32,6 +31,7 @@ export class Products  {
 
   selectedProduct: any = null;
   newPrice: number = 0;
+  newName: string = '';
 
   selectedFile: File | null = null;
   selectedFileName: string = '';
@@ -237,6 +237,7 @@ export class Products  {
   isModalEditOpen = false;
   openEditModal(product: any) {
     this.selectedProduct = product;
+    this.newName = product.nom;
     this.newPrice = Number(product.prix.replace(/[^0-9.-]+/g, ""));
     this.isModalEditOpen = true;
   }
@@ -245,8 +246,13 @@ export class Products  {
     this.selectedProduct = null;
   }
   onUpdatePrice() {
-    if (this.selectedProduct && this.newPrice > 0) {
-      this.produitService.updateProduit(this.selectedProduct._id, { prix: this.newPrice }).subscribe({
+    if (this.selectedProduct && this.newPrice > 0 && this.newName.trim() !== '') {
+      const updateData = { 
+          prix: this.newPrice, 
+          nom: this.newName 
+      };
+
+      this.produitService.updateProduit(this.selectedProduct._id, updateData).subscribe({
         next: () => {
           const bId = this.boutiqueService.currentBoutique()?._id;
           if (bId) this.loadData(bId);

@@ -9,15 +9,33 @@
     <img
       [src]="image"
       [alt]="title"
-      class="h-40 w-40 rounded-full object-cover"
+      class="object-cover w-40 h-40 rounded-full"
     />
   </div>
 
+  <div class="flex justify-center mt-2">
+    <ng-container *ngIf="stock !== null; else nonStockable">
+      <span [ngClass]="{
+          'bg-red-100 text-red-600': stock <= 0,
+          'bg-green-100 text-green-600': stock > 0
+        }" 
+        class="text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+        {{ stock > 0 ? stock + ' in stock' : 'Out of stock' }}
+      </span>
+    </ng-container>
+    
+    <ng-template #nonStockable>
+      <span class="bg-blue-50 text-blue-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+        Available
+      </span>
+    </ng-template>
+  </div>
+  
   <p class="mt-4 text-center text-sm font-semibold text-[#5F6566]">
     {{ title }}
   </p>
 
-  <div class="mt-3 flex items-center justify-between">
+  <div class="flex items-center justify-between mt-3">
     <div class="flex flex-col">
       <span 
         [ngClass]="{
@@ -32,8 +50,14 @@
       </span>
     </div>
 
-    <span (click)="onAddToCart()" class="material-symbols-outlined cursor-pointer text-[#EBAD5A] hover:text-[#3A626B] transition-colors">
-      shopping_cart
+    <span 
+      (click)="(stock === null || stock > 0) ? onAddToCart() : null" 
+      [ngClass]="{
+        'opacity-30 cursor-not-allowed': stock !== null && stock <= 0,
+        'text-[#EBAD5A] hover:text-[#3A626B]': stock === null || stock > 0
+      }"
+      class="transition-colors cursor-pointer material-symbols-outlined">
+      {{ (stock === null || stock > 0) ? 'shopping_cart' : 'block' }}
     </span>
   </div>
 </div>

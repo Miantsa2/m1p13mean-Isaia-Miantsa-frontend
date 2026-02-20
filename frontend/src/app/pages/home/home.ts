@@ -195,12 +195,19 @@ export class Home implements OnInit, OnDestroy {
     }
   }
 
-  // To get the first horaire in the data
-  get firstDaySchedule(): string {
+  get allSchedules(): any[] {
+    return this.centreInfo?.horaires || [];
+  }
+
+  get todaySchedule(): string {
     if (this.centreInfo?.horaires?.length > 0) {
-      const first = this.centreInfo.horaires[0];
-      return `Schedule: ${first.ouverture} - ${first.fermeture}`;
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const todayName = days[new Date().getDay()];
+      
+      const today = this.centreInfo.horaires.find((h: any) => h.jour === todayName) || this.centreInfo.horaires[0];
+      
+      return `${today.ouverture} - ${today.fermeture}`;
     }
-    return 'Schedule: Not available';
+    return 'Not available';
   }
 }

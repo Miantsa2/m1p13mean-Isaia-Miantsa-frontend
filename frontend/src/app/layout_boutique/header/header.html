@@ -90,22 +90,23 @@
   (close)="closeSettings()"
   (submitForm)="saveChanges()"
 >
-
   <div class="flex justify-end mb-4">
-    <button  (click)="logout()" class="flex items-center gap-2 text-red-500 transition-colors hover:text-red-700 group">
+    <button (click)="logout()" class="flex items-center gap-2 text-red-500 transition-colors hover:text-red-700 group">
       <span class="text-[10px] font-bold uppercase">Logout</span>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 transition-transform group-hover:translate-x-1">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
       </svg>
     </button>
   </div>
-  <div class="flex gap-10">
-    <div class="flex flex-col items-center">
+
+  <div class="flex gap-10 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
+    
+    <div class="sticky top-0 flex flex-col items-center h-fit">
       <div class="relative group">
         <div class="w-24 h-24 overflow-hidden border-2 border-gray-100 rounded-full shadow-sm">
           <img [src]="logoPreview || (storeData.logo ? ('http://localhost:5000' + storeData.logo) : '/image.png')" 
-              alt="Logo" 
-              class="object-cover w-full h-full">
+               alt="Logo" 
+               class="object-cover w-full h-full">
         </div>
 
         <div class="absolute bottom-0 right-0 flex items-center justify-center w-8 h-8 transition-colors bg-white border border-gray-200 rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
@@ -168,35 +169,42 @@
             <label class="block text-[10px] text-[#697F84] uppercase font-bold tracking-wider">
               Opening and Closing Times
             </label>
-            <button type="button" (click)="addHoraire()" 
+            
+            <button type="button" 
+                    (click)="addHoraire()" 
+                    [disabled]="!canAddHoraire()"
+                    [ngClass]="{'opacity-50 cursor-not-allowed': !canAddHoraire()}"
                     class="flex items-center gap-1 text-[#7FAE7D] hover:text-[#5a7e58] transition-colors">
               <span class="material-symbols-outlined text-[18px]">add_circle</span>
-              <span class="text-[10px] font-bold">ADD HOURS</span>
+              <span class="text-[10px] font-bold uppercase">
+                {{ storeData.horaires.length < 7 ? 'Add Hours' : 'Full Week Set' }}
+              </span>
             </button>
           </div>
 
-          <div *ngFor="let horaire of storeData.horaires; let i = index" class="flex items-center gap-3 mb-3 group">
-            
+          <div *ngFor="let horaire of storeData.horaires; let i = index" class="flex items-center gap-3 mb-3 animate-in fade-in slide-in-from-right-2">
             <div class="flex-1">
-              <input type="text" [(ngModel)]="horaire.jour" 
-                    placeholder="Day (ex: Mon-Fri)" 
-                    class="w-full px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none">
+              <select [(ngModel)]="horaire.jour" 
+                      class="w-full px-3 py-2 text-[13px] text-gray-600 border border-gray-200 rounded-lg bg-white outline-none focus:ring-1 focus:ring-[#7FAE7D]">
+                <option value="" disabled selected>Select Day</option>
+                <option *ngFor="let day of availableDays" 
+                        [value]="day" 
+                        [disabled]="isDaySelected(day, i)">
+                  {{ day }}
+                </option>
+              </select>
             </div>
             
-            <div class="flex items-center gap-2">
-              <input type="text" [(ngModel)]="horaire.ouverture" 
-                    placeholder="09:00" 
-                    class="w-20 px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none text-center">
-              
-              <span class="text-gray-400">-</span>
-              
-              <input type="text" [(ngModel)]="horaire.fermeture" 
-                    placeholder="19:00" 
-                    class="w-20 px-3 py-2 text-[13px] text-gray-500 border border-gray-200 rounded-lg bg-white outline-none text-center">
+            <div class="flex items-center gap-2 p-1 border border-gray-100 rounded-lg bg-gray-50/50">
+              <input type="time" [(ngModel)]="horaire.ouverture" 
+                    class="px-2 py-1 text-[13px] text-gray-500 bg-transparent outline-none text-center">
+              <span class="font-light text-gray-400">to</span>
+              <input type="time" [(ngModel)]="horaire.fermeture" 
+                    class="px-2 py-1 text-[13px] text-gray-500 bg-transparent outline-none text-center">
             </div>
 
-            <button *ngIf="storeData.horaires.length > 1" (click)="removeHoraire(i)"
-                    class="text-gray-300 transition-colors hover:text-red-400">
+            <button (click)="removeHoraire(i)"
+                    class="p-1 text-gray-300 transition-colors hover:text-red-400">
               <span class="material-symbols-outlined text-[20px]">delete</span>
             </button>
           </div>
