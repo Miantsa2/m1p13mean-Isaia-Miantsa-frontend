@@ -9,11 +9,9 @@ import * as L from 'leaflet';
 
 @Component({
   selector: 'app-livraison',
-
   standalone: true,
   imports: [Footer, Header,CommonModule],
   templateUrl: './livraison.html',
-  styleUrls: ['./livraison.css'],
 })
 export class Livraison implements OnInit {
   footerData: any = {};

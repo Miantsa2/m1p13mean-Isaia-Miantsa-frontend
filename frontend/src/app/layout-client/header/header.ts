@@ -29,6 +29,7 @@ export class Header implements OnInit {
   centreInfo: any = null;
 
   isLoggedIn = false;
+  isMenuOpen = false;
 
   constructor(
     private categorieService: Categorie, 
@@ -52,6 +53,11 @@ export class Header implements OnInit {
   checkLoginStatus() {
     const user = localStorage.getItem('token');
     this.isLoggedIn = !!user; 
+  }
+
+  toggleMenuAndScroll(sectionId: string) {
+    this.isMenuOpen = false;
+    this.scrollToSection(sectionId);
   }
 
   loadCentreData() {
