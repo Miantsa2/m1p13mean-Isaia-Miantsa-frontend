@@ -8,7 +8,7 @@
     </div>
 
     <div class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
-      <div class=" map-container flex justify-center md:w-5/6">  
+      <div class="flex justify-center map-container md:w-5/6">  
         <div id="map"></div>
       </div> 
 
@@ -21,7 +21,6 @@
             Look in the map, to see the delivery place of your products
           </p>
   
-
       </div>
     </div>
 
@@ -65,53 +64,55 @@
             </div>
         </div>
     
-        <div class="overflow-hidden border border-gray-100 rounded-lg shadow-sm">
-            <table class="w-full text-left bg-white border-collapse">
-                <thead class="bg-[#EBAD5A]">
-                    <tr>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Cart</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Store</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Products</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Price</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Quantity</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Subtotal</th>
-                        <th class="p-4 text-xs font-bold text-white uppercase">Delivery time</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    <tr *ngFor="let item of filteredDeliveries" class="transition-colors hover:bg-gray-50/50">
-                        <td class="p-4 text-sm font-bold text-[#3A626B] relative">
-                            <span *ngIf="!item.deliveryTime" class="absolute w-2 h-2 -translate-y-1/2 bg-red-500 rounded-full left-1 top-1/2"></span>
-                            {{ item.cartDisplayIndex }}
-                        </td>
-                        <td class="p-4 text-[10px] text-gray-500 font-bold uppercase">{{ item.storeName }}</td>
-                        <td class="p-4">
-                            <div class="flex items-center gap-3">
-                                <img [src]="item.productImg" class="object-cover w-10 h-10 border border-gray-100 rounded-full">
-                                <span class="text-[11px] font-medium text-[#3A626B]">{{ item.productName }}</span>
-                            </div>
-                        </td>
-                        <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.price | number:'1.0-0' }}</td>
-                        <td class="p-4 text-xs text-[#3A626B] font-bold text-center">{{ item.quantity }}</td>
-                        <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.subtotal | number:'1.0-0' }}</td>
-                        
-                        <td class="p-4 text-[11px] font-bold" 
-                            [class.text-red-500]="!item.deliveryTime" 
-                            [class.text-[#3A626B]]="item.deliveryTime">
-                            {{ item.deliveryTime ? (item.deliveryTime | date:'dd-MM-yyyy HH:mm') : 'Not yet planned' }}
-                        </td>
-                    </tr>
-                    <tr *ngIf="filteredDeliveries.length === 0">
-                        <td colspan="7" class="p-12 text-center">
-                            <div class="flex flex-col items-center justify-center gap-2">
-                                <span class="text-4xl text-gray-300 material-symbols-outlined">inventory_2</span>
-                                <p class="italic font-medium text-gray-500">No deliveries found</p>
-                                <p class="text-xs text-gray-400">Try adjusting your filters or check back later.</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="overflow-hidden bg-white border border-gray-100 rounded-lg shadow-sm">
+            <div class="w-full overflow-x-auto no-scrollbar">
+                <table class="w-full text-left border-collapse min-w-[800px]">
+                    <thead class="bg-[#EBAD5A]">
+                        <tr>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Cart</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Store</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Products</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Price</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Quantity</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Subtotal</th>
+                            <th class="p-4 text-xs font-bold text-white uppercase">Delivery time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr *ngFor="let item of filteredDeliveries" class="transition-colors hover:bg-gray-50/50">
+                            <td class="p-4 text-sm font-bold text-[#3A626B] relative">
+                                <span *ngIf="!item.deliveryTime" class="absolute w-2 h-2 -translate-y-1/2 bg-red-500 rounded-full left-1 top-1/2"></span>
+                                {{ item.cartDisplayIndex }}
+                            </td>
+                            <td class="p-4 text-[10px] text-gray-500 font-bold uppercase">{{ item.storeName }}</td>
+                            <td class="p-4">
+                                <div class="flex items-center gap-3">
+                                    <img [src]="item.productImg" class="object-cover w-10 h-10 border border-gray-100 rounded-full">
+                                    <span class="text-[11px] font-medium text-[#3A626B]">{{ item.productName }}</span>
+                                </div>
+                            </td>
+                            <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.price | number:'1.0-0' }}</td>
+                            <td class="p-4 text-xs text-[#3A626B] font-bold text-center">{{ item.quantity }}</td>
+                            <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.subtotal | number:'1.0-0' }}</td>
+                            
+                            <td class="p-4 text-[11px] font-bold" 
+                                [class.text-red-500]="!item.deliveryTime" 
+                                [class.text-[#3A626B]]="item.deliveryTime">
+                                {{ item.deliveryTime ? (item.deliveryTime | date:'dd-MM-yyyy HH:mm') : 'Not yet planned' }}
+                            </td>
+                        </tr>
+                        <tr *ngIf="filteredDeliveries.length === 0">
+                            <td colspan="7" class="p-12 text-center">
+                                <div class="flex flex-col items-center justify-center gap-2">
+                                    <span class="text-4xl text-gray-300 material-symbols-outlined">inventory_2</span>
+                                    <p class="italic font-medium text-gray-500">No deliveries found</p>
+                                    <p class="text-xs text-gray-400">Try adjusting your filters or check back later.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>

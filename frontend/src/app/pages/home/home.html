@@ -72,8 +72,10 @@
   </div>
 
   <div *ngIf="centreInfo" class="flex flex-col items-center gap-12 px-8 mx-auto max-w-7xl md:flex-row">
-    <div class="md:w-1/2">
-      <img [src]="centreInfo.logo" class="rounded-xl shadow-xl w-full h-[350px] object-cover" [alt]="centreInfo.nom">
+    <div class="flex justify-center w-full lg:w-1/2">
+      <img [src]="centreInfo.logo" 
+           class="rounded-2xl shadow-2xl w-full max-w-[500px] h-[250px] md:h-[400px] lg:h-[450px] object-cover" 
+           [alt]="centreInfo.nom">
     </div>
     <div class="space-y-6 md:w-1/2">
       <h2 class="text-3xl font-bold text-[#355F68] leading-tight">{{ centreInfo.nom }}</h2>
@@ -123,22 +125,23 @@
     <button 
       *ngIf="canScrollLeft"
       (click)="scroll('left', storeContainer)"
-      class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2">
+      class="absolute left-4 z-30 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2 md:left-2">
       <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
     </button>
     
     <div 
       #storeContainer
       (scroll)="checkScroll(storeContainer)"
-      class="flex w-full gap-8 px-2 py-4 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide no-scrollbar">
+      class="flex w-full gap-4 px-4 py-8 overflow-x-auto md:gap-8 scroll-smooth snap-x snap-mandatory no-scrollbar scrollbar-hide">
       
       <div 
         *ngFor="let store of stores()" 
-        class="flex-none w-[calc((100%-4rem)/3)] snap-start pl-12">
-        <a [routerLink]="['/store', store._id]" class="block transition-transform cursor-pointer hover:scale-105">
+        class="flex-none w-[85%] sm:w-[45%] lg:w-[30%] snap-center md:snap-start">
+        <a [routerLink]="['/store', store._id]" class="block transition-transform duration-300 cursor-pointer hover:scale-105">
           <app-store-card
             [image]="store.logo ? (apiUrl + store.logo) : '/image.png'"
-            [description]="store.nom">
+            [description]="store.nom"
+            class="shadow-sm">
           </app-store-card>
         </a>
       </div>
@@ -149,9 +152,9 @@
     </div>
 
     <button 
-      *ngIf="canScrollRight && stores().length > 3"
+      *ngIf="canScrollRight && stores().length > 1"
       (click)="scroll('right', storeContainer)"
-      class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2">
+      class="absolute right-4 z-30 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2 md:right-2">
       <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
     </button>
   </div>

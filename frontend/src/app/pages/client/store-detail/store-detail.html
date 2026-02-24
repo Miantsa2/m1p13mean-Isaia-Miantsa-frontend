@@ -26,23 +26,24 @@
         </div>
     </section>
 
-    <div id="products-section" class="py-8 bg-white">
+    <div id="products-section" class="py-8 overflow-hidden bg-white">
         <app-section-divider title="OUR PRODUCTS"></app-section-divider>
 
-        <div class="flex flex-wrap justify-center gap-4 px-4 my-8">
+        <div class="flex items-center justify-start gap-4 px-6 pb-2 my-8 overflow-x-auto flex-nowrap md:flex-wrap no-scrollbar md:justify-center">
             <button 
                 (click)="filterByPromo()"
                 [ngClass]="showOnlyPromos ? 'bg-[#86A38B] text-white border-[#86A38B]' : 'text-[#86A38B] border-[#86A38B] hover:bg-[#86A38B] hover:text-white'"
-                class="flex items-center gap-2 px-6 py-2 text-sm font-bold uppercase transition-all border rounded-full shadow-sm">
+                class="flex items-center flex-none gap-2 px-6 py-2 text-sm font-bold uppercase transition-all border rounded-full shadow-sm whitespace-nowrap">
                 <span class="text-sm material-symbols-outlined">sell</span>
                 On Sale
             </button>
 
             <div class="hidden w-px h-8 bg-gray-200 sm:block"></div>
+            
             <button 
                 (click)="filterByCategory('all')"
                 [ngClass]="selectedCategory === 'all' ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
-                class="px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm">
+                class="flex-none px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm whitespace-nowrap">
                 All Products
             </button>
 
@@ -50,7 +51,7 @@
                 *ngFor="let cat of productCategories"
                 (click)="filterByCategory(cat._id)"
                 [ngClass]="selectedCategory === cat._id ? 'bg-[#D9B570] text-white' : 'text-[#1A4A54] hover:bg-gray-50'"
-                class="px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm">
+                class="flex-none px-8 py-2 text-sm font-bold uppercase transition-all border border-transparent rounded-full shadow-sm whitespace-nowrap">
                 {{ cat.nom }}
             </button>
         </div>
@@ -59,18 +60,18 @@
             <button 
                 *ngIf="canScrollLeft"
                 (click)="scroll('left', productContainer)"
-                class="absolute left-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2">
+                class="absolute left-4 z-30 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform -translate-x-1/2 md:left-2">
                 <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_left</span>
             </button>
             
             <div 
                 #productContainer
                 (scroll)="checkScroll(productContainer)"
-                class="flex w-full gap-8 px-2 py-4 overflow-x-auto product-container scroll-smooth snap-x snap-mandatory no-scrollbar">
+                class="flex w-full gap-4 px-2 py-4 overflow-x-auto md:gap-8 product-container scroll-smooth snap-x snap-mandatory no-scrollbar">
             
                 <div 
                     *ngFor="let item of filteredProducts()" 
-                    class="flex-none w-[calc((100%-4rem)/3)] snap-start">
+                    class="flex-none w-[80%] sm:w-[45%] lg:w-[30%] snap-center md:snap-start">
                     <app-product-card
                         [id]="item._id"
                         [title]="item.nom"
@@ -88,9 +89,9 @@
             </div>
 
             <button 
-                *ngIf="canScrollRight && filteredProducts().length > 3"
+                *ngIf="canScrollRight && filteredProducts().length > 1"
                 (click)="scroll('right', productContainer)"
-                class="absolute right-0 z-20 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2">
+                class="absolute right-4 z-30 bg-[#EBAD5A] p-2 rounded-full shadow-lg hover:bg-[#d49a4d] transition-all transform translate-x-1/2 md:right-2">
                 <span class="flex items-center justify-center text-white material-symbols-outlined">chevron_right</span>
             </button>
         </div>
