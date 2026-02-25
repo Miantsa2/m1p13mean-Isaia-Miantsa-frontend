@@ -116,28 +116,31 @@ export class Events implements OnInit {
   }
 
   addEvent() {
-    this.evenementService.addEvent(this.newEvent).subscribe({
+    const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.addEvent(payload).subscribe({
       next: (res) => {
         console.log('Success event create!');
         this.loadEvents(); 
         this.resetEventForm();
-        this. resetEventForm();
         this.closeCreateModal();
       },
-
       error: (err) => alert(err.error.message)
     });
   }
 
-  formatDateForInputUTC(dateInput: string | Date): string {
-  const d = new Date(dateInput);
-  const pad = (n: number) => n.toString().padStart(2, '0');
-  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
-}
 
   
   updateEvent() {
-    this.evenementService.updateEvent(this.currentEditingId, this.newEvent).subscribe({
+     const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.updateEvent(this.currentEditingId, payload).subscribe({
       next: () => {
         this.loadEvents();
         this.resetEventForm();
@@ -213,8 +216,8 @@ export class Events implements OnInit {
       type: event.type,
       statut: event.statut,
       description: event.description,
-      dateDebut:  this.formatDateForInputUTC(event.dateDebut),
-      dateFin:  this.formatDateForInputUTC(event.dateFin)
+      dateDebut: this.formatDateForInput(event.dateDebut),
+      dateFin: this.formatDateForInput(event.dateFin)
     };
     this.currentEditingId= event._id
     this.isEditModalOpen = true; 
