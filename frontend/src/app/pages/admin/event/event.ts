@@ -127,12 +127,6 @@ export class Events implements OnInit {
     });
   }
 
-  formatDateForInputUTC(dateInput: string | Date): string {
-  const d = new Date(dateInput);
-  const pad = (n: number) => n.toString().padStart(2, '0');
-  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
-}
-
 
   
   updateEvent() {
@@ -212,8 +206,8 @@ export class Events implements OnInit {
       type: event.type,
       statut: event.statut,
       description: event.description,
-      dateDebut: this.formatDateForInputUTC(event.dateDebut),
-      dateFin: this.formatDateForInputUTC(event.dateFin)
+      dateDebut: this.formatDateForInput(event.dateDebut),
+      dateFin: this.formatDateForInput(event.dateFin)
     };
     this.currentEditingId= event._id
     this.isEditModalOpen = true; 
