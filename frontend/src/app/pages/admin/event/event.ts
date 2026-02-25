@@ -116,7 +116,14 @@ export class Events implements OnInit {
   }
 
   addEvent() {
-    this.evenementService.addEvent(this.newEvent).subscribe({
+    
+    const payload = {
+      ...this.newEvent,
+      // On s'assure que l'objet envoyé contient des dates au format ISO string
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.addEvent(payload).subscribe({
       next: (res) => {
         console.log('Success event create!');
         this.loadEvents(); 
