@@ -119,7 +119,6 @@ export class Events implements OnInit {
     
     const payload = {
       ...this.newEvent,
-      // On s'assure que l'objet envoyé contient des dates au format ISO string
       dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
       dateFin: new Date(this.newEvent.dateFin).toISOString()
     };
@@ -137,7 +136,12 @@ export class Events implements OnInit {
 
   
   updateEvent() {
-    this.evenementService.updateEvent(this.currentEditingId, this.newEvent).subscribe({
+     const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.updateEvent(this.currentEditingId, payload).subscribe({
       next: () => {
         this.loadEvents();
         this.resetEventForm();
