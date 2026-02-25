@@ -128,6 +128,12 @@ export class Rooms implements OnInit {
         console.log('Success!');
         this.loadRooms(); 
         this.closeCreateModal();
+        this.newRoom = {
+        tailleMetreCarre: 0,
+        statut: 'libre',
+        reference:''
+        
+        };
       },
       error: (err) => console.error('Erreur lors de la création', err)
     });
@@ -220,8 +226,14 @@ export class Rooms implements OnInit {
     this.salleService.updateRoom(this.currentEditingId, this.newRoom).subscribe({
       next: () => {
         this.loadRooms();
-        this.resetFormEvent()
+        this.resetFormEvent();
         this.closeEditModal();
+        this.newRoom = {
+          tailleMetreCarre: 0,
+          statut: 'libre',
+          reference:''
+          
+        };
       },
       error: (err) => console.error(err)
     });

@@ -116,7 +116,12 @@ export class Events implements OnInit {
   }
 
   addEvent() {
-    this.evenementService.addEvent(this.newEvent).subscribe({
+    const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.addEvent(payload).subscribe({
       next: (res) => {
         console.log('Success event create!');
         this.loadEvents(); 
@@ -130,7 +135,12 @@ export class Events implements OnInit {
 
   
   updateEvent() {
-    this.evenementService.updateEvent(this.currentEditingId, this.newEvent).subscribe({
+     const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+    this.evenementService.updateEvent(this.currentEditingId, payload).subscribe({
       next: () => {
         this.loadEvents();
         this.resetEventForm();
