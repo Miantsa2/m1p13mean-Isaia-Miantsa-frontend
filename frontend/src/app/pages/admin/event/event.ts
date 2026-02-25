@@ -116,7 +116,6 @@ export class Events implements OnInit {
   }
 
   addEvent() {
-    
     const payload = {
       ...this.newEvent,
       dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
