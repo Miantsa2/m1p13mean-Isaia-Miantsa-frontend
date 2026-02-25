@@ -121,8 +121,10 @@ export class Events implements OnInit {
         console.log('Success event create!');
         this.loadEvents(); 
         this.resetEventForm();
+        this. resetEventForm();
         this.closeCreateModal();
       },
+
       error: (err) => alert(err.error.message)
     });
   }
