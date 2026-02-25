@@ -104,7 +104,7 @@
     <div class="sticky top-0 flex flex-col items-center h-fit">
       <div class="relative group">
         <div class="w-24 h-24 overflow-hidden border-2 border-gray-100 rounded-full shadow-sm">
-          <img [src]="logoPreview || (storeData.logo ? ('http://localhost:5000' + storeData.logo) : '/image.png')" 
+          <img [src]="logoPreview || (storeData.logo ? (apiUrl + storeData.logo) : '/image.png')" 
                alt="Logo" 
                class="object-cover w-full h-full">
         </div>

@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth';
 import { FilterService } from '../../services/filter-service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,8 @@ import { FilterService } from '../../services/filter-service';
 })
 export class Header {
   @Output() onToggle = new EventEmitter<void>();
-
+  readonly apiUrl = environment.apiUrl;
+  
   availableDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   constructor(
     private authService: AuthService, 
