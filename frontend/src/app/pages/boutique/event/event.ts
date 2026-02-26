@@ -138,8 +138,13 @@ export class StoresEvent implements OnInit {
 
   addEvent() {
     this.newEvent.boutique = this.boutiquecurrentId;
-    console.log("Creating event with data:", this.newEvent);
-    this.evenementService.addEvent(this.newEvent).subscribe({
+    const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };
+   
+    this.evenementService.addEvent(payload).subscribe({
       next: (res) => {
          const notif = {
           titre: 'Event Request',
@@ -166,7 +171,12 @@ export class StoresEvent implements OnInit {
 
   
   updateEvent() {
-    this.evenementService.updateEvent(this.currentEditingId, this.newEvent).subscribe({
+     const payload = {
+      ...this.newEvent,
+      dateDebut: new Date(this.newEvent.dateDebut).toISOString(),
+      dateFin: new Date(this.newEvent.dateFin).toISOString()
+    };  
+    this.evenementService.updateEvent(this.currentEditingId, payload).subscribe({
       next: () => {
         this.loadEvents();
         this.resetEventForm();
