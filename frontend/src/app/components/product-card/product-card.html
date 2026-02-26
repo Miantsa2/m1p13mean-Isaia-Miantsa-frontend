@@ -42,7 +42,7 @@
           'text-[11px] text-[#D9B570] line-through opacity-70': isPromoActive, 
           'text-sm font-medium text-[#3A626B]': !isPromoActive
         }">
-        Ar {{ price | number:'1.0-0' }}
+        € {{ price | number:'1.0-0' }}
       </span>
 
       <span *ngIf="isPromoActive" class="text-sm font-bold text-[#3A626B]">

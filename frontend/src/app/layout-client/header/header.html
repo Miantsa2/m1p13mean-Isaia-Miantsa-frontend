@@ -43,14 +43,34 @@
               <span class="absolute text-sm text-gray-400 -translate-y-1/2 material-symbols-outlined right-3 top-1/2">search</span>
             </div>
 
-            <div class="flex items-center gap-3">
-              <span routerLink="/cart" class="material-symbols-outlined text-[#EBAD5A] text-2xl cursor-pointer">shopping_cart</span>
-              <span routerLink="/livraison" class="material-symbols-outlined text-[#EBAD5A] text-2xl cursor-pointer">delivery_truck_bolt</span>
-            </div>
+            <div class="flex items-center gap-5">
+              <div class="relative flex flex-col items-center group">
+                <span routerLink="/cart" class="material-symbols-outlined text-[#EBAD5A] text-2xl cursor-pointer transition-transform group-hover:scale-110">
+                  shopping_cart
+                </span>
+                <span class="absolute -bottom-8 scale-0 transition-all rounded bg-[#1A4A54] p-1 text-[10px] text-white group-hover:scale-100 whitespace-nowrap shadow-lg">
+                  My Cart
+                </span>
+              </div>
 
-            <button *ngIf="isLoggedIn" (click)="logout()" class="hidden lg:block text-[#1A4A54] hover:text-red-500">
-              <span class="material-symbols-outlined">logout</span>
-            </button>
+              <div class="relative flex flex-col items-center group">
+                <span routerLink="/livraison" class="material-symbols-outlined text-[#EBAD5A] text-2xl cursor-pointer transition-transform group-hover:scale-110">
+                  delivery_truck_bolt
+                </span>
+                <span class="absolute -bottom-8 scale-0 transition-all rounded bg-[#1A4A54] p-1 text-[10px] text-white group-hover:scale-100 whitespace-nowrap shadow-lg">
+                  My Delivery
+                </span>
+              </div>
+
+              <div *ngIf="isLoggedIn" class="relative flex flex-col items-center group">
+                <button (click)="logout()" class="hidden lg:block text-[#1A4A54] hover:text-red-500 transition-colors">
+                  <span class="material-symbols-outlined transition-transform group-hover:rotate-12">logout</span>
+                </button>
+                <span class="absolute -bottom-8 scale-0 transition-all rounded bg-red-500 p-1 text-[10px] text-white group-hover:scale-100 whitespace-nowrap shadow-lg">
+                  Logout
+                </span>
+              </div>
+            </div>
 
             <app-button-primaire *ngIf="!isLoggedIn" class="hidden sm:block" text="VISIT" [route]="['/login']"></app-button-primaire>
 
@@ -124,14 +144,27 @@
               </span>
             </div>
 
-            <div class="flex items-center gap-3">
-              <div class="flex items-center cursor-pointer" routerLink="/cart">
-                <span class="material-symbols-outlined text-[#EBAD5A] text-2xl md:text-3xl">shopping_cart</span>
+            <div class="flex items-center gap-5">
+              <div class="relative flex flex-col items-center group cursor-pointer" routerLink="/cart">
+                  <div class="flex items-center transition-transform duration-200 group-hover:scale-110">
+                      <span class="material-symbols-outlined text-[#EBAD5A] text-2xl md:text-3xl">shopping_cart</span>
+                  </div>
+                  <span class="absolute -bottom-9 scale-0 transition-all duration-200 rounded bg-[#1A4A54] px-2 py-1 text-[10px] font-medium text-white group-hover:scale-100 whitespace-nowrap shadow-xl z-50">
+                      My Cart
+                      <span class="absolute -top-1 left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-[#1A4A54]"></span>
+                  </span>
               </div>
-              <div class="flex items-center cursor-pointer" routerLink="/livraison">
-                <span class="material-symbols-outlined text-[#EBAD5A] text-2xl md:text-3xl">delivery_truck_bolt</span>
+
+              <div class="relative flex flex-col items-center group cursor-pointer" routerLink="/livraison">
+                  <div class="flex items-center transition-transform duration-200 group-hover:scale-110">
+                      <span class="material-symbols-outlined text-[#EBAD5A] text-2xl md:text-3xl">delivery_truck_bolt</span>
+                  </div>
+                  <span class="absolute -bottom-9 scale-0 transition-all duration-200 rounded bg-[#1A4A54] px-2 py-1 text-[10px] font-medium text-white group-hover:scale-100 whitespace-nowrap shadow-xl z-50">
+                      My Delivery
+                      <span class="absolute -top-1 left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-b-4 border-transparent border-b-[#1A4A54]"></span>
+                  </span>
               </div>
-            </div>
+          </div>
 
             <button (click)="isMenuOpen = !isMenuOpen" class="flex items-center lg:hidden text-[#1A4A54]">
               <span class="text-3xl material-symbols-outlined">{{ isMenuOpen ? 'close' : 'menu' }}</span>
