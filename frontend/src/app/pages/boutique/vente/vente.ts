@@ -120,7 +120,7 @@ export class Vente implements OnInit {
     this.cartService.updateRecuperationDate(
       this.selectedSale.panierId,
       this.selectedSale.produitId,
-      this.deliveryDate
+      new Date(this.deliveryDate).toISOString()
     ).subscribe({
       next: () => {
         alert("Delivery planned!");
