@@ -101,12 +101,16 @@ export class Charge {
   createCharge() {
     const bId = this.boutiqueService.currentBoutique()?._id;  
     if (bId) {
-      this.newCharge.boutique = bId;  
-      console.log('Creating charge with data:', this.newCharge);
-      this.chargeService.addCharge(this.newCharge).subscribe({
+      this.newCharge.boutique = bId; 
+       const payload = {
+        ...this.newCharge,
+        date_limite: new Date(this.newCharge.date_limite).toISOString(),
+      };   
+      this.chargeService.addCharge(payload).subscribe({
         next: () => {
           this.loadCharge(bId);
           this.closeCreateModal();
+          this.resetChargeForm()
         },
         error: (err) => console.error('Erreur création charge', err)
       });
@@ -116,8 +120,12 @@ export class Charge {
 
 
   updateCharge() {
-
-    this.chargeService.updateCharge(this.currentEditingId, this.newCharge).subscribe({
+   
+    const payload = {
+      ...this.newCharge,
+      date_limite: new Date(this.newCharge.date_limite).toISOString(),
+    };  
+    this.chargeService.updateCharge(this.currentEditingId, payload).subscribe({
       next: () => {
         const bId = this.boutiqueService.currentBoutique()?._id;
         if (bId) this.loadCharge(bId);
