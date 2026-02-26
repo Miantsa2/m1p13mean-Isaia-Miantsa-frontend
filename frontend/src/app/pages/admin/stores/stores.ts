@@ -29,6 +29,7 @@ export class Stores {
   form: any = {
     nom: '',
     categorie: '',
+    newCategoryName: '',
     salle: '',
     email: '',
     password: '',
@@ -93,15 +94,29 @@ export class Stores {
   }
 
   createStore() {
-    // create user
+    if (this.form.categorie === 'NEW_CATEGORY' && this.form.newCategoryName) {
+      this.categorieService.createCategory({ nom: this.form.newCategoryName }).subscribe({
+        next: (newCat: any) => {
+          this.form.categorie = newCat._id; 
+          this.proceedWithStoreCreation(); 
+          this.loadCategories(); 
+        },
+        error: err => console.error("Erreur création catégorie", err)
+      });
+    } else {
+      this.proceedWithStoreCreation();
+    }
+  }
+
+  private proceedWithStoreCreation() {
     const userPayload = {
       email: this.form.email,
       password: this.form.password,
       role: 'boutique'
     };
+
     this.userService.createUser(userPayload).subscribe({
       next: (user: any) => {
-        // create boutique
         const boutiquePayload = {
           user: user._id,
           nom: this.form.nom,
@@ -109,17 +124,23 @@ export class Stores {
           categorie: this.form.categorie,
           salle: this.form.salle
         };
+
         this.boutiqueService.createBoutique(boutiquePayload).subscribe({
           next: () => {
             this.loadBoutiques();
             this.loadFreeRooms();
             this.closeAddModal();
+            this.resetForm(); 
           },
           error: err => console.error(err)
         });
       },
       error: err => console.error(err)
     });
+  }
+
+  private resetForm() {
+    this.form = { nom: '', categorie: '', newCategoryName: '', salle: '', email: '', password: '', telephone: '' };
   }
 
   // Modal ajout

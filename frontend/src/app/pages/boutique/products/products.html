@@ -194,7 +194,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="text-[13px] font-medium text-[#697F84]">Unit Price (Ar)</label>
+            <label class="text-[13px] font-medium text-[#697F84]">Unit Price (€)</label>
             <input type="number" 
                    [(ngModel)]="newPrice"
                    name="prix"
@@ -227,7 +227,7 @@
         <div class="flex flex-col gap-2">
             <label class="text-[13px] font-medium text-[#697F84]">Price after discount</label>
             <div class="px-4 py-2.5 bg-[#F1F4F5] border border-[#7FAE7D] rounded-lg text-[#3A626B] font-bold text-sm">
-                Ar {{ discountedPrice.toLocaleString() }}
+                € {{ discountedPrice.toLocaleString() }}
             </div>
         </div>
 

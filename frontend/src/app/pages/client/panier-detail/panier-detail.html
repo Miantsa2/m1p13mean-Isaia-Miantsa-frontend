@@ -40,7 +40,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-center text-[11px] font-bold text-[#3A626B] whitespace-nowrap">
-                  Ar {{ item.sous_total / item.quantite | number:'1.0-0' }}
+                  € {{ item.sous_total / item.quantite | number:'1.0-0' }}
                 </td>
 
                 <td class="px-6 py-6 text-center">
@@ -60,7 +60,7 @@
                 </td>
 
                 <td class="px-6 py-6 text-right text-[11px] font-bold text-[#3A626B] whitespace-nowrap">
-                  Ar {{ item.sous_total | number:'1.0-0' }}
+                  € {{ item.sous_total | number:'1.0-0' }}
                 </td>
               </tr>
             </tbody>
@@ -87,7 +87,7 @@
           
           <div class="flex justify-between items-center mb-10 text-xs font-bold text-[#3A626B] whitespace-nowrap">
             <span class="tracking-widest">TOTAL</span>
-            <span class="ml-4 text-sm">Ar {{ cartService.currentPanier()?.total | number:'1.0-0' }}</span>
+            <span class="ml-4 text-sm">€ {{ cartService.currentPanier()?.total | number:'1.0-0' }}</span>
           </div>
 
           <button [routerLink]="['/delivery']" 

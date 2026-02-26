@@ -121,7 +121,7 @@ export class Products  {
             ...p,
             prixInitial: prixInitial, 
             isPromoActive: promoValide,
-            prix: `Ar ${prixFinal.toLocaleString()}`,
+            prix: `€ ${prixFinal.toLocaleString()}`,
             stock: stockStatus
           };
         });
@@ -319,7 +319,7 @@ export class Products  {
               ...p, 
               promotions: null,
               isPromoActive: false,
-              prix: `Ar ${p.prixInitial.toLocaleString()}`
+              prix: `€ ${p.prixInitial.toLocaleString()}`
             };
           }
           return p;
