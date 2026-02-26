@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "baseHref": "/m1p13mean-isaia-miantsa/",
+            "baseHref": "/dist/frontend/browser",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
