@@ -13,6 +13,7 @@ import * as L from 'leaflet';
   standalone: true,
   imports: [Footer, Header,CommonModule],
   templateUrl: './livraison.html',
+  styleUrls: ['./livraison.css'],
 })
 export class Livraison implements OnInit {
   readonly apiUrl = environment.apiUrl;

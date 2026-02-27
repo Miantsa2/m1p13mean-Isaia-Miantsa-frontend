@@ -71,7 +71,7 @@ export class Charge {
         _id: charge._id,
         reference: charge.reference,
         description: charge.description,
-        valeur: charge.valeur, 
+        valeur: charge.valeur.toFixed(2), 
         du_centre: charge.du_centre,
         statut: charge.statut,
         date_limite: charge.date_limite
