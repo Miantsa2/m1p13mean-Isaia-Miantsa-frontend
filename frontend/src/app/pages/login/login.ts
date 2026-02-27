@@ -17,8 +17,9 @@ import { NgForm } from '@angular/forms';
   // password = signal('');
 
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
+  role: string='';
+  email: string = 'admin@test.com';
+  password: string = 'admin';
 
   constructor(private authService: AuthService, private router: Router) {}
   onLogin(form: NgForm) {
