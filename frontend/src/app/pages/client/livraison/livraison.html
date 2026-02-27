@@ -87,13 +87,13 @@
                             <td class="p-4 text-[10px] text-gray-500 font-bold uppercase">{{ item.storeName }}</td>
                             <td class="p-4">
                                 <div class="flex items-center gap-3">
-                                    <img [src]="item.productImg" class="object-cover w-10 h-10 border border-gray-100 rounded-full">
+                                    <img [src]="getProductImage(item.productImg)" class="object-cover w-10 h-10 border border-gray-100 rounded-full">
                                     <span class="text-[11px] font-medium text-[#3A626B]">{{ item.productName }}</span>
                                 </div>
                             </td>
-                            <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.price | number:'1.0-0' }}</td>
+                            <td class="p-4 text-xs text-[#3A626B] font-bold">€ {{ item.price | number:'1.0-0' }}</td>
                             <td class="p-4 text-xs text-[#3A626B] font-bold text-center">{{ item.quantity }}</td>
-                            <td class="p-4 text-xs text-[#3A626B] font-bold">Ar {{ item.subtotal | number:'1.0-0' }}</td>
+                            <td class="p-4 text-xs text-[#3A626B] font-bold">€ {{ item.subtotal | number:'1.0-0' }}</td>
                             
                             <td class="p-4 text-[11px] font-bold" 
                                 [class.text-red-500]="!item.deliveryTime" 

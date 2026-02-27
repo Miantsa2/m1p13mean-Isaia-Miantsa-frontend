@@ -121,7 +121,7 @@ export class Products  {
             ...p,
             prixInitial: prixInitial, 
             isPromoActive: promoValide,
-            prix: `Ar ${prixFinal.toLocaleString()}`,
+            prix: `€ ${prixFinal.toLocaleString()}`,
             stock: stockStatus
           };
         });
@@ -319,7 +319,7 @@ export class Products  {
               ...p, 
               promotions: null,
               isPromoActive: false,
-              prix: `Ar ${p.prixInitial.toLocaleString()}`
+              prix: `€ ${p.prixInitial.toLocaleString()}`
             };
           }
           return p;
@@ -349,6 +349,20 @@ export class Products  {
       produit: this.selectedProduct,
       sponsorData: this.sponsorData
     };
+    const debut = new Date(this.sponsorData.dateDebut);
+    const fin = new Date(this.sponsorData.dateFin);
+  
+    const duree = Math.ceil((fin.getTime() - debut.getTime()) / (1000 * 60 * 60 * 24));
+    
+    const calculatedAmount = this.selectedProduct.prixInitial * 0.01 * duree;
+    console.log(calculatedAmount);
+
+    if (calculatedAmount < 0.5) {   
+      alert(`The sponsoring amount total (${calculatedAmount.toFixed(2)}€) is too low  (min 0.50€).`);
+      console.log(calculatedAmount);
+      return;
+    }
+
 
     this.closeSponsorModal();
 

@@ -4,6 +4,7 @@ import { Footer } from '../../../layout-client/footer/footer';
 import { CentreService } from '../../../services/centre';
 import { CartService } from '../../../services/cart-service';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 import * as L from 'leaflet';
 
 
@@ -12,8 +13,11 @@ import * as L from 'leaflet';
   standalone: true,
   imports: [Footer, Header,CommonModule],
   templateUrl: './livraison.html',
+  styleUrls: ['./livraison.css'],
 })
 export class Livraison implements OnInit {
+  readonly apiUrl = environment.apiUrl;
+
   footerData: any = {};
   allDeliveries: any[] = [];
   filteredDeliveries: any[] = [];
@@ -134,5 +138,15 @@ export class Livraison implements OnInit {
     setTimeout(() => {
         this.map.invalidateSize();
       }, 200);
+    }
+
+    getProductImage(imagePath: string): string {
+      if (!imagePath) return '/image.png';
+      
+      if (imagePath.startsWith('/uploads')) {
+        return `${this.apiUrl}${imagePath}`;
+      }
+      
+      return imagePath;
     }
 }
