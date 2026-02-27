@@ -1,8 +1,7 @@
 
  #map {
-  height: 500px; /* Ou 80vh pour prendre 80% de l'écran */
+  height: 500px; 
   width: 100%;
-  display: block;
-  z-index: 0;     /* map derrière les modals */
+  display: block; /* map derrière les modals */
   position: relative;
 }
