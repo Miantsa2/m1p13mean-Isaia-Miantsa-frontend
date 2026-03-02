@@ -57,7 +57,6 @@ export class Charge {
       const boutique = this.boutiqueService.currentBoutique();
       
       if (boutique && boutique._id) {
-        console.log("Boutique chargée :", boutique._id);
         this.loadCharge(boutique._id);
       }
     });
@@ -82,7 +81,6 @@ export class Charge {
           : '—'
       }));
 
-      console.log('Charges chargées:', this.charges);
     },
     error: (err) => {
       console.error('Erreur lors du chargement des charges', err);
@@ -180,7 +178,6 @@ export class Charge {
 
 
   openEditModal(charge: any) {
-    console.log('Editing charge:', charge);
     this.newCharge = {
       reference: charge.reference,
       description: charge.description,

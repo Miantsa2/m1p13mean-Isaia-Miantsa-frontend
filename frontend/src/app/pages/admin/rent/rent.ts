@@ -57,7 +57,6 @@ export class RentAdmin {
           this.openAddModal(info.dateStr);
         }
       };
-      console.log('Loyers payés chargés :', events);
     });
   }
   
@@ -140,7 +139,6 @@ export class RentAdmin {
     const newcharge = {
       statut: 'paye'
     };
-   console.log('Updating charge with data:', newcharge);
     this.chargeService.updateCharge(currentEditingId, newcharge).subscribe({
       next: (updatedCharge : any) => {
           const notif = {
@@ -167,7 +165,6 @@ export class RentAdmin {
 
   
   createCharge() {
-      console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
         next: (createdCharge : any) => {
           this.loadBoutiquesPayees(this.mois, this.annee);
@@ -177,7 +174,6 @@ const dateLimite = new Date(createdCharge.date_limite); // convertit ISO string 
           titre: 'Rent Validation',
           description: `Your rent of ${formattedDate} has been paied`
         };
-        console.log('boutique', createdCharge.boutique);
 
         this.boutiqueService.addNotif(createdCharge.boutique, notif).subscribe({
           next: () => {

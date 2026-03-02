@@ -95,11 +95,8 @@ export class StoresEvent implements OnInit {
 
 
   loadEvents(): void {
-    console.log("Boutique ID:", this.boutique);
     this.evenementService.getEventsByBoutiqueId(this.boutique._id).subscribe({
       next: (res) => {
-        console.log(res);
-
         this.events = res.map((event: any) => ({
           _id: event._id,
           reference: event.reference,
@@ -124,7 +121,6 @@ export class StoresEvent implements OnInit {
       next: (res) => {
         this.currentCenter = res[0];
         this.currentCenterId = res[0]._id;
-        console.log("Centre chargé :", this.currentCenter);
       }
     });
   }
@@ -159,7 +155,6 @@ export class StoresEvent implements OnInit {
             console.error('Erreur notification', err);
           }
         });
-        console.log('Success event create!');
         this.loadBoutique(); 
         this.resetEventForm();
         this.closeCreateModal();
@@ -223,7 +218,6 @@ export class StoresEvent implements OnInit {
           dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
           dateFinFormatted: new Date(event.dateFin).toLocaleString()
         }));
-        console.log(this.events);
       },
       error: (err) => console.error(err)
     });

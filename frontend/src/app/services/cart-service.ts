@@ -65,7 +65,18 @@ export class CartService {
       clientId,
       produitId,
       prix
-    }).subscribe(() => this.refreshCart());
+    }).subscribe({
+      next: () => {
+        this.refreshCart();
+      },
+      error: (err) => {
+        if (err.status === 400) {
+          alert(err.error.message || "Insufficient stock!");
+        } else {
+          console.error("Error adding to cart", err);
+        }
+      }
+    });
   }
 
   updateQuantity(produitId: string, nouvelleQuantite: number, prix: number) {

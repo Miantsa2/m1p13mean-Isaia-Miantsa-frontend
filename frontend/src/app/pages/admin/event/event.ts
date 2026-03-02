@@ -64,8 +64,6 @@ export class Events implements OnInit {
     const params: any = { type : 'centre' };
     this.evenementService.getEventsByType(params).subscribe({
       next: (res) => {
-        console.log(res);
-
         this.events = res.map((event: any) => ({
           _id: event._id,
           reference: event.reference,
@@ -75,8 +73,6 @@ export class Events implements OnInit {
           dateDebutFormatted: new Date(event.dateDebut).toLocaleString(),
           dateFinFormatted: new Date(event.dateFin).toLocaleString()
         }));
-        console.log(this.events);
-
       },
       error: (err) => console.error(err)
     });
@@ -101,7 +97,6 @@ export class Events implements OnInit {
           dateFinFormatted: new Date(event.dateFin).toLocaleString()
 
         }));
-        console.log(this.events);
       },
       error: (err) => console.error(err)
     });
@@ -123,7 +118,6 @@ export class Events implements OnInit {
     };
     this.evenementService.addEvent(payload).subscribe({
       next: (res) => {
-        console.log('Success event create!');
         this.loadEvents(); 
         this.resetEventForm();
         this.closeCreateModal();
@@ -207,10 +201,6 @@ export class Events implements OnInit {
 
   // edit modal
   openEditModal(event: any) {
-    console.log(event.dateDebut);
-    console.log(event.dateFin);
-
-
     this.newEvent = {
       reference: event.reference,
       type: event.type,
