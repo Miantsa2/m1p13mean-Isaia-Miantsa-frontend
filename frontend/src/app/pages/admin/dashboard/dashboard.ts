@@ -148,7 +148,7 @@ export class DashboardAdmin implements OnInit {
 
     this.dashboardService.getChiffreAffaire(year, month).subscribe({
       next: (res) => {
-        this.chiffreAffaire = res.chiffre_affaire;
+        this.chiffreAffaire = Math.round(res.chiffre_affaire);
         this.loading = false;
       }
     });
