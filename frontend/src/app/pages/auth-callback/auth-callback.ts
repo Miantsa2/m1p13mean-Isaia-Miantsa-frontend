@@ -20,6 +20,8 @@ export class AuthCallbackComponent implements OnInit {
     const token = this.route.snapshot.queryParamMap.get('token');
     const role = this.route.snapshot.queryParamMap.get('role');
 
+    console.log(token,role)
+
     if (token && role) {
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
