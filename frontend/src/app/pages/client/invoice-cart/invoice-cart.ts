@@ -63,7 +63,7 @@ export class InvoiceCart {
   private async initStripe() {
     this.stripe = await loadStripe(this.key);
     if (!this.stripe) {
-      console.error("Impossible de charger Stripe");
+      console.error("Impossible to charge Stripe");
       return;
     }
 

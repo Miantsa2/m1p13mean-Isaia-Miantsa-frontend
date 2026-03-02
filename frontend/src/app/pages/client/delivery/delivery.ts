@@ -117,9 +117,7 @@ export class Delivery implements OnInit {
       fillColor: 'rgb(19, 202, 123)',   
       fillOpacity: 0.5
     }).addTo(this.map)
-    
-    console.log('Position:', lat, lng);
-  });
+    });
   }
  
 

@@ -124,7 +124,6 @@ export class Rent {
       description: 'Rent of the month'
     };
     this.errorMessage='';
-    console.log('date_limite', this.paymentForm.date_limite);
 
     if (this.boutiqueId) {
       this.boutiqueService.getLoyer(this.boutiqueId).subscribe({
@@ -174,7 +173,6 @@ export class Rent {
 
    createCharge() {
       this.paymentForm.statut = 'paye'; 
-      console.log('Creating charge with data:', this.paymentForm);
       this.chargeService.addCharge(this.paymentForm).subscribe({
          next: () => {
           this.loadLoyer(this.boutiqueService.currentBoutique()?._id, this.mois, this.annee);
@@ -203,7 +201,6 @@ export class Rent {
     const newcharge = {
       statut: 'paye'
     };
-   console.log('Updating charge with data:', newcharge);
     this.chargeService.updateCharge(currentEditingId, newcharge).subscribe({
       next: () => {
         const notif = {

@@ -80,9 +80,6 @@ export class InvoiceSponsor {
 
         this.selectedProduct = state.produit;
         this.sponsorData = state.sponsorData;
-        console.log(state);
-
-
   }
 
 
@@ -177,7 +174,6 @@ export class InvoiceSponsor {
     };
       this.produitService.updateProduit(this.selectedProduct._id, body).subscribe({
         next: () => {
-          console.log('update sponsor success');
           const notif = {
             titre: 'Sponsor Payement',
             description: `Store  ${this.boutiqueService.currentBoutique()?.nom} has paid a sponsor for ${this.selectedProduct.reference}. `
