@@ -80,8 +80,6 @@ export class Rooms implements OnInit {
   loadRooms(): void {
     this.salleService.getRoom().subscribe({
       next: (res) => {
-        console.log(res);
-
         this.rooms = res.map((room: any) => ({
           _id: room._id,
           reference: room.reference,
@@ -89,23 +87,17 @@ export class Rooms implements OnInit {
           date: new Date(room.createdAt).toLocaleDateString(),
           status: room.statut === 'libre' ? 'Free' : 'Occupied'
         }));
-        //this.cdr.detectChanges();
-        console.log(this.rooms);
-
       },
       error: (err) => console.error(err)
     });
   }
 
   loadCentre(): void {
-    console.log('Loading centre...');
     this.centreService.getCenter().subscribe({
       next: (res) => {
         const centreData = res[0];
         this.meterPrice = centreData.prixMetreCarre;
         this.centreId= centreData._id;
-        console.log('Meter price loaded:', res);
-        //this.cdr.detectChanges();
       },
       
       error: (err) => {
@@ -125,7 +117,6 @@ export class Rooms implements OnInit {
   addRoom() {
     this.salleService.addRoom(this.newRoom).subscribe({
       next: (res) => {
-        console.log('Success!');
         this.loadRooms(); 
         this.closeCreateModal();
         this.newRoom = {
@@ -145,7 +136,6 @@ export class Rooms implements OnInit {
 
     this.centreService.updatePrice(this.centreId, this.meterPrice).subscribe({
       next: (res) => {
-        console.log('Prix mis à jour !');
         this.closePriceModal();
         this.loadCentre(); 
       },
@@ -183,8 +173,6 @@ export class Rooms implements OnInit {
   }
 
   createStore() {
-    console.log("Données du formulaire avant envoi :", this.form);
-
     if (!this.form.email || !this.form.password) {
       alert("Veuillez remplir l'email et le mot de passe.");
       return;

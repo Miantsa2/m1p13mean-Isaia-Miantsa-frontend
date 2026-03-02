@@ -74,7 +74,6 @@ export class EventStore implements OnInit {
   loadEventStores(): void {
   this.evenementService.getEventsByType('boutique').subscribe({
     next: (res) => {
-      console.log(res);
       this.eventStores = res.map((event: any) => ({
         _id: event._id,
         reference: event.reference,
@@ -120,7 +119,6 @@ statutFormatted (statut : string): string {
           dateDebut: new Date(event.dateDebut).toLocaleString(),
           dateFin: new Date(event.dateFin).toLocaleString(),
         }));
-        console.log(this.eventStores);
       },
       error: (err) => console.error(err)
     });
@@ -148,8 +146,6 @@ statutFormatted (statut : string): string {
             console.error('Erreur notification', err);
           }
         });
-
-        console.log(`Statut mis à jour : refused`);
         this.loadEventStores();
       },
       error: (err) => {
@@ -177,7 +173,6 @@ statutFormatted (statut : string): string {
         });
 
           this.loadEventStores();
-          console.log(`Event ${eventId} approuved`);
         },
         error: (err) => {
           console.error(err);

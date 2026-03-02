@@ -23,16 +23,12 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
   onLogin(form: NgForm) {
-  console.log('clic login');  
-
   this.authService.login(this.email, this.password).subscribe({
     next: (res) => {
-      console.log('login OK', res.user.role);
+      console.log('login', res.user.role);
       this.authService.setToken(res.token);
 
        if (res.user.role === 'admin') {
-      console.log('login OK', res.user.role);
-
         this.router.navigate(['/layout-admin']);
       } 
 

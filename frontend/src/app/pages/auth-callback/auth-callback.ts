@@ -23,8 +23,6 @@ export class AuthCallbackComponent implements OnInit {
     if (token && role) {
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
-      console.log('Token and role stored:', token, role);
-
       switch (role) {
         case 'admin':
           this.router.navigate(['/layout-admin']);
