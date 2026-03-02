@@ -33,32 +33,36 @@
                     ×
                   </button>
                   <img [src]="getProductImage(item.id.description)" 
-                       class="object-cover w-10 h-10 border border-gray-100 rounded-full md:w-12 md:h-12" alt="Product">
+                      class="object-cover w-10 h-10 border border-gray-100 rounded-full md:w-12 md:h-12" alt="Product">
                   <span class="text-[10px] md:text-xs font-semibold text-[#1A4A54] uppercase tracking-tighter">
                     {{ item.id.nom }}
                   </span>
                 </td>
 
                 <td class="px-6 py-6 text-center text-[11px] font-bold text-[#3A626B] whitespace-nowrap">
-                  € {{ item.sous_total / item.quantite | number:'1.0-0' }}
+                  <div class="flex flex-col">
+                    <span>€ {{ item.sous_total / item.quantite | number:'1.0-2' }}</span>
+                    <span *ngIf="(item.sous_total / item.quantite) < item.id.prix" class="text-[9px] text-red-400 line-through">
+                      € {{ item.id.prix }}
+                    </span>
+                  </div>
                 </td>
 
                 <td class="px-6 py-6 text-center">
                   <div class="inline-flex items-center h-8 bg-white border border-gray-300 shadow-sm md:h-9">
-                    <button (click)="cartService.updateQuantity(item.id._id, item.quantite - 1, item.id.prix)"
+                    <button (click)="cartService.updateQuantity(item.id._id, item.quantite - 1, (item.sous_total / item.quantite))"
                             class="h-full px-2 text-gray-500 border-r border-gray-300 md:px-3 hover:bg-gray-50">
                       −
                     </button>
                     <span class="px-4 md:px-6 text-[10px] md:text-xs font-bold text-[#3A626B] min-w-[40px] md:min-w-[50px]">
                       {{ item.quantite }}
                     </span>
-                    <button (click)="cartService.updateQuantity(item.id._id, item.quantite + 1, item.id.prix)"
+                    <button (click)="cartService.updateQuantity(item.id._id, item.quantite + 1, (item.sous_total / item.quantite))"
                             class="h-full px-2 text-gray-500 border-l border-gray-300 md:px-3 hover:bg-gray-50">
                       +
                     </button>
                   </div>
                 </td>
-
                 <td class="px-6 py-6 text-right text-[11px] font-bold text-[#3A626B] whitespace-nowrap">
                   € {{ item.sous_total | number:'1.0-0' }}
                 </td>
