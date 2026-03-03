@@ -77,7 +77,7 @@ export class StoreDetail implements OnInit {
           title: data.nom,
           phone: data.telephone,
           email: data.user?.email,
-          logoUrl: data.logo || '/image.png'
+          logoUrl: this.getProductImage(data.logo)
         };
       },
       error: (err) => console.error('Error stores:', err)
