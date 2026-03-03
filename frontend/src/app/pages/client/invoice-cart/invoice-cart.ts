@@ -127,8 +127,9 @@ export class InvoiceCart {
             titre: 'New Sale',
             description: ` Mr/Ms ${this.cartService.currentClient()?.nom} ordered a  ${produit.id.nom} `
           };
+          const boutiqueId = produit.id.boutique;
 
-          this.boutiqueService.addNotif(produit.id.boutique._id, notif).subscribe({
+          this.boutiqueService.addNotif(boutiqueId, notif).subscribe({
             next: () => {
               console.log('Notification envoyée à la boutique');
             },
